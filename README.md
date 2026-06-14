@@ -105,7 +105,7 @@ export GEMINI_API_KEY=...
 export TAVILY_API_KEY=...
 ```
 
-## Run one query
+<!-- ## Run one query
 
 ```bash
 python src/run_agent.py \
@@ -125,7 +125,7 @@ and appends one JSON line to `outputs/runs.jsonl`.
 
 Useful flags: `--variant` (one of the five), `--persona_id` (from
 `experiments/sample_personas.jsonl`, optional), `--max_results_per_branch`,
-`--model`, `--no_log`.
+`--model`, `--no_log`. -->
 
 ## Reproducing the EACL 2027 Evaluation
 
@@ -165,9 +165,9 @@ Finally, open the provided Jupyter Notebook to view the performance charts and o
 - Run all cells.
 - The notebook will automatically load the generated CSVs and render clean, publication-ready visualizations comparing the architectural variants.
 
-## Notes & limitations
+<!-- ## Notes & limitations
 
 - No reranking / fusion yet (planned for later iterations).
 - Duplicate URLs are kept but flagged, not removed.
 - `cost_proxy` is a transparency aid, not real billing.
-- Soft-fails on a single bad search/branch so a batch run keeps going.
+- Soft-fails on a single bad search/branch so a batch run keeps going. -->
