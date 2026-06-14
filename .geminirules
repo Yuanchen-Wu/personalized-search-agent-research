@@ -1,3 +1,5 @@
 This folder is public facing and the goal of the experiment is to publish a public paper in EACL 2027. Ensure that all code and documentation generated align with this goal, and keep all information and data appropriate for public release.
 
 When providing Python commands to run, ALWAYS explicitly use the Python executable inside the project's virtual environment (`.venv/bin/python`) instead of the global `python` command.
+
+When modifying Jupyter Notebooks (`.ipynb` files) using tools, be aware that the strict `nbformat` JSON schema must be perfectly maintained (especially for GitHub rendering). Specifically, ALWAYS run a Python script to verify and fix the schema after modifying cells: `markdown` cells MUST NOT contain `execution_count` or `outputs` fields, and `code` cells MUST contain an `outputs` list (even if empty) and an `execution_count` field.
