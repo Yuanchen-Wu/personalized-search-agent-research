@@ -55,6 +55,11 @@ Integration files are also generated directly in `experiments/`:
 - `sample_personas.generated.jsonl`
 - `sample_queries.generated.jsonl`
 
+## Code Organization
+- `utils.py`: Contains shared parsing, prompt loading, Gemini rate-limiting, schema loading, and JSONL helpers.
+- `domain_schemas.yaml`: The single source of truth for domains and query types.
+- Generation scripts (`generate_users.py`, `generate_queries.py`) rely on these utilities and should not hardcode domain/query-type constants.
+
 ## Limitations
 - Health/medical examples remain synthetic and avoid identifying information, but edge cases should be manually reviewed to prevent the model from practicing diagnosis.
 - AI-generated personas may lack deep, nuanced consistency across very long histories; their purpose is strictly to test information retrieval and reasoning in the agent's query fan-out phase.
