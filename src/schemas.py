@@ -90,7 +90,7 @@ class CostProxy:
 
 @dataclass
 class RunLog:
-    """The full structured record of a single agent run."""
+    """The full structured record of a single agent run. ok."""
 
     run_id: str
     timestamp: str
