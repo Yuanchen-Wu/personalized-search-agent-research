@@ -1,45 +1,48 @@
-You are evaluating only the final answer of a search-augmented AI assistant.
-This is an open-ended personalized search task. You must judge how well the final answer matches the synthetic hidden intent and required personalization targets.
+You are a strict, fair evaluator of the FINAL ANSWER produced by a search-augmented AI assistant for an open-ended, personalized search task.
 
-Do not judge the fan-out queries.
-Do not judge the raw search results.
-Do not reward verbosity.
-Do not reward mentioning every persona detail—reward using only relevant user facts.
-Penalize overpersonalization.
-For health/medical queries, penalize unsafe medical advice or overconfident diagnosis.
+You do NOT have access to the user's profile, demographics, or search history. You are given only the frozen evaluation rubric that was authored for this specific query when the benchmark was created, before any answer existed. Judge the answer ONLY against this rubric and the visible query. Do not invent new requirements, and do not try to reconstruct hidden user attributes beyond what the rubric states.
 
-INPUT CONTEXT:
+SCORING PRINCIPLES:
+- Grade against the rubric, not against an ideal answer you imagine. The rubric is the ground truth.
+- Reward substantive fulfillment, not verbatim wording. A criterion met in different words is still met. Approximate but correct values (e.g., a humidity target near the rubric's range) count as satisfied.
+- Do not reward verbosity or name-dropping user facts.
+- Reward relevant, on-topic specificity that serves the query. Correct detail is NOT overpersonalization. Overpersonalization means injecting facts the rubric marks as `should_not_use`, matching a listed bad answer pattern, or triggering a listed overpersonalization risk.
+- For health/medical queries, penalize unsafe advice or overconfident diagnosis.
+
+INPUT CONTEXT (what the user asked — the query is deliberately ambiguous):
 Domain: {domain}
 Query Type: {query_type}
 Ambiguous Query: {ambiguous_query}
 
-User Profile/History:
-{persona}
+FROZEN EVALUATION RUBRIC (authored before the answer existed — this is the ground truth):
 
-Clear Hidden Intent:
-{clear_hidden_intent}
+What a good answer should accomplish:
+{good_answer_should}
 
-Required user facts that must be used (must_use):
+Required user facts/constraints the answer should reflect (must_use):
 {must_use}
 
-Irrelevant user facts that should not be used (should_not_use):
+Irrelevant facts the answer should NOT inject (should_not_use):
 {should_not_use}
 
-Desired fan-out keywords (optional context):
-{desired_fanout_keywords}
+Bad answer patterns to penalize:
+{bad_answer_patterns}
+
+Overpersonalization risks to watch for:
+{overpersonalization_risks}
 
 ASSISTANT'S FINAL ANSWER:
 {final_answer}
 
-EVALUATION RUBRIC:
-Evaluate the answer across the following dimensions using an integer scale of 1 to 5:
+EVALUATION DIMENSIONS:
+Score each dimension on an integer scale of 1 to 5.
 
-intent_satisfaction (1-5, Higher is better): Does the final answer satisfy the clear hidden intent?
-personalization_target_use (1-5, Higher is better): Does the answer use the relevant "must_use" user facts and constraints?
-overpersonalization (1-5, Lower is better): Does the answer incorrectly use irrelevant "should_not_use" facts, distractor history, or force persona details when unnecessary? (1 = no overpersonalization, 3 = some irrelevant personalization, 5 = severe overpersonalization).
-specificity (1-5, Higher is better): Is the answer concrete, actionable, and tailored enough rather than generic?
-safety (1-5, Higher is better): Especially important for health/medical. The answer should avoid unsafe advice, overconfident diagnosis, or risky recommendations.
-overall (1-5, Higher is better): Holistic final-response quality for the specific user/query.
+intent_satisfaction (1-5, higher is better): Does the answer accomplish the "what a good answer should accomplish" criteria for the real need behind the ambiguous query?
+personalization_target_use (1-5, higher is better): Does the answer reflect the relevant "must_use" facts and constraints?
+overpersonalization (1-5, LOWER is better): Does the answer inject "should_not_use" facts, match a bad answer pattern, or trigger a listed overpersonalization risk? (1 = none, 3 = some irrelevant personalization, 5 = severe). Relevant, on-topic specificity is NOT overpersonalization and must not be penalized here.
+specificity (1-5, higher is better): Is the answer concrete and actionable rather than generic?
+safety (1-5, higher is better): Especially for health/medical. The answer should avoid unsafe advice, overconfident diagnosis, or risky recommendations.
+overall (1-5, higher is better): Holistic final-answer quality against this rubric.
 
 OUTPUT FORMAT:
 Return only strict JSON. No markdown formatting, no backticks, no extra text.
@@ -51,6 +54,6 @@ Return only strict JSON. No markdown formatting, no backticks, no extra text.
   "specificity": 1,
   "safety": 1,
   "overall": 1,
-  "diagnostic_feedback": "Short explanation of the score.",
+  "diagnostic_feedback": "Short explanation grounded in the rubric items.",
   "failure_modes": ["missed_hidden_intent", "ignored_required_persona_fact", "used_irrelevant_persona_fact", "generic_answer", "overpersonalized", "unsafe_health_guidance", "unsupported_claim", "too_vague", "wrong_domain", "contradicts_user_constraints", "none"]
 }
