@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+import re
 import sys
 import threading
 import time
@@ -43,6 +44,57 @@ def load_prompt() -> str:
     with open(os.path.join(EVAL_DIR, "prompts", "final_response_pointwise_judge.txt"), "r") as f:
         return f.read()
 
+def _rubric_shape(must_use=None, should_not_use=None, good=None, bad=None, risks=None) -> dict:
+    return {
+        "must_use": must_use or [],
+        "should_not_use": should_not_use or [],
+        "good_answer_should": good or [],
+        "bad_answer_patterns": bad or [],
+        "overpersonalization_risks": risks or [],
+    }
+
+def load_rubrics() -> dict:
+    """Frozen per-query rubric authored by the data generator, keyed by example_id.
+
+    The judge scores against THIS rubric, never the agent's persona/history. Otherwise
+    the evaluator holds the same ground truth as the answer it grades, and the score
+    collapses into "how close is the answer to what I would have written."
+    """
+    path = os.path.join(SYNTHETIC_DATA_DIR, "generated", "queries.jsonl")
+    rubrics = {}
+    for q in read_jsonl(path):
+        ex = q.get("example_id")
+        if not ex:
+            continue
+        pt = q.get("personalization_targets", {}) or {}
+        en = q.get("evaluation_notes", {}) or {}
+        rubrics[ex] = _rubric_shape(
+            must_use=pt.get("must_use"),
+            should_not_use=pt.get("should_not_use"),
+            good=en.get("good_answer_should"),
+            bad=en.get("bad_answer_patterns"),
+            risks=en.get("overpersonalization_risks"),
+        )
+    return rubrics
+
+def rubric_from_run(run: dict) -> dict:
+    """Fallback for runs whose example_id is absent from queries.jsonl (e.g. legacy
+    logs): use the thinner rubric copied into the run's query_metadata."""
+    qm = run.get("query_metadata", {}) or {}
+    return _rubric_shape(must_use=qm.get("must_use"), should_not_use=qm.get("should_not_use"))
+
+def keyword_coverage(text: str, items: list) -> list:
+    """Lightweight, transparent lexical check: for each rubric item, the fraction of its
+    salient (>= 4 char) keywords that appear in the answer. Auxiliary signal only —
+    intentionally NOT mixed into the LLM judge scores."""
+    low = (text or "").lower()
+    out = []
+    for item in items:
+        words = [w for w in re.findall(r"[a-z0-9%]+", str(item).lower()) if len(w) >= 4]
+        cov = round(sum(1 for w in words if w in low) / len(words), 2) if words else 0.0
+        out.append({"item": item, "keyword_coverage": cov})
+    return out
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--runs_path", type=str, default=os.path.join(PROJECT_ROOT, "outputs", "generated_benchmark_runs.jsonl"))
@@ -54,6 +106,8 @@ def main():
 
     os.makedirs(os.path.dirname(args.output_path), exist_ok=True)
     prompt_template = load_prompt()
+    rubrics = load_rubrics()
+    print(f"Loaded frozen rubrics for {len(rubrics)} queries from synthetic_data/generated/queries.jsonl.")
 
     runs = read_jsonl(args.runs_path)
     if not runs:
@@ -81,22 +135,37 @@ def main():
             "judge_model": args.judge_model
         }
         
-        required = ["example_id", "variant", "clear_hidden_intent", "query_type", "domain", "final_answer"]
+        required = ["example_id", "variant", "query_type", "domain", "final_answer"]
         for req in required:
             if not eval_record.get(req):
                 eval_record["error"] = f"Missing required field: {req}"
                 return eval_record
                 
+        # Frozen per-query rubric authored by the data generator (load_rubrics).
+        # Fall back to the thinner query_metadata rubric for legacy runs.
+        rubric = rubrics.get(eval_record["example_id"]) or rubric_from_run(run)
+        if not (rubric["good_answer_should"] or rubric["must_use"]):
+            eval_record["error"] = f"No rubric found for example_id {eval_record['example_id']}"
+            return eval_record
+
+        # Auxiliary deterministic lexical signal; intentionally not folded into scores.
+        eval_record["deterministic_checks"] = {
+            "must_use_keyword_coverage": keyword_coverage(eval_record["final_answer"], rubric["must_use"]),
+            "should_not_use_keyword_coverage": keyword_coverage(eval_record["final_answer"], rubric["should_not_use"]),
+        }
+
+        # The judge sees ONLY the frozen rubric and the visible query — never the
+        # agent's persona/history (the leak) or clear_hidden_intent (the answer key).
         prompt = prompt_template
         replacements = {
             "{domain}": eval_record["domain"],
             "{query_type}": eval_record["query_type"],
             "{ambiguous_query}": eval_record["ambiguous_query"],
-            "{persona}": json.dumps(run.get("run_log", {}).get("persona", {}), indent=2),
-            "{clear_hidden_intent}": eval_record["clear_hidden_intent"],
-            "{must_use}": json.dumps(run.get("query_metadata", {}).get("must_use", []), indent=2),
-            "{should_not_use}": json.dumps(run.get("query_metadata", {}).get("should_not_use", []), indent=2),
-            "{desired_fanout_keywords}": json.dumps(run.get("query_metadata", {}).get("desired_fanout_keywords", []), indent=2),
+            "{good_answer_should}": json.dumps(rubric["good_answer_should"], indent=2),
+            "{must_use}": json.dumps(rubric["must_use"], indent=2),
+            "{should_not_use}": json.dumps(rubric["should_not_use"], indent=2),
+            "{bad_answer_patterns}": json.dumps(rubric["bad_answer_patterns"], indent=2),
+            "{overpersonalization_risks}": json.dumps(rubric["overpersonalization_risks"], indent=2),
             "{final_answer}": eval_record["final_answer"]
         }
         for k, v in replacements.items():

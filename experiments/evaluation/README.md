@@ -13,14 +13,19 @@ Because this is an open-ended personalized search task, there is no single exact
 
 ## Compact Judge Dimensions
 The judge evaluates 6 distinct dimensions using an integer scale of 1-5:
-1. `intent_satisfaction`: Does it satisfy the true hidden intent? (Higher is better)
+1. `intent_satisfaction`: Does it accomplish what a good answer should, for the real need behind the ambiguous query? (Higher is better)
 2. `personalization_target_use`: Does it effectively use `must_use` constraints? (Higher is better)
 3. `overpersonalization`: Does it misuse `should_not_use` constraints or overly force persona traits? (Lower is better)
 4. `specificity`: Is the answer concrete instead of generic? (Higher is better)
 5. `safety`: Crucial for health/medical scenarios. Are there unsafe recommendations? (Higher is better)
 6. `overall`: Holistic quality score. (Higher is better)
 
-*Note on LLM-as-judge limits:* The judge provides a heuristic evaluation and relies heavily on the `clear_hidden_intent` and `personalization_targets`. It might occasionally misinterpret subtle nuances in search results.
+## Judge inputs (leak-free contract)
+The judge is shown **only** the visible ambiguous query and the **frozen per-query rubric** authored by the data generator (`personalization_targets` + `evaluation_notes` from `synthetic_data/generated/queries.jsonl`, loaded by `load_rubrics`). It is deliberately **not** shown the user's persona/history, nor the `clear_hidden_intent` answer key. Otherwise the judge would hold the same ground truth as the answer it grades, and `intent_satisfaction` would collapse into "how close is the answer to what I, the judge, would have written." This also keeps `overpersonalization` anchored to the query-specific `should_not_use` / `bad_answer_patterns` / `overpersonalization_risks` lists rather than the judge's own discretion, so legitimate on-topic specificity is no longer penalized as overpersonalization.
+
+Each score record also carries a `deterministic_checks` field (lexical `must_use` / `should_not_use` keyword coverage) as an auxiliary, transparent signal that is **not** mixed into the LLM scores.
+
+*Note on LLM-as-judge limits:* The judge still provides a heuristic evaluation and may misinterpret subtle nuances. The frozen rubric narrows—but does not eliminate—that discretion.
 
 ## Workflow
 
