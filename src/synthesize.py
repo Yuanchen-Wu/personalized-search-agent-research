@@ -57,14 +57,11 @@ def _format_evidence(results: List[SearchResult]) -> str:
 def _persona_block(persona: Optional[Persona]) -> str:
     if persona is None:
         return ""
-    import json
-
-    attrs = json.dumps(persona.attributes, ensure_ascii=False)
     return (
-        "\nUser persona/context (use ONLY when genuinely relevant; do not "
-        "over-personalize):\n"
-        f"  description: {persona.description}\n"
-        f"  attributes: {attrs}\n"
+        "\nWhat we know about the user (stated details + recent search history; "
+        "some history may be unrelated — infer what is genuinely relevant and do "
+        "NOT over-personalize):\n"
+        f"{persona.render_for_agent()}\n"
     )
 
 

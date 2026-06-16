@@ -30,15 +30,14 @@ MIXED_BRANCH_PLAN = {
 
 
 def _persona_block(persona: Optional[Persona]) -> str:
-    """Render a persona into a compact text block for prompting."""
+    """Render the agent-visible user context for prompting.
+
+    Shows stated demographics + raw search history only; the curated
+    ``latent_profile`` is withheld so the planner must infer preferences.
+    """
     if persona is None:
-        return "(no persona provided)"
-    attrs = json.dumps(persona.attributes, ensure_ascii=False)
-    return (
-        f"persona_id: {persona.persona_id}\n"
-        f"description: {persona.description}\n"
-        f"attributes: {attrs}"
-    )
+        return "(no user context provided)"
+    return persona.render_for_agent()
 
 
 def _extract_json(text: str) -> Optional[Any]:
@@ -174,21 +173,23 @@ def _generate_personalized(
 ) -> List[FanoutBranch]:
     """Generate personalized fan-out branches conditioned on the persona."""
     prompt = f"""You are a search query planner for a PERSONALIZED retrieval
-system. Given a user question and a persona, produce {NUM_PERSONALIZED_BRANCHES}
-web search queries tailored to this specific user's needs, preferences, and
-constraints. Use the persona to make queries more relevant, but keep them
-realistic search queries (not full sentences about the user).
+system. You are given a user's question plus a snapshot of what we know about
+them: a few stated details and their recent search history. Some history entries
+are unrelated to the current question — INFER which of their interests,
+preferences, and constraints are actually relevant and ignore the rest. Produce
+{NUM_PERSONALIZED_BRANCHES} web search queries tailored to this user's inferred
+needs, but keep them realistic search queries (not full sentences about the user).
 
 User question: {user_query!r}
 
-Persona:
+User context:
 {_persona_block(persona)}
 
 Return STRICT JSON: a list of objects, each with fields:
   "branch_type": always "personalized",
   "query": the search query string,
   "rationale": one short sentence explaining the personalization,
-  "used_persona_fields": list of persona fields you used (e.g. ["budget","expertise"]).
+  "used_persona_fields": list of the user signals you inferred and used (e.g. ["self-paced learner","prefers subscription-free hardware"]); [] if none.
 
 Return ONLY the JSON array, no prose."""
     raw = call_gemini(
@@ -211,24 +212,26 @@ def _generate_mixed(
     )
     prompt = f"""You are an advanced search query planner. Produce a MIXED set of
 web search queries across two branch types to thoroughly and fairly answer a
-user's question for a specific persona.
+user's question.
 
 Branch types:
-  - "generic": broad, neutral evidence about the topic (ignore the persona).
-  - "personalized": tailored to the persona's specific needs/preferences.
+  - "generic": broad, neutral evidence about the topic (ignore the user context).
+  - "personalized": tailored to the user's needs/preferences that you INFER from
+    their stated details and recent search history (some history is unrelated —
+    use only what is genuinely relevant).
 
 Aim for roughly: {plan_desc}.
 
 User question: {user_query!r}
 
-Persona:
+User context:
 {_persona_block(persona)}
 
 Return STRICT JSON: a list of objects, each with fields:
   "branch_type": one of "generic" | "personalized",
   "query": the search query string,
   "rationale": one short sentence,
-  "used_persona_fields": list of persona fields used (empty list for generic).
+  "used_persona_fields": list of inferred user signals used (empty list for generic).
 
 Return ONLY the JSON array, no prose."""
     raw = call_gemini(

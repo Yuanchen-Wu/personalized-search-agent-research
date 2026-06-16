@@ -7,6 +7,7 @@ can serialize everything cleanly into JSONL logs.
 
 from __future__ import annotations
 
+import json
 from dataclasses import asdict, dataclass, field
 from typing import Any, Dict, List, Optional
 
@@ -27,11 +28,21 @@ VARIANTS = (
 
 @dataclass
 class Persona:
-    """A user persona / context bundle used to drive personalization."""
+    """A user persona / context bundle used to drive personalization.
+
+    For the personalization-placement study the agent is shown a *realistic*
+    view of the user — stated ``demographics`` plus the raw, interleaved
+    ``observable_history`` and ``distractor_history`` — and must INFER what is
+    relevant. The curated ``latent_profile`` inside ``attributes`` is treated as
+    ground truth for evaluation only and is deliberately NOT rendered for the
+    agent (see :meth:`render_for_agent`).
+    """
 
     persona_id: str
     description: str
     attributes: Dict[str, Any] = field(default_factory=dict)
+    observable_history: List[Dict[str, Any]] = field(default_factory=list)
+    distractor_history: List[Dict[str, Any]] = field(default_factory=list)
 
     def as_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -42,6 +53,58 @@ class Persona:
             persona_id=data["persona_id"],
             description=data.get("description", ""),
             attributes=data.get("attributes", {}) or {},
+            observable_history=data.get("observable_history", []) or [],
+            distractor_history=data.get("distractor_history", []) or [],
+        )
+
+    def _merged_history(self) -> List[Dict[str, Any]]:
+        """Observable + distractor history, interleaved chronologically.
+
+        The two sources are merged and sorted by timestamp so distractor entries
+        are indistinguishable from genuine ones: the agent must judge relevance
+        from the query text itself, not from a source label.
+        """
+        merged = list(self.observable_history) + list(self.distractor_history)
+        return sorted(merged, key=lambda h: str(h.get("timestamp", "")))
+
+    def render_for_agent(self) -> str:
+        """Render the agent-visible view of the user.
+
+        Shows stated demographics and the raw, interleaved search history, and
+        deliberately EXCLUDES ``latent_profile`` (curated ground truth reserved
+        for evaluation). Falls back to legacy ``attributes`` rendering for
+        personas that carry no demographics/history (e.g. hand-made demo data).
+        """
+        lines: List[str] = []
+        demographics = (self.attributes or {}).get("demographics")
+        if isinstance(demographics, dict) and demographics:
+            lines.append("Stated user details:")
+            for key, value in demographics.items():
+                lines.append(f"  - {key}: {value}")
+
+        history = self._merged_history()
+        if history:
+            if lines:
+                lines.append("")
+            lines.append(
+                "Recent search history (chronological; some entries may be "
+                "unrelated to the current question — infer what is relevant):"
+            )
+            for entry in history:
+                ts = str(entry.get("timestamp", "")).strip()
+                content = str(entry.get("content", "")).strip()
+                if not content:
+                    continue
+                prefix = f"[{ts}] " if ts else ""
+                lines.append(f"  - {prefix}{content}")
+
+        if lines:
+            return "\n".join(lines)
+
+        # Legacy fallback: no demographics or history (e.g. demo personas).
+        return (
+            f"description: {self.description}\n"
+            f"attributes: {json.dumps(self.attributes, ensure_ascii=False)}"
         )
 
 
