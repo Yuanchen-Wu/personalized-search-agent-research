@@ -117,18 +117,63 @@ class QueryRecord:
     task_type: str = "unknown"
     task_category: str = "unknown"
     persona_relevant_dimensions: List[str] = field(default_factory=list)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
     def as_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "QueryRecord":
+        query_id = data.get("query_id", data.get("id", data.get("example_id", "unknown")))
+        
+        task_category = data.get("task_category", data.get("category", data.get("domain", "unknown")))
+        
+        # normalize task_category
+        cat_lower = task_category.lower()
+        if any(x in cat_lower for x in ["ecommerce", "product", "shopping"]):
+            if "tech" in cat_lower or "comparison" in cat_lower:
+                task_category = "tech_product_comparison"
+            else:
+                task_category = "shopping_commerce"
+        elif any(x in cat_lower for x in ["textbook", "book", "course", "resource"]):
+            task_category = "textbook_or_resource_recommendation"
+        elif any(x in cat_lower for x in ["technical", "concept"]):
+            task_category = "technical_explanation"
+        elif any(x in cat_lower for x in ["career", "education advice", "professional"]):
+            task_category = "professional_career_strategy"
+        elif any(x in cat_lower for x in ["health", "wellness"]):
+            task_category = "health_information"
+        elif any(x in cat_lower for x in ["travel", "local"]):
+            task_category = "travel_local_planning"
+
+        task_type = data.get("task_type")
+        if not task_type:
+            q_type = str(data.get("query_type", "")).lower()
+            combined_hint = task_category.lower() + " " + q_type
+            
+            search_keywords = ["shopping", "ecommerce", "product", "textbook", "course", "resource", "travel", "local"]
+            synthesis_keywords = ["technical", "career", "education advice", "professional", "background-adaptive", "explanation", "conceptual"]
+            
+            if any(k in combined_hint for k in search_keywords):
+                task_type = "search_native"
+            elif any(k in combined_hint for k in synthesis_keywords):
+                task_type = "synthesis_native"
+            else:
+                task_type = "unknown"
+                print(f"Warning: Could not infer task_type for query {query_id}. Defaulting to 'unknown'.")
+        
+        metadata = {}
+        for k, v in data.items():
+            if k not in ["query", "query_id", "id", "example_id", "task_type", "task_category", "category", "domain", "persona_relevant_dimensions"]:
+                metadata[k] = v
+
         return cls(
             query=data.get("query", ""),
-            query_id=data.get("query_id", data.get("id", "unknown")),
-            task_type=data.get("task_type", "unknown"),
-            task_category=data.get("task_category", "unknown"),
+            query_id=query_id,
+            task_type=task_type,
+            task_category=task_category,
             persona_relevant_dimensions=data.get("persona_relevant_dimensions", []),
+            metadata=metadata
         )
 
 

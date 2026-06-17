@@ -13,7 +13,7 @@ When building a retrieval-augmented agent, you can inject the user's persona/con
 
 The goal of this repository is to provide a cleaner research experiment structure for a personalization-placement ablation study, while preserving existing working functionality. The main goal is to make the experiment reproducible, well-logged, and easy to analyze.
 
-**Explicit Note:** `task_type` is used for analysis only. It does NOT alter generation logic. We want to test whether the same personalization-placement variants naturally perform differently across task types.
+**Explicit Warning:** `task_type` is used for analysis only. It must NOT alter generation behavior. We want to test whether the same personalization-placement variants naturally perform differently across task types. Do not write generation logic that branches on `task_type`.
 
 ## Pipeline
 ```
@@ -23,6 +23,16 @@ user query (+ optional persona)
   -> collect top results per branch  (normalized, duplicates flagged)
   -> final answer synthesis          (Gemini; persona-dependent)
   -> structured JSONL log            (outputs/placement_ablation_v1/runs.jsonl)
+```
+
+## Running a Single Query
+You can run the agent locally on a single query via the CLI:
+```bash
+export PYTHONPATH=src
+python -m search_agent.run_agent \
+    --query "What laptop should I buy for ML research?" \
+    --persona_id ml_phd_budget \
+    --variant V4_mixed_fanout
 ```
 
 ## Variants
@@ -90,25 +100,31 @@ Generate the synthetic user personas and search queries:
 python scripts/generate_synthetic_data.py
 ```
 
-### 2. Run the Benchmark
+### 2. Validate Experiment Setup
+Run a smoke test to ensure config, paths, and distributions are valid:
+```bash
+python scripts/validate_experiment_setup.py --config configs/placement_ablation_v1.yaml
+```
+
+### 3. Run the Benchmark
 Run the variants against the data:
 ```bash
 python scripts/run_benchmark.py --config configs/placement_ablation_v1.yaml --limit 10
 ```
 
-### 3. Evaluate Fan-out Queries
+### 4. Evaluate Fan-out Queries
 Evaluate the generated sub-queries:
 ```bash
 python scripts/evaluate_fanout_queries.py --config configs/placement_ablation_v1.yaml
 ```
 
-### 4. Evaluate Final Responses
+### 5. Evaluate Final Responses
 Evaluate the final answers:
 ```bash
 python scripts/evaluate_final_responses.py --config configs/placement_ablation_v1.yaml
 ```
 
-### 5. Summarize Results
+### 6. Summarize Results
 Aggregate scores into CSV files:
 ```bash
 python scripts/summarize_results.py --config configs/placement_ablation_v1.yaml

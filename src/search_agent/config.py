@@ -12,7 +12,7 @@ from dataclasses import dataclass
 
 # Project paths (computed early so dotenv can target the repo root reliably).
 _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(_THIS_DIR)
+PROJECT_ROOT = os.path.dirname(os.path.dirname(_THIS_DIR))
 
 try:
     # Load .env from the project root (not cwd), so batch/CLI work from any dir.
@@ -29,7 +29,7 @@ DEFAULT_MAX_RESULTS_PER_BRANCH = 5
 DEFAULT_SEARCH_DEPTH = "basic"
 MAX_RESULTS_PER_BRANCH_FOR_SYNTHESIS = 5
 OUTPUTS_DIR = os.path.join(PROJECT_ROOT, "outputs")
-DEFAULT_RUNS_LOG = os.path.join(OUTPUTS_DIR, "runs.jsonl")
+DEFAULT_RUNS_LOG = os.path.join(OUTPUTS_DIR, "placement_ablation_v1", "runs.jsonl")
 
 
 class MissingAPIKeyError(RuntimeError):

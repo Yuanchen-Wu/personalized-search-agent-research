@@ -97,6 +97,45 @@ def main():
     write_csv(summary_by_task_cat_path, by_variant_task_cat, ["variant", "task_category"])
     
     print(f"Saved summaries to {os.path.dirname(summary_by_variant_path)}")
+    
+    # Task 6: Summary contrasts
+    contrasts_path = config.get("outputs", {}).get("summary_contrasts_by_task_type_path")
+    if contrasts_path:
+        if not os.path.isabs(contrasts_path): contrasts_path = os.path.join(_PROJECT_ROOT, contrasts_path)
+        
+        contrasts = [
+            ("synthesis personalization effect", "V2_synthesis_only_personalization", "V1_generic_fanout"),
+            ("marginal personalized fan-out effect given personalized synthesis", "V3_personalized_fanout", "V2_synthesis_only_personalization"),
+            ("full personalization gain over generic fan-out", "V3_personalized_fanout", "V1_generic_fanout"),
+            ("mixed/disconfirming fan-out effect", "V4_mixed_fanout", "V3_personalized_fanout")
+        ]
+        
+        all_task_types = set(tt for (var, tt) in by_variant_task_type.keys())
+        all_metrics = set()
+        for v in by_variant_task_type.values(): all_metrics.update(v.keys())
+        all_metrics = sorted(list(all_metrics))
+        
+        lower_is_better_metrics = {"final_overpersonalization", "fanout_overpersonalization_risk"}
+        
+        with open(contrasts_path, "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(["task_type", "metric", "contrast_name", "variant_a", "variant_b", "mean_a", "mean_b", "diff_a_minus_b", "higher_is_better"])
+            
+            for tt in all_task_types:
+                for metric in all_metrics:
+                    higher_is_better = str(metric not in lower_is_better_metrics).lower()
+                    
+                    for contrast_name, var_a, var_b in contrasts:
+                        scores_a = by_variant_task_type.get((var_a, tt), {}).get(metric, [])
+                        scores_b = by_variant_task_type.get((var_b, tt), {}).get(metric, [])
+                        
+                        if scores_a and scores_b:
+                            mean_a = compute_mean(scores_a)
+                            mean_b = compute_mean(scores_b)
+                            diff = mean_a - mean_b
+                            writer.writerow([tt, metric, contrast_name, var_a, var_b, f"{mean_a:.2f}", f"{mean_b:.2f}", f"{diff:.2f}", higher_is_better])
+                            
+        print(f"Saved contrasts to {contrasts_path}")
 
 if __name__ == "__main__":
     main()

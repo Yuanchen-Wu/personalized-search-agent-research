@@ -1,5 +1,5 @@
-{"query_id": "q_product_laptop", "category": "product recommendation", "query": "What laptop should I buy for ML research?"}
-{"query_id": "q_travel_tokyo", "category": "travel/local planning", "query": "Plan a 4-day trip to Tokyo with good food and museums."}
-{"query_id": "q_tech_transformers", "category": "technical explanation", "query": "How does the attention mechanism in transformers work?"}
-{"query_id": "q_health_sleep", "category": "health/wellness information", "query": "How can I improve my sleep quality naturally?"}
-{"query_id": "q_career_mleng", "category": "career/education advice", "query": "How do I transition from software engineering into machine learning engineering?"}
+{"query": "What laptop should I buy for ML research?", "query_id": "q_product_laptop", "task_type": "search_native", "task_category": "shopping_commerce", "persona_relevant_dimensions": [], "metadata": {}}
+{"query": "Plan a 4-day trip to Tokyo with good food and museums.", "query_id": "q_travel_tokyo", "task_type": "search_native", "task_category": "travel_local_planning", "persona_relevant_dimensions": [], "metadata": {}}
+{"query": "How does the attention mechanism in transformers work?", "query_id": "q_tech_transformers", "task_type": "synthesis_native", "task_category": "technical_explanation", "persona_relevant_dimensions": [], "metadata": {}}
+{"query": "How can I improve my sleep quality naturally?", "query_id": "q_health_sleep", "task_type": "unknown", "task_category": "health_information", "persona_relevant_dimensions": [], "metadata": {}}
+{"query": "How do I transition from software engineering into machine learning engineering?", "query_id": "q_career_mleng", "task_type": "synthesis_native", "task_category": "professional_career_strategy", "persona_relevant_dimensions": [], "metadata": {}}

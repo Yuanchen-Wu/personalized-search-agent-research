@@ -41,3 +41,4 @@ outputs:
   summary_by_variant_path: outputs/placement_ablation_v1/summary_by_variant.csv
   summary_by_variant_task_type_path: outputs/placement_ablation_v1/summary_by_variant_task_type.csv
   summary_by_variant_task_category_path: outputs/placement_ablation_v1/summary_by_variant_task_category.csv
+  summary_contrasts_by_task_type_path: outputs/placement_ablation_v1/contrasts_by_task_type.csv

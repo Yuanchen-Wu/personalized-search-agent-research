@@ -1,0 +1,2 @@
+variant,fanout_faithfulness_to_user_query_mean,fanout_overpersonalization_risk_mean,fanout_persona_field_use_mean,fanout_query_diversity_mean,fanout_query_specificity_mean,fanout_search_realism_mean,final_groundedness_mean,final_intent_satisfaction_mean,final_non_genericness_mean,final_overpersonalization_mean,final_personalization_target_use_mean,final_safety_mean,final_specificity_mean
+V0_generic_single,5.00,1.00,1.00,1.00,2.00,5.00,2.00,5.00,5.00,1.00,5.00,5.00,5.00

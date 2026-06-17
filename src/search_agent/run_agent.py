@@ -9,7 +9,8 @@ Pipeline:
       -> structured JSONL log
 
 Run a single query:
-    python src/run_agent.py \
+    export PYTHONPATH=src
+    python -m search_agent.run_agent \
         --query "What laptop should I buy for ML research?" \
         --persona_id ml_phd_budget \
         --variant V4_mixed_fanout
@@ -43,7 +44,7 @@ PERSONALIZED_SYNTHESIS_VARIANTS = {
 }
 
 DEFAULT_PERSONAS_PATH = os.path.join(
-    PROJECT_ROOT, "experiments", "sample_personas.jsonl"
+    PROJECT_ROOT, "data", "personas", "personas_v1.jsonl"
 )
 
 
@@ -178,7 +179,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--persona_id",
         default=None,
-        help="Persona id from experiments/sample_personas.jsonl (optional).",
+        help="Persona id from data/personas/personas_v1.jsonl (optional).",
     )
     parser.add_argument(
         "--variant",
@@ -228,8 +229,16 @@ def main(argv: Optional[List[str]] = None) -> None:
                 f"{args.personas_path}. Available: {list(personas)}"
             )
 
+    query_record = QueryRecord(
+        query=args.query,
+        query_id="manual",
+        task_type="unknown",
+        task_category="manual",
+        persona_relevant_dimensions=[],
+    )
+
     run_log = run_agent(
-        user_query=args.query,
+        query_record=query_record,
         persona=persona,
         variant=args.variant,
         model=args.model,
