@@ -1,43 +1,31 @@
 # Personalization Placement in Query Fan-out (EACL 2027 prototype)
 
-A simple, inspectable search-based AI agent for studying **where personalization
-should be applied** in a search-augmented LLM pipeline.
+A simple, inspectable search-based AI agent for studying **where personalization should be applied** in a search-augmented LLM pipeline.
 
-## Motivation
+## Motivation & Project Goal
+When building a retrieval-augmented agent, you can inject the user's persona/context at different stages:
+- Only at **final answer synthesis**
+- During **query fan-out** (the search queries themselves)
+- At **both** stages
+- Via a **mixed** fan-out that explicitly seeks generic, personalized, constraint, and *disconfirming* evidence.
 
-When you build a retrieval-augmented agent, you can inject the user's persona /
-context at different stages:
+**Research question:** does personalization help more at synthesis, at fan-out, at both, or in a mixed/disconfirming fan-out design?
 
-- only at **final answer synthesis**, or
-- during **query fan-out** (the search queries themselves), or
-- at **both** stages, or
-- via a **mixed** fan-out that explicitly seeks generic, personalized,
-  constraint, and *disconfirming* evidence.
+The goal of this repository is to provide a cleaner research experiment structure for a personalization-placement ablation study, while preserving existing working functionality. The main goal is to make the experiment reproducible, well-logged, and easy to analyze.
 
-**Research question:** does personalization help more at synthesis, at fan-out,
-at both, or in a mixed/disconfirming fan-out design?
-
-This first iteration is deliberately minimal: plain Python, clean logging, no
-reranking or fusion. The goal is **ablation control and research transparency**,
-not production performance.
+**Explicit Note:** `task_type` is used for analysis only. It does NOT alter generation logic. We want to test whether the same personalization-placement variants naturally perform differently across task types.
 
 ## Pipeline
-
 ```
 user query (+ optional persona)
   -> query fan-out generation        (Gemini; variant-dependent)
   -> Tavily Search API calls         (one call per branch)
   -> collect top results per branch  (normalized, duplicates flagged)
   -> final answer synthesis          (Gemini; persona-dependent)
-  -> structured JSONL log            (outputs/runs.jsonl)
+  -> structured JSONL log            (outputs/placement_ablation_v1/runs.jsonl)
 ```
 
-We use **Tavily only for search evidence** — its generated `answer` field is
-never used. All synthesis is done by Gemini so the experiment cleanly isolates
-personalization placement.
-
 ## Variants
-
 | Variant | Fan-out | Persona in fan-out? | Persona in synthesis? |
 |---|---|---|---|
 | `V0_generic_single` | raw query as one branch | no | no |
@@ -46,128 +34,88 @@ personalization placement.
 | `V3_personalized_fanout` | personalized queries | **yes** | **yes** |
 | `V4_mixed_fanout` | generic + personalized + constraint + disconfirming | **yes** | **yes** |
 
-No fusion, reranking, or Reciprocal Rank Fusion is implemented in this version.
-
-## Project structure
-
+## Directory Structure
 ```
-project/
+EACL_2027_search_agent/
   README.md
-  .env.example
   requirements.txt
+  .env.example
+  .gitignore
+
+  configs/
+    placement_ablation_v1.yaml
   src/
-    config.py          # env vars, defaults, paths
-    llm_gemini.py      # call_gemini(...)
-    search_tavily.py   # search_tavily(...), collect_search_results(...)
-    fanout.py          # generate_fanout_queries(...)
-    synthesize.py      # synthesize_answer(...)
-    run_agent.py       # orchestration + CLI
-    schemas.py         # dataclass schemas
-    logging_utils.py   # JSONL logging
-  experiments/
-    sample_queries.jsonl
-    sample_personas.jsonl
-    run_batch.py
+    search_agent/
+      __init__.py, config.py, schemas.py, ...
+  data/
+    personas/, queries/, generated/
+  scripts/
+    generate_synthetic_data.py
+    run_benchmark.py
+    evaluate_final_responses.py
+    evaluate_fanout_queries.py
+    summarize_results.py
   outputs/
-    runs.jsonl         # appended run logs
+    placement_ablation_v1/
+  notebooks/
+    analysis.ipynb
+  reports/
+    notes/experiment_spec.md
 ```
 
 ## Setup
-
-1. Create and activate a virtual environment (recommended):
-
+1. Create and activate a virtual environment:
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 ```
 
 2. Install dependencies:
-
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Configure API keys. **Keys are read only from environment variables; nothing
-   is hardcoded.** Copy the example file and fill in your real keys:
-
+3. Configure API keys (copy `.env.example` to `.env`):
 ```bash
 cp .env.example .env
-# then edit .env:
-#   GEMINI_API_KEY=...
-#   TAVILY_API_KEY=...
 ```
 
-`.env` is git-ignored. You can also export the variables directly instead of
-using a `.env` file:
+## Running the Pipeline
 
-```bash
-export GEMINI_API_KEY=...
-export TAVILY_API_KEY=...
-```
-
-<!-- ## Run one query
-
-```bash
-python src/run_agent.py \
-  --query "What laptop should I buy for ML research?" \
-  --persona_id ml_phd_budget \
-  --variant V4_mixed_fanout
-```
-
-This prints:
-
-- the fan-out branches (with type, query, rationale, persona fields used),
-- the top Tavily results per branch,
-- the final synthesized answer,
-- a cost proxy,
-
-and appends one JSON line to `outputs/runs.jsonl`.
-
-Useful flags: `--variant` (one of the five), `--persona_id` (from
-`experiments/sample_personas.jsonl`, optional), `--max_results_per_branch`,
-`--model`, `--no_log`. -->
-
-## Reproducing the EACL 2027 Evaluation
-
-To reproduce the full evaluation pipeline and generate the final visualizations, follow these steps sequentially:
+Follow these steps sequentially to run the full pipeline:
 
 ### 1. Generate Synthetic Data
-First, generate the synthetic user personas and their corresponding ambiguous search queries:
+Generate the synthetic user personas and search queries:
 ```bash
-.venv/bin/python experiments/synthetic_data/generate_synthetic_data.py
+python scripts/generate_synthetic_data.py
 ```
-This populates the `experiments/synthetic_data/generated/` folder with profiles and queries designed specifically to test personalization boundaries.
 
 ### 2. Run the Benchmark
-Execute all five agent variants (`V0` through `V4`) against the generated queries:
+Run the variants against the data:
 ```bash
-.venv/bin/python experiments/run_generated_benchmark.py
-```
-*(Tip: Use `--limit N` to run a smaller subset for quick testing)*
-This orchestrates the full pipeline and saves the raw search trajectories and final answers to `outputs/generated_benchmark_runs.jsonl`.
-
-### 3. Run the LLM Judge
-Evaluate the final answers using our pointwise LLM-as-a-judge:
-```bash
-.venv/bin/python experiments/evaluation/evaluate_final_responses.py
-```
-This critically scores each answer on Intent Satisfaction, Personalization Target Use, Overpersonalization, Specificity, and Safety, saving the raw scores to `experiments/evaluation/generated/final_response_scores.jsonl`.
-
-### 4. Summarize Results
-Aggregate the raw scores into clean CSVs and Markdown tables:
-```bash
-.venv/bin/python experiments/evaluation/summarize_eval_results.py
+python scripts/run_benchmark.py --config configs/placement_ablation_v1.yaml --limit 10
 ```
 
-### 5. Visualize the Findings
-Finally, open the provided Jupyter Notebook to view the performance charts and our final conclusions:
-- Open `analysis.ipynb` in your preferred Jupyter environment.
-- Run all cells.
-- The notebook will automatically load the generated CSVs and render clean, publication-ready visualizations comparing the architectural variants.
+### 3. Evaluate Fan-out Queries
+Evaluate the generated sub-queries:
+```bash
+python scripts/evaluate_fanout_queries.py --config configs/placement_ablation_v1.yaml
+```
 
-<!-- ## Notes & limitations
+### 4. Evaluate Final Responses
+Evaluate the final answers:
+```bash
+python scripts/evaluate_final_responses.py --config configs/placement_ablation_v1.yaml
+```
 
-- No reranking / fusion yet (planned for later iterations).
-- Duplicate URLs are kept but flagged, not removed.
-- `cost_proxy` is a transparency aid, not real billing.
-- Soft-fails on a single bad search/branch so a batch run keeps going. -->
+### 5. Summarize Results
+Aggregate scores into CSV files:
+```bash
+python scripts/summarize_results.py --config configs/placement_ablation_v1.yaml
+```
+
+## Analysis Outputs
+The summarized CSV files are saved in `outputs/placement_ablation_v1/`. Use `notebooks/analysis.ipynb` to analyze the results.
+
+### Legacy Scripts
+Note: The old `/experiments/` directory scripts have been refactored or moved to `scripts/`. Please use the commands above.

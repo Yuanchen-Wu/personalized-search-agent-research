@@ -1,6 +1,0 @@
-variant,n,mean_intent_satisfaction,mean_personalization_target_use,mean_overpersonalization,mean_specificity,mean_safety,mean_overall
-V0_generic_single,10,1.90,1.60,1.00,2.50,5.00,1.90
-V1_generic_fanout,10,2.80,2.80,1.20,3.20,5.00,2.80
-V2_synthesis_only_personalization,10,4.50,4.50,1.00,4.50,5.00,4.50
-V3_personalized_fanout,10,4.90,5.00,1.60,5.00,5.00,4.80
-V4_mixed_fanout,10,5.00,5.00,1.70,5.00,5.00,4.60

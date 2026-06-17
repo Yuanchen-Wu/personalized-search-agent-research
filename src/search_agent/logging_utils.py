@@ -13,13 +13,14 @@ import os
 import uuid
 from typing import List, Optional
 
-from config import DEFAULT_RUNS_LOG, OUTPUTS_DIR
-from schemas import (
+from .config import DEFAULT_RUNS_LOG, OUTPUTS_DIR
+from .schemas import (
     CostProxy,
     FanoutBranch,
     Persona,
     RunLog,
     SearchResult,
+    QueryRecord,
 )
 
 
@@ -36,7 +37,7 @@ def utc_timestamp() -> str:
 def build_run_log(
     *,
     variant: str,
-    user_query: str,
+    query_record: QueryRecord,
     persona: Optional[Persona],
     fanout_branches: List[FanoutBranch],
     raw_search_results: List[SearchResult],
@@ -44,13 +45,19 @@ def build_run_log(
     cost_proxy: CostProxy,
     run_id: Optional[str] = None,
     timestamp: Optional[str] = None,
+    experiment_name: str = "placement_ablation_v1",
 ) -> RunLog:
     """Assemble a :class:`RunLog` from pipeline outputs."""
     return RunLog(
         run_id=run_id or new_run_id(),
+        experiment_name=experiment_name,
         timestamp=timestamp or utc_timestamp(),
         variant=variant,
-        user_query=user_query,
+        user_query=query_record.query,
+        query_id=query_record.query_id,
+        task_type=query_record.task_type,
+        task_category=query_record.task_category,
+        persona_relevant_dimensions=query_record.persona_relevant_dimensions,
         persona_id=persona.persona_id if persona else None,
         persona=persona.as_dict() if persona else None,
         fanout_branches=[b.as_dict() for b in fanout_branches],

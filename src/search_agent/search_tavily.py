@@ -10,12 +10,12 @@ from __future__ import annotations
 import time
 from typing import List, Optional
 
-from config import (
+from .config import (
     DEFAULT_MAX_RESULTS_PER_BRANCH,
     DEFAULT_SEARCH_DEPTH,
     get_tavily_api_key,
 )
-from schemas import FanoutBranch, SearchResult
+from .schemas import FanoutBranch, SearchResult
 
 _client = None  # lazily initialized Tavily client
 

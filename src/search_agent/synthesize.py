@@ -14,12 +14,12 @@ from __future__ import annotations
 from collections import defaultdict
 from typing import List, Optional
 
-from config import (
+from .config import (
     DEFAULT_GEMINI_MODEL,
     MAX_RESULTS_PER_BRANCH_FOR_SYNTHESIS,
 )
-from llm_gemini import call_gemini
-from schemas import Persona, SearchResult
+from .llm_gemini import call_gemini
+from .schemas import Persona, SearchResult
 
 
 def _select_results_for_synthesis(

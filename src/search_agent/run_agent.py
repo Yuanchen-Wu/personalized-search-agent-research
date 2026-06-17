@@ -22,18 +22,18 @@ import json
 import os
 from typing import Dict, List, Optional
 
-from config import (
+from .config import (
     DEFAULT_GEMINI_MODEL,
     DEFAULT_MAX_RESULTS_PER_BRANCH,
     DEFAULT_RUNS_LOG,
     DEFAULT_SEARCH_DEPTH,
     PROJECT_ROOT,
 )
-from fanout import generate_fanout_queries
-from logging_utils import append_run_log, build_run_log, new_run_id, utc_timestamp
-from schemas import CostProxy, FanoutBranch, Persona, RunLog, SearchResult, VARIANTS
-from search_tavily import collect_search_results
-from synthesize import synthesize_answer
+from .fanout import generate_fanout_queries
+from .logging_utils import append_run_log, build_run_log, new_run_id, utc_timestamp
+from .schemas import CostProxy, FanoutBranch, Persona, RunLog, SearchResult, VARIANTS, QueryRecord
+from .search_tavily import collect_search_results
+from .synthesize import synthesize_answer
 
 # Variants that pass persona context into final synthesis.
 PERSONALIZED_SYNTHESIS_VARIANTS = {
@@ -64,13 +64,14 @@ def load_personas(path: str = DEFAULT_PERSONAS_PATH) -> Dict[str, Persona]:
 
 
 def run_agent(
-    user_query: str,
+    query_record: QueryRecord,
     persona: Optional[Persona],
     variant: str,
     *,
     model: str = DEFAULT_GEMINI_MODEL,
     max_results_per_branch: int = DEFAULT_MAX_RESULTS_PER_BRANCH,
     search_depth: str = DEFAULT_SEARCH_DEPTH,
+    experiment_name: str = "placement_ablation_v1",
 ) -> RunLog:
     """Run the full pipeline for one (query, persona, variant) combination.
 
@@ -88,7 +89,7 @@ def run_agent(
 
     # 1) Fan-out generation.
     fanout_branches: List[FanoutBranch] = generate_fanout_queries(
-        user_query, persona, variant, model=model
+        query_record.query, persona, variant, model=model
     )
     # Count Gemini calls used for fan-out: V0 makes none, others make one.
     num_fanout_gemini_calls = 0 if variant == "V0_generic_single" else 1
@@ -103,7 +104,7 @@ def run_agent(
     # 4) Final synthesis. Persona passed only for personalized-synthesis variants.
     synth_persona = persona if variant in PERSONALIZED_SYNTHESIS_VARIANTS else None
     final_answer = synthesize_answer(
-        user_query, synth_persona, raw_results, variant, model=model
+        query_record.query, synth_persona, raw_results, variant, model=model
     )
 
     # 5) Cost accounting (transparent proxy, not real billing).
@@ -116,7 +117,7 @@ def run_agent(
 
     return build_run_log(
         variant=variant,
-        user_query=user_query,
+        query_record=query_record,
         persona=persona,
         fanout_branches=fanout_branches,
         raw_search_results=raw_results,
@@ -124,6 +125,7 @@ def run_agent(
         cost_proxy=cost_proxy,
         run_id=run_id,
         timestamp=timestamp,
+        experiment_name=experiment_name,
     )
 
 

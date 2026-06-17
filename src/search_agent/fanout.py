@@ -15,9 +15,9 @@ import json
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
-from config import DEFAULT_GEMINI_MODEL
-from llm_gemini import call_gemini
-from schemas import BRANCH_TYPES, FanoutBranch, Persona
+from .config import DEFAULT_GEMINI_MODEL
+from .llm_gemini import call_gemini
+from .schemas import BRANCH_TYPES, FanoutBranch, Persona
 
 # How many branches each variant should aim for. These are soft targets passed
 # into the prompt; parsing is tolerant of slightly different counts.

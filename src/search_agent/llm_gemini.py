@@ -10,7 +10,7 @@ from __future__ import annotations
 import time
 from typing import Optional
 
-from config import DEFAULT_GEMINI_MODEL, get_gemini_api_key
+from .config import DEFAULT_GEMINI_MODEL, get_gemini_api_key
 
 _client = None  # lazily initialized google-genai client
 

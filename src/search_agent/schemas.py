@@ -109,6 +109,31 @@ class Persona:
 
 
 @dataclass
+class QueryRecord:
+    """A user query with metadata indicating the intended task type."""
+
+    query: str
+    query_id: str = "unknown"
+    task_type: str = "unknown"
+    task_category: str = "unknown"
+    persona_relevant_dimensions: List[str] = field(default_factory=list)
+
+    def as_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "QueryRecord":
+        return cls(
+            query=data.get("query", ""),
+            query_id=data.get("query_id", data.get("id", "unknown")),
+            task_type=data.get("task_type", "unknown"),
+            task_category=data.get("task_category", "unknown"),
+            persona_relevant_dimensions=data.get("persona_relevant_dimensions", []),
+        )
+
+
+
+@dataclass
 class FanoutBranch:
     """A single search branch produced during query fan-out."""
 
@@ -156,9 +181,14 @@ class RunLog:
     """The full structured record of a single agent run. ok."""
 
     run_id: str
+    experiment_name: str
     timestamp: str
     variant: str
     user_query: str
+    query_id: str
+    task_type: str
+    task_category: str
+    persona_relevant_dimensions: List[str]
     persona_id: Optional[str]
     persona: Optional[Dict[str, Any]]
     fanout_branches: List[Dict[str, Any]]
