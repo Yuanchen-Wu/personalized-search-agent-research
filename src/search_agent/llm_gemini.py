@@ -1,86 +1,94 @@
-"""Thin wrapper around the Google Gemini API.
+"""Google Gemini provider for the LLM client abstraction.
 
-We keep this intentionally minimal: a single ``call_gemini`` function plus a
-small retry loop. The client is lazily constructed so that importing this module
-does not require the API key to be present (useful for tests / dry runs).
+Implements :class:`~llm_client.LLMClient` for Gemini (google-genai). The SDK
+client is built lazily so importing this module never requires the API key or the
+package to be present. A backward-compatible ``call_gemini`` shim is retained for
+callers not yet migrated to ``llm_client.generate``; it simply routes through the
+abstraction (and therefore picks up multi-provider routing + shared throttling).
 """
 
 from __future__ import annotations
 
-import time
+import re
 from typing import Optional
 
 from .config import DEFAULT_GEMINI_MODEL, get_gemini_api_key
+from .llm_client import LLMClient, get_client
 
-_client = None  # lazily initialized google-genai client
 
+class GeminiClient(LLMClient):
+    """Gemini backend via the google-genai SDK."""
 
-def _get_client():
-    """Construct (once) and return the google-genai client."""
-    global _client
-    if _client is None:
-        from google import genai  # imported lazily so import-time stays cheap
+    name = "gemini"
+    default_max_rpm = 15.0  # free-tier-friendly; override with GEMINI_MAX_RPM
 
-        _client = genai.Client(api_key=get_gemini_api_key())
-    return _client
+    _sdk_client = None  # class-level: all instances share one google-genai client
+
+    def _client(self):
+        def factory():
+            from google import genai  # lazy import keeps module import cheap
+            from google.genai import types
+
+            return genai.Client(
+                api_key=get_gemini_api_key(),
+                http_options=types.HttpOptions(
+                    timeout=int(self._timeout_seconds() * 1000)  # genai timeout is ms
+                ),
+            )
+
+        return self._get_or_build_sdk(factory)
+
+    def _raw_generate(
+        self, prompt: str, *, model: str, temperature: float, json_mode: bool
+    ) -> str:
+        from google.genai import types
+
+        config_kwargs = {
+            "temperature": temperature,
+            "max_output_tokens": self._max_output_tokens(),
+        }
+        seed = self._seed()
+        if seed is not None:
+            config_kwargs["seed"] = seed
+        if json_mode:
+            config_kwargs["response_mime_type"] = "application/json"
+        response = self._client().models.generate_content(
+            model=model,
+            contents=prompt,
+            config=types.GenerateContentConfig(**config_kwargs),
+        )
+        text = getattr(response, "text", None)
+        return text.strip() if text else ""
+
+    def _retry_after_seconds(self, err: Exception, attempt: int) -> float:
+        """Honor Gemini's ``retryDelay`` hint on 429s; else exponential backoff."""
+        text = str(err)
+        if "429" in text or "RESOURCE_EXHAUSTED" in text:
+            m = re.search(r"retryDelay['\"]?\s*[:=]\s*['\"]?(\d+(?:\.\d+)?)\s*s", text)
+            if m:
+                return min(float(m.group(1)) + 1.0, 90.0)
+        return min(2.0 ** (attempt - 1), 30.0)
 
 
 def call_gemini(
     prompt: str,
     model: str = DEFAULT_GEMINI_MODEL,
     *,
-    max_retries: int = 3,
+    max_retries: int = 6,
     temperature: float = 0.7,
     response_mime_type: Optional[str] = None,
     seed: Optional[int] = None,
 ) -> str:
-    """Call Gemini with a single text prompt and return the response text.
+    """Backward-compatible shim. Prefer ``llm_client.generate``.
 
-    Args:
-        prompt: The full prompt string.
-        model: Gemini model name (default ``gemini-flash-latest``).
-        max_retries: Number of attempts on transient failures.
-        temperature: Sampling temperature.
-        response_mime_type: If set to ``"application/json"``, asks Gemini to
-            return JSON. Useful for structured fan-out generation.
-        seed: Random seed for model sampling generation.
-
-    Returns:
-        The model's text output (stripped). Returns an empty string if the
-        model produced no text.
-
-    Raises:
-        RuntimeError: If all retries are exhausted.
+    Routes through the provider abstraction so existing callers transparently get
+    multi-provider support and shared rate limiting. ``response_mime_type=
+    "application/json"`` maps to ``json_mode=True``.
     """
-    from google.genai import types
-
-    client = _get_client()
-
-    config_kwargs = {"temperature": temperature}
-    if response_mime_type is not None:
-        config_kwargs["response_mime_type"] = response_mime_type
-    if seed is not None:
-        config_kwargs["seed"] = seed
-    gen_config = types.GenerateContentConfig(**config_kwargs)
-
-    last_err: Optional[Exception] = None
-    for attempt in range(1, max_retries + 1):
-        try:
-            response = client.models.generate_content(
-                model=model,
-                contents=prompt,
-                config=gen_config,
-            )
-            text = getattr(response, "text", None)
-            return text.strip() if text else ""
-        except Exception as err:  # noqa: BLE001 - we want broad retry coverage
-            last_err = err
-            if attempt < max_retries:
-                # Simple exponential backoff: 1s, 2s, 4s, ...
-                time.sleep(2 ** (attempt - 1))
-            else:
-                break
-
-    raise RuntimeError(
-        f"Gemini call failed after {max_retries} attempts: {last_err}"
-    ) from last_err
+    return get_client(model).generate(
+        prompt,
+        model=model,
+        temperature=temperature,
+        json_mode=(response_mime_type == "application/json"),
+        max_retries=max_retries,
+    )
