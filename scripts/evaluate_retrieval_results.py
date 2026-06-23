@@ -148,11 +148,33 @@ def main():
     if args.limit:
         runs = runs[:args.limit]
         
-    results = []
-    for i, run in enumerate(runs, 1):
-        print(f"Evaluating retrieval results {i}/{len(runs)} (run_id: {run.get('run_id')})...")
-        res = evaluate_run(run, config, model=args.model)
-        results.append(res)
+    import time
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    evaluator_rpm = 250
+    evaluator_max_workers = 15
+    pacing_delay = 60.0 / evaluator_rpm
+
+    results_map = {}
+    
+    with ThreadPoolExecutor(max_workers=evaluator_max_workers) as executor:
+        future_to_idx = {}
+        for idx, run in enumerate(runs):
+            print(f"Submitting retrieval evaluation {idx+1}/{len(runs)} (run_id: {run.get('run_id')})...")
+            future = executor.submit(evaluate_run, run, config, args.model)
+            future_to_idx[future] = idx
+            time.sleep(pacing_delay)
+            
+        for future in as_completed(future_to_idx):
+            idx = future_to_idx[future]
+            try:
+                res = future.result()
+                results_map[idx] = res
+                print(f"Completed retrieval evaluation {idx+1}/{len(runs)} (run_id: {res.get('run_id')}).")
+            except Exception as e:
+                print(f"Error in retrieval evaluation {idx+1}: {e}")
+                
+    results = [results_map[k] for k in sorted(results_map.keys())]
         
     with open(out_path, "w", encoding="utf-8") as f:
         for r in results:

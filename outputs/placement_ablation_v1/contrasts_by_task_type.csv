@@ -1,93 +1,185 @@
 task_type,metric,contrast_name,variant_a,variant_b,mean_a,mean_b,diff_a_minus_b,higher_is_better
-retrieval_sensitive,fanout_faithfulness_to_user_query,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,5.00,0.00,true
-retrieval_sensitive,fanout_faithfulness_to_user_query,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,5.00,0.00,true
-retrieval_sensitive,fanout_faithfulness_to_user_query,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,5.00,0.00,true
-retrieval_sensitive,fanout_faithfulness_to_user_query,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,5.00,0.00,true
+retrieval_sensitive,fanout_faithfulness_to_user_query,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.93,4.87,0.07,true
+retrieval_sensitive,fanout_faithfulness_to_user_query,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,4.93,0.07,true
+retrieval_sensitive,fanout_faithfulness_to_user_query,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,4.87,0.13,true
+retrieval_sensitive,fanout_faithfulness_to_user_query,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,4.93,5.00,-0.07,true
 retrieval_sensitive,fanout_overpersonalization_risk,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,1.00,1.00,0.00,false
-retrieval_sensitive,fanout_overpersonalization_risk,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,1.50,1.00,0.50,false
-retrieval_sensitive,fanout_overpersonalization_risk,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,1.50,1.00,0.50,false
-retrieval_sensitive,fanout_overpersonalization_risk,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,1.00,1.50,-0.50,false
-retrieval_sensitive,fanout_persona_field_use,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,1.00,1.00,0.00,true
-retrieval_sensitive,fanout_persona_field_use,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,1.00,4.00,true
-retrieval_sensitive,fanout_persona_field_use,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,1.00,4.00,true
-retrieval_sensitive,fanout_persona_field_use,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,5.00,0.00,true
-retrieval_sensitive,fanout_query_diversity,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,2.50,2.00,0.50,true
-retrieval_sensitive,fanout_query_diversity,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.00,2.50,1.50,true
-retrieval_sensitive,fanout_query_diversity,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.00,2.00,2.00,true
-retrieval_sensitive,fanout_query_diversity,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,4.00,1.00,true
-retrieval_sensitive,fanout_query_specificity,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,3.00,3.00,0.00,true
-retrieval_sensitive,fanout_query_specificity,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.50,3.00,1.50,true
-retrieval_sensitive,fanout_query_specificity,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.50,3.00,1.50,true
-retrieval_sensitive,fanout_query_specificity,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,4.50,0.50,true
-retrieval_sensitive,fanout_search_realism,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.00,4.00,0.00,true
-retrieval_sensitive,fanout_search_realism,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,4.00,1.00,true
-retrieval_sensitive,fanout_search_realism,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,4.00,1.00,true
+retrieval_sensitive,fanout_overpersonalization_risk,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,1.07,1.00,0.07,false
+retrieval_sensitive,fanout_overpersonalization_risk,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,1.07,1.00,0.07,false
+retrieval_sensitive,fanout_overpersonalization_risk,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,1.00,1.07,-0.07,false
+retrieval_sensitive,fanout_persona_field_use,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,2.20,2.20,0.00,true
+retrieval_sensitive,fanout_persona_field_use,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.93,2.20,2.73,true
+retrieval_sensitive,fanout_persona_field_use,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.93,2.20,2.73,true
+retrieval_sensitive,fanout_persona_field_use,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,4.93,0.07,true
+retrieval_sensitive,fanout_query_diversity,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.07,4.07,0.00,true
+retrieval_sensitive,fanout_query_diversity,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.87,4.07,0.80,true
+retrieval_sensitive,fanout_query_diversity,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.87,4.07,0.80,true
+retrieval_sensitive,fanout_query_diversity,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,4.87,0.13,true
+retrieval_sensitive,fanout_query_specificity,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,3.93,3.80,0.13,true
+retrieval_sensitive,fanout_query_specificity,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,3.93,1.07,true
+retrieval_sensitive,fanout_query_specificity,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,3.80,1.20,true
+retrieval_sensitive,fanout_query_specificity,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,5.00,0.00,true
+retrieval_sensitive,fanout_search_realism,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,4.80,0.20,true
+retrieval_sensitive,fanout_search_realism,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,5.00,0.00,true
+retrieval_sensitive,fanout_search_realism,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,4.80,0.20,true
 retrieval_sensitive,fanout_search_realism,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,5.00,0.00,true
-retrieval_sensitive,final_actionability_without_overclaiming,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,5.00,0.00,true
-retrieval_sensitive,final_actionability_without_overclaiming,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,5.00,0.00,true
-retrieval_sensitive,final_actionability_without_overclaiming,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,5.00,0.00,true
-retrieval_sensitive,final_actionability_without_overclaiming,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,5.00,0.00,true
-retrieval_sensitive,final_domain_safety,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,5.00,0.00,true
-retrieval_sensitive,final_domain_safety,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,5.00,0.00,true
-retrieval_sensitive,final_domain_safety,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,5.00,0.00,true
-retrieval_sensitive,final_domain_safety,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,5.00,0.00,true
-retrieval_sensitive,final_groundedness,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,5.00,0.00,true
-retrieval_sensitive,final_groundedness,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.50,5.00,-0.50,true
-retrieval_sensitive,final_groundedness,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.50,5.00,-0.50,true
-retrieval_sensitive,final_groundedness,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,4.50,0.50,true
-retrieval_sensitive,final_intent_satisfaction,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,5.00,0.00,true
-retrieval_sensitive,final_intent_satisfaction,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,5.00,0.00,true
+retrieval_sensitive,final_actionability_without_overclaiming,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.67,4.53,0.13,true
+retrieval_sensitive,final_actionability_without_overclaiming,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.93,4.67,0.27,true
+retrieval_sensitive,final_actionability_without_overclaiming,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.93,4.53,0.40,true
+retrieval_sensitive,final_actionability_without_overclaiming,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,4.93,0.07,true
+retrieval_sensitive,final_domain_safety,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.60,4.60,0.00,true
+retrieval_sensitive,final_domain_safety,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.73,4.60,0.13,true
+retrieval_sensitive,final_domain_safety,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.73,4.60,0.13,true
+retrieval_sensitive,final_domain_safety,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,4.73,0.27,true
+retrieval_sensitive,final_groundedness,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,3.33,3.73,-0.40,true
+retrieval_sensitive,final_groundedness,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,3.40,3.33,0.07,true
+retrieval_sensitive,final_groundedness,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,3.40,3.73,-0.33,true
+retrieval_sensitive,final_groundedness,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,4.27,3.40,0.87,true
+retrieval_sensitive,final_intent_satisfaction,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.87,5.00,-0.13,true
+retrieval_sensitive,final_intent_satisfaction,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,4.87,0.13,true
 retrieval_sensitive,final_intent_satisfaction,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,5.00,0.00,true
 retrieval_sensitive,final_intent_satisfaction,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,5.00,0.00,true
-retrieval_sensitive,final_missing_constraint_awareness,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.00,3.00,1.00,true
-retrieval_sensitive,final_missing_constraint_awareness,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.00,4.00,0.00,true
-retrieval_sensitive,final_missing_constraint_awareness,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.00,3.00,1.00,true
-retrieval_sensitive,final_missing_constraint_awareness,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,4.00,1.00,true
-retrieval_sensitive,final_non_genericness,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,4.50,0.50,true
-retrieval_sensitive,final_non_genericness,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,5.00,0.00,true
-retrieval_sensitive,final_non_genericness,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,4.50,0.50,true
+retrieval_sensitive,final_missing_constraint_awareness,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,3.80,3.60,0.20,true
+retrieval_sensitive,final_missing_constraint_awareness,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.20,3.80,0.40,true
+retrieval_sensitive,final_missing_constraint_awareness,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.20,3.60,0.60,true
+retrieval_sensitive,final_missing_constraint_awareness,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,4.47,4.20,0.27,true
+retrieval_sensitive,final_non_genericness,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.53,4.00,0.53,true
+retrieval_sensitive,final_non_genericness,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,4.53,0.47,true
+retrieval_sensitive,final_non_genericness,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,4.00,1.00,true
 retrieval_sensitive,final_non_genericness,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,5.00,0.00,true
 retrieval_sensitive,final_overpersonalization,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,1.00,1.00,0.00,false
 retrieval_sensitive,final_overpersonalization,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,1.00,1.00,0.00,false
 retrieval_sensitive,final_overpersonalization,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,1.00,1.00,0.00,false
 retrieval_sensitive,final_overpersonalization,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,1.00,1.00,0.00,false
-retrieval_sensitive,final_personalization_target_use,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,3.50,1.50,true
-retrieval_sensitive,final_personalization_target_use,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,5.00,0.00,true
-retrieval_sensitive,final_personalization_target_use,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,3.50,1.50,true
-retrieval_sensitive,final_personalization_target_use,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,5.00,0.00,true
-retrieval_sensitive,final_safety,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,5.00,0.00,true
-retrieval_sensitive,final_safety,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,5.00,0.00,true
-retrieval_sensitive,final_safety,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,5.00,0.00,true
+retrieval_sensitive,final_personalization_target_use,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.13,3.47,0.67,true
+retrieval_sensitive,final_personalization_target_use,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.87,4.13,0.73,true
+retrieval_sensitive,final_personalization_target_use,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.87,3.47,1.40,true
+retrieval_sensitive,final_personalization_target_use,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,4.93,4.87,0.07,true
+retrieval_sensitive,final_safety,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.80,4.93,-0.13,true
+retrieval_sensitive,final_safety,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,4.80,0.20,true
+retrieval_sensitive,final_safety,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,4.93,0.07,true
 retrieval_sensitive,final_safety,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,5.00,0.00,true
-retrieval_sensitive,final_specificity,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,5.00,0.00,true
-retrieval_sensitive,final_specificity,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,5.00,0.00,true
-retrieval_sensitive,final_specificity,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,5.00,0.00,true
+retrieval_sensitive,final_specificity,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.80,4.73,0.07,true
+retrieval_sensitive,final_specificity,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,4.80,0.20,true
+retrieval_sensitive,final_specificity,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,4.73,0.27,true
 retrieval_sensitive,final_specificity,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,5.00,0.00,true
-retrieval_sensitive,retrieval_constraint_coverage,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,1.00,2.00,-1.00,true
-retrieval_sensitive,retrieval_constraint_coverage,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,3.50,1.00,2.50,true
-retrieval_sensitive,retrieval_constraint_coverage,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,3.50,2.00,1.50,true
-retrieval_sensitive,retrieval_constraint_coverage,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,1.00,3.50,-2.50,true
+retrieval_sensitive,retrieval_constraint_coverage,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,2.93,3.20,-0.27,true
+retrieval_sensitive,retrieval_constraint_coverage,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.67,2.93,1.73,true
+retrieval_sensitive,retrieval_constraint_coverage,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.67,3.20,1.47,true
+retrieval_sensitive,retrieval_constraint_coverage,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,2.33,4.67,-2.33,true
 retrieval_sensitive,retrieval_disconfirming_coverage,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,5.00,0.00,true
 retrieval_sensitive,retrieval_disconfirming_coverage,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,5.00,0.00,true
 retrieval_sensitive,retrieval_disconfirming_coverage,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,5.00,0.00,true
-retrieval_sensitive,retrieval_disconfirming_coverage,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,1.00,5.00,-4.00,true
+retrieval_sensitive,retrieval_disconfirming_coverage,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,1.60,5.00,-3.40,true
 retrieval_sensitive,retrieval_distractor_robustness,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,5.00,0.00,true
-retrieval_sensitive,retrieval_distractor_robustness,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,5.00,0.00,true
-retrieval_sensitive,retrieval_distractor_robustness,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,5.00,0.00,true
-retrieval_sensitive,retrieval_distractor_robustness,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,3.00,5.00,-2.00,true
-retrieval_sensitive,retrieval_evidence_relevance,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,3.50,3.00,0.50,true
-retrieval_sensitive,retrieval_evidence_relevance,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,3.00,3.50,-0.50,true
-retrieval_sensitive,retrieval_evidence_relevance,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,3.00,3.00,0.00,true
-retrieval_sensitive,retrieval_evidence_relevance,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,4.00,3.00,1.00,true
-retrieval_sensitive,retrieval_result_persona_fit,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,1.00,1.00,0.00,true
-retrieval_sensitive,retrieval_result_persona_fit,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,3.50,1.00,2.50,true
-retrieval_sensitive,retrieval_result_persona_fit,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,3.50,1.00,2.50,true
-retrieval_sensitive,retrieval_result_persona_fit,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,2.00,3.50,-1.50,true
-retrieval_sensitive,retrieval_source_quality,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.00,4.00,0.00,true
-retrieval_sensitive,retrieval_source_quality,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.00,4.00,0.00,true
-retrieval_sensitive,retrieval_source_quality,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.00,4.00,0.00,true
-retrieval_sensitive,retrieval_source_quality,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,3.00,4.00,-1.00,true
+retrieval_sensitive,retrieval_distractor_robustness,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.80,5.00,-0.20,true
+retrieval_sensitive,retrieval_distractor_robustness,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.80,5.00,-0.20,true
+retrieval_sensitive,retrieval_distractor_robustness,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,4.80,0.20,true
+retrieval_sensitive,retrieval_evidence_relevance,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.20,4.20,0.00,true
+retrieval_sensitive,retrieval_evidence_relevance,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.93,4.20,0.73,true
+retrieval_sensitive,retrieval_evidence_relevance,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.93,4.20,0.73,true
+retrieval_sensitive,retrieval_evidence_relevance,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,4.47,4.93,-0.47,true
+retrieval_sensitive,retrieval_result_persona_fit,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,2.93,3.33,-0.40,true
+retrieval_sensitive,retrieval_result_persona_fit,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.73,2.93,1.80,true
+retrieval_sensitive,retrieval_result_persona_fit,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.73,3.33,1.40,true
+retrieval_sensitive,retrieval_result_persona_fit,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,2.60,4.73,-2.13,true
+retrieval_sensitive,retrieval_source_quality,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.20,3.87,0.33,true
+retrieval_sensitive,retrieval_source_quality,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.33,4.20,0.13,true
+retrieval_sensitive,retrieval_source_quality,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.33,3.87,0.47,true
+retrieval_sensitive,retrieval_source_quality,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,4.00,4.33,-0.33,true
 retrieval_sensitive,retrieval_unsafe_or_overpersonalized_retrieval_risk,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,5.00,0.00,false
 retrieval_sensitive,retrieval_unsafe_or_overpersonalized_retrieval_risk,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,5.00,0.00,false
 retrieval_sensitive,retrieval_unsafe_or_overpersonalized_retrieval_risk,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,5.00,0.00,false
 retrieval_sensitive,retrieval_unsafe_or_overpersonalized_retrieval_risk,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,5.00,0.00,false
+synthesis_sensitive,fanout_faithfulness_to_user_query,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,5.00,0.00,true
+synthesis_sensitive,fanout_faithfulness_to_user_query,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.87,5.00,-0.13,true
+synthesis_sensitive,fanout_faithfulness_to_user_query,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.87,5.00,-0.13,true
+synthesis_sensitive,fanout_faithfulness_to_user_query,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,4.87,0.13,true
+synthesis_sensitive,fanout_overpersonalization_risk,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,1.00,1.00,0.00,false
+synthesis_sensitive,fanout_overpersonalization_risk,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,1.13,1.00,0.13,false
+synthesis_sensitive,fanout_overpersonalization_risk,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,1.13,1.00,0.13,false
+synthesis_sensitive,fanout_overpersonalization_risk,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,1.00,1.13,-0.13,false
+synthesis_sensitive,fanout_persona_field_use,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,2.73,3.00,-0.27,true
+synthesis_sensitive,fanout_persona_field_use,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,2.73,2.27,true
+synthesis_sensitive,fanout_persona_field_use,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,3.00,2.00,true
+synthesis_sensitive,fanout_persona_field_use,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,5.00,0.00,true
+synthesis_sensitive,fanout_query_diversity,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.67,4.73,-0.07,true
+synthesis_sensitive,fanout_query_diversity,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.87,4.67,0.20,true
+synthesis_sensitive,fanout_query_diversity,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.87,4.73,0.13,true
+synthesis_sensitive,fanout_query_diversity,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,4.87,0.13,true
+synthesis_sensitive,fanout_query_specificity,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.60,4.73,-0.13,true
+synthesis_sensitive,fanout_query_specificity,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,4.60,0.40,true
+synthesis_sensitive,fanout_query_specificity,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,4.73,0.27,true
+synthesis_sensitive,fanout_query_specificity,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,5.00,0.00,true
+synthesis_sensitive,fanout_search_realism,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,5.00,0.00,true
+synthesis_sensitive,fanout_search_realism,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,5.00,0.00,true
+synthesis_sensitive,fanout_search_realism,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,5.00,0.00,true
+synthesis_sensitive,fanout_search_realism,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,5.00,0.00,true
+synthesis_sensitive,final_actionability_without_overclaiming,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.93,4.27,0.67,true
+synthesis_sensitive,final_actionability_without_overclaiming,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,4.93,0.07,true
+synthesis_sensitive,final_actionability_without_overclaiming,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,4.27,0.73,true
+synthesis_sensitive,final_actionability_without_overclaiming,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,5.00,0.00,true
+synthesis_sensitive,final_domain_safety,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.80,4.40,0.40,true
+synthesis_sensitive,final_domain_safety,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.87,4.80,0.07,true
+synthesis_sensitive,final_domain_safety,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.87,4.40,0.47,true
+synthesis_sensitive,final_domain_safety,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,4.93,4.87,0.07,true
+synthesis_sensitive,final_groundedness,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.33,3.73,0.60,true
+synthesis_sensitive,final_groundedness,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.40,4.33,0.07,true
+synthesis_sensitive,final_groundedness,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.40,3.73,0.67,true
+synthesis_sensitive,final_groundedness,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,4.67,4.40,0.27,true
+synthesis_sensitive,final_intent_satisfaction,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,4.60,0.40,true
+synthesis_sensitive,final_intent_satisfaction,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,5.00,0.00,true
+synthesis_sensitive,final_intent_satisfaction,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,4.60,0.40,true
+synthesis_sensitive,final_intent_satisfaction,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,5.00,0.00,true
+synthesis_sensitive,final_missing_constraint_awareness,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.13,3.13,1.00,true
+synthesis_sensitive,final_missing_constraint_awareness,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.40,4.13,0.27,true
+synthesis_sensitive,final_missing_constraint_awareness,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.40,3.13,1.27,true
+synthesis_sensitive,final_missing_constraint_awareness,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,4.60,4.40,0.20,true
+synthesis_sensitive,final_non_genericness,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.67,3.13,1.53,true
+synthesis_sensitive,final_non_genericness,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.93,4.67,0.27,true
+synthesis_sensitive,final_non_genericness,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.93,3.13,1.80,true
+synthesis_sensitive,final_non_genericness,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,4.93,0.07,true
+synthesis_sensitive,final_overpersonalization,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,1.00,1.00,0.00,false
+synthesis_sensitive,final_overpersonalization,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,1.00,1.00,0.00,false
+synthesis_sensitive,final_overpersonalization,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,1.00,1.00,0.00,false
+synthesis_sensitive,final_overpersonalization,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,1.00,1.00,0.00,false
+synthesis_sensitive,final_personalization_target_use,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.60,2.93,1.67,true
+synthesis_sensitive,final_personalization_target_use,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.93,4.60,0.33,true
+synthesis_sensitive,final_personalization_target_use,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.93,2.93,2.00,true
+synthesis_sensitive,final_personalization_target_use,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,4.93,0.07,true
+synthesis_sensitive,final_safety,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,4.73,0.27,true
+synthesis_sensitive,final_safety,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,5.00,0.00,true
+synthesis_sensitive,final_safety,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,4.73,0.27,true
+synthesis_sensitive,final_safety,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,5.00,0.00,true
+synthesis_sensitive,final_specificity,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,4.20,0.80,true
+synthesis_sensitive,final_specificity,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,5.00,0.00,true
+synthesis_sensitive,final_specificity,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,4.20,0.80,true
+synthesis_sensitive,final_specificity,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,5.00,0.00,true
+synthesis_sensitive,retrieval_constraint_coverage,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,3.00,2.93,0.07,true
+synthesis_sensitive,retrieval_constraint_coverage,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.20,3.00,1.20,true
+synthesis_sensitive,retrieval_constraint_coverage,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.20,2.93,1.27,true
+synthesis_sensitive,retrieval_constraint_coverage,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,1.73,4.20,-2.47,true
+synthesis_sensitive,retrieval_disconfirming_coverage,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.67,4.40,0.27,true
+synthesis_sensitive,retrieval_disconfirming_coverage,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.80,4.67,0.13,true
+synthesis_sensitive,retrieval_disconfirming_coverage,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.80,4.40,0.40,true
+synthesis_sensitive,retrieval_disconfirming_coverage,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,1.53,4.80,-3.27,true
+synthesis_sensitive,retrieval_distractor_robustness,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,5.00,0.00,true
+synthesis_sensitive,retrieval_distractor_robustness,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,5.00,0.00,true
+synthesis_sensitive,retrieval_distractor_robustness,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,5.00,0.00,true
+synthesis_sensitive,retrieval_distractor_robustness,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,5.00,0.00,true
+synthesis_sensitive,retrieval_evidence_relevance,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.80,4.47,0.33,true
+synthesis_sensitive,retrieval_evidence_relevance,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.47,4.80,-0.33,true
+synthesis_sensitive,retrieval_evidence_relevance,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.47,4.47,0.00,true
+synthesis_sensitive,retrieval_evidence_relevance,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,4.27,4.47,-0.20,true
+synthesis_sensitive,retrieval_result_persona_fit,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,3.07,2.87,0.20,true
+synthesis_sensitive,retrieval_result_persona_fit,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.73,3.07,1.67,true
+synthesis_sensitive,retrieval_result_persona_fit,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.73,2.87,1.87,true
+synthesis_sensitive,retrieval_result_persona_fit,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,2.13,4.73,-2.60,true
+synthesis_sensitive,retrieval_source_quality,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.13,4.00,0.13,true
+synthesis_sensitive,retrieval_source_quality,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,4.00,4.13,-0.13,true
+synthesis_sensitive,retrieval_source_quality,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,4.00,4.00,0.00,true
+synthesis_sensitive,retrieval_source_quality,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,3.73,4.00,-0.27,true
+synthesis_sensitive,retrieval_unsafe_or_overpersonalized_retrieval_risk,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,5.00,0.00,false
+synthesis_sensitive,retrieval_unsafe_or_overpersonalized_retrieval_risk,marginal personalized fan-out effect given personalized synthesis,V3_personalized_fanout,V2_synthesis_only_personalization,5.00,5.00,0.00,false
+synthesis_sensitive,retrieval_unsafe_or_overpersonalized_retrieval_risk,full personalization gain over generic fan-out,V3_personalized_fanout,V1_generic_fanout,5.00,5.00,0.00,false
+synthesis_sensitive,retrieval_unsafe_or_overpersonalized_retrieval_risk,mixed/disconfirming fan-out effect,V4_mixed_fanout,V3_personalized_fanout,5.00,5.00,0.00,false

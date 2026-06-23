@@ -1,7 +1,11 @@
 variant,macro_domain,task_type,fanout_faithfulness_to_user_query_mean,fanout_overpersonalization_risk_mean,fanout_persona_field_use_mean,fanout_query_diversity_mean,fanout_query_specificity_mean,fanout_search_realism_mean,final_actionability_without_overclaiming_mean,final_domain_safety_mean,final_groundedness_mean,final_intent_satisfaction_mean,final_missing_constraint_awareness_mean,final_non_genericness_mean,final_overpersonalization_mean,final_personalization_target_use_mean,final_safety_mean,final_specificity_mean,retrieval_constraint_coverage_mean,retrieval_disconfirming_coverage_mean,retrieval_distractor_robustness_mean,retrieval_evidence_relevance_mean,retrieval_result_persona_fit_mean,retrieval_source_quality_mean,retrieval_unsafe_or_overpersonalized_retrieval_risk_mean
-V0_generic_single,education,search_native,5.00,1.00,1.00,1.00,2.00,5.00,4.00,5.00,2.00,5.00,4.00,5.00,1.00,5.00,5.00,5.00,5.00,5.00,5.00,5.00,4.00,4.00,5.00
-V0_generic_single,education,retrieval_sensitive,5.00,1.00,1.00,1.00,2.00,3.00,3.50,5.00,2.00,3.00,4.00,2.50,1.00,1.00,5.00,2.50,2.00,5.00,5.00,2.00,1.00,3.50,5.00
-V1_generic_fanout,education,retrieval_sensitive,5.00,1.00,1.00,2.00,3.00,4.00,5.00,5.00,5.00,5.00,3.00,4.50,1.00,3.50,5.00,5.00,2.00,5.00,5.00,3.00,1.00,4.00,5.00
-V2_synthesis_only_personalization,education,retrieval_sensitive,5.00,1.00,1.00,2.50,3.00,4.00,5.00,5.00,5.00,5.00,4.00,5.00,1.00,5.00,5.00,5.00,1.00,5.00,5.00,3.50,1.00,4.00,5.00
-V3_personalized_fanout,education,retrieval_sensitive,5.00,1.50,5.00,4.00,4.50,5.00,5.00,5.00,4.50,5.00,4.00,5.00,1.00,5.00,5.00,5.00,3.50,5.00,5.00,3.00,3.50,4.00,5.00
-V4_mixed_fanout,education,retrieval_sensitive,5.00,1.00,5.00,5.00,5.00,5.00,5.00,5.00,5.00,5.00,5.00,5.00,1.00,5.00,5.00,5.00,1.00,1.00,3.00,4.00,2.00,3.00,5.00
+V0_generic_single,education,retrieval_sensitive,5.00,1.00,1.00,1.00,2.07,4.20,4.07,4.27,2.93,4.27,2.93,2.93,1.00,2.07,4.60,4.00,2.07,5.00,5.00,4.13,1.73,3.60,5.00
+V1_generic_fanout,education,retrieval_sensitive,4.87,1.00,2.20,4.07,3.80,4.80,4.53,4.60,3.73,5.00,3.60,4.00,1.00,3.47,4.93,4.73,3.20,5.00,5.00,4.20,3.33,3.87,5.00
+V2_synthesis_only_personalization,education,retrieval_sensitive,4.93,1.00,2.20,4.07,3.93,5.00,4.67,4.60,3.33,4.87,3.80,4.53,1.00,4.13,4.80,4.80,2.93,5.00,5.00,4.20,2.93,4.20,5.00
+V3_personalized_fanout,education,retrieval_sensitive,5.00,1.07,4.93,4.87,5.00,5.00,4.93,4.73,3.40,5.00,4.20,5.00,1.00,4.87,5.00,5.00,4.67,5.00,4.80,4.93,4.73,4.33,5.00
+V4_mixed_fanout,education,retrieval_sensitive,4.93,1.00,5.00,5.00,5.00,5.00,5.00,5.00,4.27,5.00,4.47,5.00,1.00,4.93,5.00,5.00,2.33,1.60,5.00,4.47,2.60,4.00,5.00
+V0_generic_single,education,synthesis_sensitive,5.00,1.00,1.07,1.00,2.67,4.00,3.87,4.07,3.20,4.33,2.73,2.60,1.00,2.47,4.47,3.87,2.87,5.00,5.00,4.47,2.73,3.53,5.00
+V1_generic_fanout,education,synthesis_sensitive,5.00,1.00,3.00,4.73,4.73,5.00,4.27,4.40,3.73,4.60,3.13,3.13,1.00,2.93,4.73,4.20,2.93,4.40,5.00,4.47,2.87,4.00,5.00
+V2_synthesis_only_personalization,education,synthesis_sensitive,5.00,1.00,2.73,4.67,4.60,5.00,4.93,4.80,4.33,5.00,4.13,4.67,1.00,4.60,5.00,5.00,3.00,4.67,5.00,4.80,3.07,4.13,5.00
+V3_personalized_fanout,education,synthesis_sensitive,4.87,1.13,5.00,4.87,5.00,5.00,5.00,4.87,4.40,5.00,4.40,4.93,1.00,4.93,5.00,5.00,4.20,4.80,5.00,4.47,4.73,4.00,5.00
+V4_mixed_fanout,education,synthesis_sensitive,5.00,1.00,5.00,5.00,5.00,5.00,5.00,4.93,4.67,5.00,4.60,5.00,1.00,5.00,5.00,5.00,1.73,1.53,5.00,4.27,2.13,3.73,5.00

@@ -1,6 +1,6 @@
 variant,fanout_faithfulness_to_user_query_mean,fanout_overpersonalization_risk_mean,fanout_persona_field_use_mean,fanout_query_diversity_mean,fanout_query_specificity_mean,fanout_search_realism_mean,final_actionability_without_overclaiming_mean,final_domain_safety_mean,final_groundedness_mean,final_intent_satisfaction_mean,final_missing_constraint_awareness_mean,final_non_genericness_mean,final_overpersonalization_mean,final_personalization_target_use_mean,final_safety_mean,final_specificity_mean,retrieval_constraint_coverage_mean,retrieval_disconfirming_coverage_mean,retrieval_distractor_robustness_mean,retrieval_evidence_relevance_mean,retrieval_result_persona_fit_mean,retrieval_source_quality_mean,retrieval_unsafe_or_overpersonalized_retrieval_risk_mean
-V0_generic_single,5.00,1.00,1.00,1.00,2.00,3.67,3.67,5.00,2.00,3.67,4.00,3.33,1.00,2.33,5.00,3.33,3.00,5.00,5.00,3.00,2.00,3.67,5.00
-V1_generic_fanout,5.00,1.00,1.00,2.00,3.00,4.00,5.00,5.00,5.00,5.00,3.00,4.50,1.00,3.50,5.00,5.00,2.00,5.00,5.00,3.00,1.00,4.00,5.00
-V2_synthesis_only_personalization,5.00,1.00,1.00,2.50,3.00,4.00,5.00,5.00,5.00,5.00,4.00,5.00,1.00,5.00,5.00,5.00,1.00,5.00,5.00,3.50,1.00,4.00,5.00
-V3_personalized_fanout,5.00,1.50,5.00,4.00,4.50,5.00,5.00,5.00,4.50,5.00,4.00,5.00,1.00,5.00,5.00,5.00,3.50,5.00,5.00,3.00,3.50,4.00,5.00
-V4_mixed_fanout,5.00,1.00,5.00,5.00,5.00,5.00,5.00,5.00,5.00,5.00,5.00,5.00,1.00,5.00,5.00,5.00,1.00,1.00,3.00,4.00,2.00,3.00,5.00
+V0_generic_single,5.00,1.00,1.03,1.00,2.37,4.10,3.97,4.17,3.07,4.30,2.83,2.77,1.00,2.27,4.53,3.93,2.47,5.00,5.00,4.30,2.23,3.57,5.00
+V1_generic_fanout,4.93,1.00,2.60,4.40,4.27,4.90,4.40,4.50,3.73,4.80,3.37,3.57,1.00,3.20,4.83,4.47,3.07,4.70,5.00,4.33,3.10,3.93,5.00
+V2_synthesis_only_personalization,4.97,1.00,2.47,4.37,4.27,5.00,4.80,4.70,3.83,4.93,3.97,4.60,1.00,4.37,4.90,4.90,2.97,4.83,5.00,4.50,3.00,4.17,5.00
+V3_personalized_fanout,4.93,1.10,4.97,4.87,5.00,5.00,4.97,4.80,3.90,5.00,4.30,4.97,1.00,4.90,5.00,5.00,4.43,4.90,4.90,4.70,4.73,4.17,5.00
+V4_mixed_fanout,4.97,1.00,5.00,5.00,5.00,5.00,5.00,4.97,4.47,5.00,4.53,5.00,1.00,4.97,5.00,5.00,2.03,1.57,5.00,4.37,2.37,3.87,5.00

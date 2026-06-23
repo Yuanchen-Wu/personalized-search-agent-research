@@ -79,6 +79,26 @@ def build_plan(
                 plan.append((q, persona, variant))
     return plan
 
+def get_balanced_subset(queries: List[QueryRecord], n_per_domain: int = 10) -> List[QueryRecord]:
+    """Select a balanced subset of queries: n_per_domain per macro_domain,
+    evenly split between retrieval_sensitive and synthesis_sensitive task_types.
+    """
+    by_domain: Dict[str, List[QueryRecord]] = {}
+    for q in queries:
+        by_domain.setdefault(q.macro_domain, []).append(q)
+        
+    selected: List[QueryRecord] = []
+    n_half = n_per_domain // 2
+    
+    for domain, domain_queries in by_domain.items():
+        retrieval_q = [q for q in domain_queries if q.task_type == "retrieval_sensitive"]
+        synthesis_q = [q for q in domain_queries if q.task_type == "synthesis_sensitive"]
+        
+        selected.extend(retrieval_q[:n_half])
+        selected.extend(synthesis_q[:n_half])
+        
+    return selected
+
 def main(argv: Optional[List[str]] = None) -> None:
     parser = argparse.ArgumentParser(description="Run the ablation batch.")
     parser.add_argument("--config", default=None, help="Path to config YAML")
@@ -88,6 +108,7 @@ def main(argv: Optional[List[str]] = None) -> None:
     parser.add_argument("--variants", nargs="+", default=None)
     parser.add_argument("--model", default=DEFAULT_GEMINI_MODEL)
     parser.add_argument("--limit", type=int, default=None)
+    parser.add_argument("--balanced-subset", action="store_true", help="Run a balanced subset of 30 queries (10 per domain)")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args(argv)
 
@@ -109,6 +130,8 @@ def main(argv: Optional[List[str]] = None) -> None:
     if not os.path.isabs(out_path): out_path = os.path.join(_PROJECT_ROOT, out_path)
 
     queries = load_queries(q_path)
+    if args.balanced_subset:
+        queries = get_balanced_subset(queries, n_per_domain=10)
     personas = load_personas(p_path)
     plan = build_plan(queries, personas, variants)
     if args.limit is not None:
