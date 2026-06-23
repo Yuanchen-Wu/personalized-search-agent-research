@@ -1,4 +1,4 @@
-# Personalization Placement in Query Fan-out (EACL 2027 prototype)
+# Personalization Placement in Query Fan-out
 
 A simple, inspectable search-based AI agent for studying **where personalization should be applied** in a search-augmented LLM pipeline.
 
