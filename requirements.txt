@@ -2,6 +2,9 @@
 # Pinned to minor versions for reproducibility; bump as needed.
 
 google-genai>=1.0.0,<2.0.0
+# Additional LLM providers (needed only when running claude-* / gpt-* / llama-* models):
+anthropic>=0.40.0
+openai>=1.40.0,<2.0.0
 tavily-python>=0.5.0,<1.0.0
 python-dotenv>=1.0.0,<2.0.0
 tqdm>=4.66.0

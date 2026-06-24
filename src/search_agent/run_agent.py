@@ -201,7 +201,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--model",
         default=DEFAULT_GEMINI_MODEL,
-        help="Gemini model name.",
+        help="Model id; provider auto-detected (gemini-*, claude-*, gpt-*, llama-*).",
     )
     parser.add_argument(
         "--max_results_per_branch",

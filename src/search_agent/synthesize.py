@@ -18,7 +18,7 @@ from .config import (
     DEFAULT_GEMINI_MODEL,
     MAX_RESULTS_PER_BRANCH_FOR_SYNTHESIS,
 )
-from .llm_gemini import call_gemini
+from .llm_client import generate
 from .schemas import Persona, SearchResult
 
 
@@ -112,4 +112,4 @@ Retrieved evidence:
 
 Now write the final answer."""
 
-    return call_gemini(prompt, model=model, temperature=0.4)
+    return generate(prompt, model=model, temperature=0.4)

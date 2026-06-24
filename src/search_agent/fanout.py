@@ -16,7 +16,7 @@ import re
 from typing import Any, Dict, List, Optional, Tuple
 
 from .config import DEFAULT_GEMINI_MODEL
-from .llm_gemini import call_gemini
+from .llm_client import generate
 from .schemas import BRANCH_TYPES, FanoutBranch, Persona
 
 # How many branches each variant should aim for. These are soft targets passed
@@ -159,9 +159,7 @@ Return STRICT JSON: a list of objects, each with fields:
   "used_persona_fields": always an empty list [].
 
 Return ONLY the JSON array, no prose."""
-    raw = call_gemini(
-        prompt, model=model, response_mime_type="application/json"
-    )
+    raw = generate(prompt, model=model, json_mode=True)
     branches = _coerce_branches(
         _extract_json(raw), allowed_types=("generic",), default_type="generic"
     )
@@ -192,9 +190,7 @@ Return STRICT JSON: a list of objects, each with fields:
   "used_persona_fields": list of the user signals you inferred and used (e.g. ["self-paced learner","prefers subscription-free hardware"]); [] if none.
 
 Return ONLY the JSON array, no prose."""
-    raw = call_gemini(
-        prompt, model=model, response_mime_type="application/json"
-    )
+    raw = generate(prompt, model=model, json_mode=True)
     branches = _coerce_branches(
         _extract_json(raw),
         allowed_types=("personalized",),
@@ -233,9 +229,7 @@ Return STRICT JSON: a list of exactly 4 objects, each with fields:
   "used_persona_fields": list of the user signals/history items you inferred and used (empty list for generic).
 
 Return ONLY the JSON array, no prose."""
-    raw = call_gemini(
-        prompt, model=model, response_mime_type="application/json"
-    )
+    raw = generate(prompt, model=model, json_mode=True)
     branches = _coerce_branches(
         _extract_json(raw),
         allowed_types=BRANCH_TYPES,
