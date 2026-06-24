@@ -1,0 +1,33 @@
+# Arm B: rubric-based scoring WITH the persona answer key re-introduced
+# (run the judges with --include-latent-profile). Identical to Arm A except the
+# output dir, so we can measure how much the latent_profile leak shifts scores.
+experiment_name: placement_ablation_v1
+
+variants:
+  - V0_generic_single
+  - V1_generic_fanout
+  - V2_synthesis_only_personalization
+  - V3_personalized_fanout
+  - V4_mixed_fanout
+
+task_types:
+  - retrieval_sensitive
+  - synthesis_sensitive
+
+data:
+  personas_path: data/synthetic_personas_v1.jsonl
+  queries_path: data/synthetic_queries_v1.jsonl
+
+outputs:
+  run_dir: outputs/placement_ablation_v1_rubric_profile
+  runs_path: outputs/placement_ablation_v1/runs.jsonl          # reuse existing runs (read-only)
+  retrieval_scores_path: outputs/placement_ablation_v1_rubric_profile/retrieval_scores.jsonl
+  final_response_scores_path: outputs/placement_ablation_v1_rubric_profile/final_response_scores.jsonl
+  fanout_scores_path: outputs/placement_ablation_v1_rubric_profile/fanout_scores.jsonl
+  summary_by_variant_path: outputs/placement_ablation_v1_rubric_profile/summary_by_variant.csv
+  summary_by_variant_task_type_path: outputs/placement_ablation_v1_rubric_profile/summary_by_variant_task_type.csv
+  summary_by_variant_task_category_path: outputs/placement_ablation_v1_rubric_profile/summary_by_variant_task_category.csv
+  summary_by_macro_domain_path: outputs/placement_ablation_v1_rubric_profile/summary_by_macro_domain.csv
+  summary_by_macro_domain_task_type_path: outputs/placement_ablation_v1_rubric_profile/summary_by_macro_domain_task_type.csv
+  summary_contrasts_by_task_type_path: outputs/placement_ablation_v1_rubric_profile/contrasts_by_task_type.csv
+  contrasts_by_macro_domain_task_type_path: outputs/placement_ablation_v1_rubric_profile/contrasts_by_macro_domain_task_type.csv
