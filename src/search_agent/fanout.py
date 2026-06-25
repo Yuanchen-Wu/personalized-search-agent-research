@@ -17,6 +17,11 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from .config import DEFAULT_GEMINI_MODEL
 from .llm_gemini import call_gemini
+from .meta_prompt import (
+    GENERIC_FANOUT_PROMPT_TEMPLATE,
+    MIXED_FANOUT_PROMPT_TEMPLATE,
+    PERSONALIZED_FANOUT_PROMPT_TEMPLATE,
+)
 from .schemas import BRANCH_TYPES, FanoutBranch, Persona
 
 # How many branches each variant should aim for. These are soft targets passed
@@ -144,21 +149,10 @@ def _generate_generic(
     user_query: str, model: str
 ) -> List[FanoutBranch]:
     """Generate generic (non-personalized) fan-out branches."""
-    prompt = f"""You are a search query planner for a retrieval system.
-Given a user question, produce {NUM_GENERIC_BRANCHES} diverse, GENERIC web
-search queries that together gather broad, high-quality evidence to answer it.
-Do NOT assume anything about the specific user. Keep queries concise and
-search-engine friendly.
-
-User question: {user_query!r}
-
-Return STRICT JSON: a list of objects, each with fields:
-  "branch_type": always "generic",
-  "query": the search query string,
-  "rationale": one short sentence on what evidence this gathers,
-  "used_persona_fields": always an empty list [].
-
-Return ONLY the JSON array, no prose."""
+    prompt = GENERIC_FANOUT_PROMPT_TEMPLATE.format(
+        num_branches=NUM_GENERIC_BRANCHES,
+        user_query=user_query,
+    )
     raw = call_gemini(
         prompt, model=model, response_mime_type="application/json"
     )
@@ -172,26 +166,11 @@ def _generate_personalized(
     user_query: str, persona: Optional[Persona], model: str
 ) -> List[FanoutBranch]:
     """Generate personalized fan-out branches conditioned on the persona."""
-    prompt = f"""You are a search query planner for a PERSONALIZED retrieval
-system. You are given a user's question plus a snapshot of what we know about
-them: a few stated details and their recent search history. Some history entries
-are unrelated to the current question — INFER which of their interests,
-preferences, and constraints are actually relevant and ignore the rest. Produce
-{NUM_PERSONALIZED_BRANCHES} web search queries tailored to this user's inferred
-needs, but keep them realistic search queries (not full sentences about the user).
-
-User question: {user_query!r}
-
-User context:
-{_persona_block(persona)}
-
-Return STRICT JSON: a list of objects, each with fields:
-  "branch_type": always "personalized",
-  "query": the search query string,
-  "rationale": one short sentence explaining the personalization,
-  "used_persona_fields": list of the user signals you inferred and used (e.g. ["self-paced learner","prefers subscription-free hardware"]); [] if none.
-
-Return ONLY the JSON array, no prose."""
+    prompt = PERSONALIZED_FANOUT_PROMPT_TEMPLATE.format(
+        num_branches=NUM_PERSONALIZED_BRANCHES,
+        user_query=user_query,
+        persona_block=_persona_block(persona),
+    )
     raw = call_gemini(
         prompt, model=model, response_mime_type="application/json"
     )
@@ -210,29 +189,10 @@ def _generate_mixed(
 
     Produces exactly 4 branches: 1 generic, 1 personalized, 1 constraint, and 1 disconfirming.
     """
-    prompt = f"""You are an advanced search query planner. Your goal is to produce a balanced, comprehensive set of web search queries to gather diverse evidence for a user's question, conditioned on their persona context.
-You must generate exactly 4 search queries, one for each of the following branch types:
-
-1. "generic": Search broad evidence for the user query without any persona-specific assumptions or constraints.
-2. "personalized": Search evidence tailored to relevant user persona/history signals (e.g. preferences, background, style).
-3. "constraint": Search evidence targeting hard constraints inferred from the persona/history (such as budget limits, specific jurisdictions, visa/status limitations, family constraints, risk tolerance, deadlines, technical level, etc.).
-4. "disconfirming": Search evidence that could challenge, correct, or check caveats/exceptions for the personalized assumptions.
-   - For legal information: search official exceptions, state-specific caveats, eligibility limits.
-   - For personal finance: search fees, risks, disadvantages, tax caveats, eligibility restrictions.
-   - For education/other: search tradeoffs, negative reviews, limitations, alternative paths.
-
-User question: {user_query!r}
-
-User context:
-{_persona_block(persona)}
-
-Return STRICT JSON: a list of exactly 4 objects, each with fields:
-  "branch_type": one of "generic" | "personalized" | "constraint" | "disconfirming",
-  "query": the search query string (should be a concise, realistic search query),
-  "rationale": one short sentence explaining what this query aims to find and why it fits the branch type,
-  "used_persona_fields": list of the user signals/history items you inferred and used (empty list for generic).
-
-Return ONLY the JSON array, no prose."""
+    prompt = MIXED_FANOUT_PROMPT_TEMPLATE.format(
+        user_query=user_query,
+        persona_block=_persona_block(persona),
+    )
     raw = call_gemini(
         prompt, model=model, response_mime_type="application/json"
     )

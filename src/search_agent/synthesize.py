@@ -19,6 +19,7 @@ from .config import (
     MAX_RESULTS_PER_BRANCH_FOR_SYNTHESIS,
 )
 from .llm_gemini import call_gemini
+from .meta_prompt import SYNTHESIS_PROMPT_TEMPLATE
 from .schemas import Persona, SearchResult
 
 
@@ -90,26 +91,10 @@ def synthesize_answer(
     evidence_block = _format_evidence(selected)
     persona_block = _persona_block(persona)
 
-    prompt = f"""You are a careful research assistant. Answer the user's question
-directly and helpfully, grounded in the retrieved web evidence below.
-
-Guidelines:
-- Answer the question directly; lead with the most useful information.
-- Ground claims in the retrieved evidence. Cite source titles or URLs inline
-  (e.g. "according to [title]" or with the URL) when you rely on a source.
-- Do NOT over-personalize. Only use the persona context when it is genuinely
-  relevant to giving a better answer.
-- If the evidence is weak, sparse, or conflicting, say so and express the
-  appropriate uncertainty.
-- Do NOT pretend the retrieved sources are exhaustive or authoritative; they are
-  a limited sample of the web.
-- Be concise but complete.
-
-User question: {user_query}
-{persona_block}
-Retrieved evidence:
-{evidence_block}
-
-Now write the final answer."""
+    prompt = SYNTHESIS_PROMPT_TEMPLATE.format(
+        user_query=user_query,
+        persona_block=persona_block,
+        evidence_block=evidence_block,
+    )
 
     return call_gemini(prompt, model=model, temperature=0.4)

@@ -10,67 +10,13 @@ _PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(_PROJECT_ROOT, "src"))
 
 from search_agent.llm_gemini import call_gemini
+from search_agent.meta_prompt import FANOUT_JUDGE_PROMPT_TEMPLATE
 from search_agent.rubrics import (
     FANOUT_RUBRIC_FIELDS,
     format_latent_profile,
     format_rubric,
     load_rubrics,
 )
-
-JUDGE_PROMPT_TEMPLATE = """You are an expert AI judge evaluating a search-augmented agent's query fanout generation.
-
-You do NOT have access to the user's private profile, demographics, or hidden intent. You are given only the visible user query and a FROZEN evaluation rubric authored for this query before any search ran. Judge the fan-out ONLY against this rubric and the visible query.
-
-Return your evaluation as a strict JSON object. Do not include markdown formatting like ```json or any other text outside the JSON object.
-
-Input Data:
-User Query: {query}
-Task Type: {task_type}
-Task Category: {task_category}
-Macro Domain: {macro_domain}
-Search Required: {search_required}
-Expected Personalization Stage: {expected_personalization_stage}
-Persona Relevant Dimensions: {persona_relevant_dimensions}
-
-FROZEN EVALUATION RUBRIC (the ground truth for what a good search plan should target):
-{rubric_block}
-{profile_block}
-Generated Fanout Branches to Evaluate:
-{fanout_branches}
-
-Metrics to score on a 1-5 scale:
-- persona_field_use: Does the fan-out translate the rubric's `positive_persona_signals` / `must_use` constraints into the search queries? (Higher is better)
-- query_specificity: Are the subqueries specific enough to retrieve useful evidence? (Higher is better)
-- query_diversity: Do the subqueries cover meaningfully different aspects? (Higher is better)
-- search_realism: Do the subqueries look like realistic search queries? (Higher is better)
-- faithfulness_to_user_query: Do the subqueries preserve the original user intent? (Higher is better)
-- overpersonalization_risk: Do the subqueries chase the rubric's `distractor_signals_to_ignore` or inject persona details the rubric does not call for? (1 = no problematic overpersonalization, 5 = severe overpersonalization)
-
-Important Instructions:
-Do not reward a fan-out merely because it repeats persona-like words. Reward only usage of signals the rubric marks relevant (`positive_persona_signals` / `must_use`).
-For retrieval_sensitive tasks, reward fan-out that translates the rubric's required constraints into useful search queries.
-For synthesis_sensitive tasks, do not require heavy persona-specific fan-out. Reward faithful, search-worthy, evidence-grounding queries. Penalize fan-out that over-personalizes by narrowing the search away from the user's actual information need or by chasing distractors.
-
-Your output MUST be exactly in this JSON format:
-{{
-  "scores": {{
-    "persona_field_use": 1,
-    "query_specificity": 1,
-    "query_diversity": 1,
-    "search_realism": 1,
-    "faithfulness_to_user_query": 1,
-    "overpersonalization_risk": 1
-  }},
-  "rationale": {{
-    "persona_field_use": "...",
-    "query_specificity": "...",
-    "query_diversity": "...",
-    "search_realism": "...",
-    "faithfulness_to_user_query": "...",
-    "overpersonalization_risk": "..."
-  }}
-}}
-"""
 
 
 def clean_json_response(text: str) -> str:
@@ -84,8 +30,9 @@ def clean_json_response(text: str) -> str:
     return text.strip()
 
 
-def build_prompt(run, rubric, include_latent_profile=False):
-    """Render the fan-out judge prompt for one run. Pure (no model call)."""
+def evaluate_fanout(run, rubrics, model="gemini-flash-latest", include_latent_profile=False):
+    rubric = rubrics.get(run.get("query_id"), {})
+
     profile_block = ""
     if include_latent_profile:
         profile_block = (
@@ -93,7 +40,8 @@ def build_prompt(run, rubric, include_latent_profile=False):
             "extra ground truth):\n"
             f"{format_latent_profile(run.get('persona') or {})}\n"
         )
-    return JUDGE_PROMPT_TEMPLATE.format(
+
+    prompt = FANOUT_JUDGE_PROMPT_TEMPLATE.format(
         query=run.get("user_query", run.get("query", "")),
         task_type=run.get("task_type", "unknown"),
         task_category=run.get("task_category", "unknown"),
@@ -105,11 +53,6 @@ def build_prompt(run, rubric, include_latent_profile=False):
         profile_block=profile_block,
         fanout_branches=json.dumps(run.get("fanout_branches", []), indent=2),
     )
-
-
-def evaluate_fanout(run, rubrics, model="gemini-flash-latest", include_latent_profile=False):
-    rubric = rubrics.get(run.get("query_id"), {})
-    prompt = build_prompt(run, rubric, include_latent_profile=include_latent_profile)
 
     result = {
         "run_id": run.get("run_id", "unknown"),
