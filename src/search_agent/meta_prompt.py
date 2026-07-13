@@ -372,3 +372,57 @@ Your output MUST be exactly in this JSON format:
 }}
 """
 
+ORDERED_FANOUT_PLANNER_PROMPT_V1 = """You are an expert search query planner. Your task is to generate an ordered candidate plan of exactly {candidate_pool_size} web search queries for a user's request, conditioned on their persona context.
+
+The search queries will be evaluated using nested prefixes of lengths 1, 2, 4, and 8. Therefore, the queries MUST be ordered strictly by expected marginal retrieval value:
+
+1. Query 1 (priority_rank 1): Must be the strongest standalone search covering a general interpretation of the user's request.
+2. Query 2 (priority_rank 2): Must target persona-specific preferences or needs inferred from context.
+3. Query 3 (priority_rank 3): Must target hard constraints such as budget, jurisdiction, location, timeline, risk tolerance, or technical level.
+4. Query 4 (priority_rank 4): Must target caveats, exceptions, tradeoffs, or disconfirming evidence.
+5. Queries 5-{candidate_pool_size} (priority_rank 5-{candidate_pool_size}): Must target additional nonredundant information needs. They must NOT be superficial paraphrases generated only to reach {candidate_pool_size} queries.
+
+Allowed branch types: "generic" | "personalized" | "constraint" | "disconfirming" | "supplementary".
+
+User Question: {user_query!r}
+
+User Persona Context:
+{persona_block}
+
+Return STRICT JSON: a list of exactly {candidate_pool_size} objects in order of priority_rank (1 to {candidate_pool_size}), each with fields:
+  "priority_rank": integer rank from 1 to {candidate_pool_size},
+  "query": concise, realistic web search query string (no prose or full questions),
+  "branch_type": one of "generic" | "personalized" | "constraint" | "disconfirming" | "supplementary",
+  "information_need": short sentence describing the specific information need,
+  "rationale": short explanation of what evidence this search gathers and why it fits this priority rank,
+  "used_persona_fields": list of user signals inferred and used (empty list for generic queries).
+
+Return ONLY the JSON array, no prose."""
+
+ORDERED_FANOUT_REPAIR_PROMPT_V1 = """You are an expert search query planner. We previously generated an ordered search plan, but after parsing and deduplication we are missing {missing_count} branches to reach the required {candidate_pool_size} branches.
+
+User Question: {user_query!r}
+
+User Persona Context:
+{persona_block}
+
+Existing validated queries already in the plan:
+{existing_queries_block}
+
+Existing information needs already covered:
+{existing_needs_block}
+
+Generate EXACTLY {missing_count} additional NONREDUNDANT search queries with priority_rank starting from {start_rank} up to {candidate_pool_size}.
+Do NOT repeat or paraphrase any of the existing queries or information needs above.
+
+Return STRICT JSON: a list of exactly {missing_count} objects with fields:
+  "priority_rank": integer rank,
+  "query": search query string,
+  "branch_type": one of "generic" | "personalized" | "constraint" | "disconfirming" | "supplementary",
+  "information_need": short sentence describing the new information need,
+  "rationale": short explanation,
+  "used_persona_fields": list of persona signals used.
+
+Return ONLY the JSON array, no prose."""
+
+

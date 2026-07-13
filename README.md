@@ -150,3 +150,63 @@ The summarized CSV files are saved in `outputs/placement_ablation_v1/`:
 - `summary_by_macro_domain.csv`: Breakdown by macro-domain.
 - `contrasts_by_task_type.csv`: Pairwise variant contrast analysis.
 - `contrasts_by_macro_domain_task_type.csv`: Contrasts grouped by domain and task type.
+
+---
+
+## Fixed Fanout Scaling Experiment
+
+### Research Question
+How do retrieval quality, final-answer quality, redundancy, cost, and latency change as the number of search-query fanout branches increases?
+
+### k Values & Experimental Conditions
+We test fixed fanout branch scaling using:
+$$k \in \{1, 2, 4, 8\}$$
+
+The 4 experimental methods are:
+- `fixed_k1`: executes query 1
+- `fixed_k2`: executes queries 1–2
+- `fixed_k4`: executes queries 1–4
+- `fixed_k8`: executes queries 1–8
+
+### Methodological Rigor: Shared Plan & Nested Prefixes
+To ensure differences reflect fanout scaling rather than random query drift:
+- Exactly **one ordered 8-query plan** is generated per query/persona pair.
+- All four conditions use exact **nested prefixes** of this shared candidate plan:
+  $$Q_1 \subset Q_2 \subset Q_4 \subset Q_8$$
+- Searches are executed once and cached per candidate query. Overlapping prefixes reuse cached search results.
+- No condition receives evidence outside its prefix during synthesis.
+
+### Quickstart Commands
+
+#### 1. Validate Setup
+```bash
+python scripts/validate_fixed_fanout_setup.py --config configs/fixed_fanout_scaling_v1.yaml
+```
+
+#### 2. Run Benchmark (Supports `--dry_run`, `--limit`, `--resume`)
+```bash
+# Dry run preview (no API calls)
+python scripts/run_fixed_fanout_benchmark.py --config configs/fixed_fanout_scaling_v1.yaml --dry_run
+
+# Execute benchmark
+python scripts/run_fixed_fanout_benchmark.py --config configs/fixed_fanout_scaling_v1.yaml
+```
+
+#### 3. Evaluate Runs
+```bash
+python scripts/evaluate_fixed_fanout.py --config configs/fixed_fanout_scaling_v1.yaml
+```
+
+#### 4. Summarize Results & Compute Marginal Gains
+```bash
+python scripts/summarize_fixed_fanout.py --config configs/fixed_fanout_scaling_v1.yaml
+```
+
+### Major Outputs (`outputs/fixed_fanout_scaling_v1/`)
+- `runs.jsonl`: Structured run logs containing cost proxies, context character counts, and latencies.
+- `fanout_plans.jsonl`: Cached ordered 8-query candidate plans.
+- `search_cache.jsonl`: Cached normalized Tavily search results.
+- `fanout_scores.jsonl`, `retrieval_scores.jsonl`, `final_response_scores.jsonl`: Evaluator judgments.
+- `quality_cost_frontier.csv`: Summary of performance, retrieval quality, cost, and latency across methods.
+- `marginal_gains.csv`: Paired differences ($\Delta_{1\to 2}, \Delta_{2\to 4}, \Delta_{4\to 8}, \Delta_{1\to 4}, \Delta_{1\to 8}$) with 95% bootstrap confidence intervals.
+

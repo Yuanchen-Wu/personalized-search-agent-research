@@ -13,7 +13,15 @@ from typing import Any, Dict, List, Optional
 
 # Branch types used throughout the fan-out logic. Kept as a simple tuple so it
 # is trivial to validate against and to extend later.
-BRANCH_TYPES = ("generic", "personalized", "constraint", "disconfirming")
+BRANCH_TYPES = (
+    "generic",
+    "personalized",
+    "constraint",
+    "disconfirming",
+    "supplementary",
+)
+
+FIXED_FANOUT_METHODS = ("fixed_k1", "fixed_k2", "fixed_k4", "fixed_k8")
 
 # Variant identifiers. Centralized here so the CLI, batch runner, and fan-out
 # logic all agree on the canonical names.
@@ -24,7 +32,7 @@ VARIANTS = (
     "V3_fanout_only_personalization",
     "V4_personalized_fanout",
     "V5_mixed_fanout",
-)
+) + FIXED_FANOUT_METHODS
 
 
 @dataclass
@@ -228,6 +236,8 @@ class FanoutBranch:
     query: str
     rationale: str = ""
     used_persona_fields: List[str] = field(default_factory=list)
+    information_need: str = ""
+    priority_rank: Optional[int] = None
 
     def as_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -265,7 +275,7 @@ class CostProxy:
 
 @dataclass
 class RunLog:
-    """The full structured record of a single agent run. ok."""
+    """The full structured record of a single agent run."""
 
     run_id: str
     experiment_name: str
@@ -285,6 +295,36 @@ class RunLog:
     raw_search_results: List[Dict[str, Any]]
     final_answer: str
     cost_proxy: Dict[str, Any]
+    method: str = ""
+    seed: Optional[int] = None
+    planner_model: Optional[str] = None
+    synthesis_model: Optional[str] = None
+    requested_fanout_count: Optional[int] = None
+    realized_fanout_count: Optional[int] = None
+    full_candidate_plan_id: Optional[str] = None
+    executed_fanout_prefix: List[Dict[str, Any]] = field(default_factory=list)
+    branch_types_executed: List[str] = field(default_factory=list)
+    information_needs_executed: List[str] = field(default_factory=list)
+    priority_ranks_executed: List[int] = field(default_factory=list)
+    deduplicated_search_results: List[Dict[str, Any]] = field(default_factory=list)
+    exact_synthesis_evidence: List[Dict[str, Any]] = field(default_factory=list)
+    num_planner_calls: int = 0
+    num_synthesis_calls: int = 0
+    num_tavily_calls: int = 0
+    num_cache_hits: int = 0
+    num_cache_misses: int = 0
+    num_raw_results: int = 0
+    num_unique_results: int = 0
+    total_retrieved_context_size: int = 0
+    total_synthesis_context_size: int = 0
+    planner_latency: float = 0.0
+    search_latency: float = 0.0
+    synthesis_latency: float = 0.0
+    total_latency: float = 0.0
+    events: List[Dict[str, Any]] = field(default_factory=list)
 
     def as_dict(self) -> Dict[str, Any]:
-        return asdict(self)
+        d = asdict(self)
+        if not d.get("method"):
+            d["method"] = d.get("variant", "")
+        return d

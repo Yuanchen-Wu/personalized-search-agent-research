@@ -73,21 +73,28 @@ def synthesize_answer(
     variant: str,
     *,
     model: str = DEFAULT_GEMINI_MODEL,
+    select_results: bool = True,
+    seed: Optional[int] = None,
 ) -> str:
     """Synthesize a final answer from the user query and retrieved evidence.
 
     Args:
         user_query: The original user question.
-        persona: Persona context, or ``None`` to synthesize without it. For
-            V0/V1 the caller passes ``None``; for V2/V3/V4 it passes the persona.
+        persona: Persona context, or ``None`` to synthesize without it.
         search_results: Collected evidence across all branches.
-        variant: The experimental variant (included for traceability).
+        variant: The experimental variant / method identifier.
         model: Gemini model name.
+        select_results: If True, uses legacy per-branch capping. If False, uses search_results as-is.
+        seed: Optional random seed for Gemini call.
 
     Returns:
         The synthesized answer text.
     """
-    selected = _select_results_for_synthesis(search_results)
+    if select_results:
+        selected = _select_results_for_synthesis(search_results)
+    else:
+        selected = search_results
+
     evidence_block = _format_evidence(selected)
     persona_block = _persona_block(persona)
 
@@ -97,4 +104,5 @@ def synthesize_answer(
         evidence_block=evidence_block,
     )
 
-    return call_gemini(prompt, model=model, temperature=0.4)
+    return call_gemini(prompt, model=model, temperature=0.4, seed=seed)
+
