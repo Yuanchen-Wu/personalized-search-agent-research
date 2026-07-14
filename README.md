@@ -180,26 +180,26 @@ To ensure differences reflect fanout scaling rather than random query drift:
 
 #### 1. Validate Setup
 ```bash
-python scripts/validate_fixed_fanout_setup.py --config configs/fixed_fanout_scaling_v1.yaml
+.venv/bin/python scripts/validate_fixed_fanout_setup.py --config configs/fixed_fanout_scaling_v1.yaml
 ```
 
 #### 2. Run Benchmark (Supports `--dry_run`, `--limit`, `--resume`)
 ```bash
 # Dry run preview (no API calls)
-python scripts/run_fixed_fanout_benchmark.py --config configs/fixed_fanout_scaling_v1.yaml --dry_run
+.venv/bin/python scripts/run_fixed_fanout_benchmark.py --config configs/fixed_fanout_scaling_v1.yaml --dry_run
 
 # Execute benchmark
-python scripts/run_fixed_fanout_benchmark.py --config configs/fixed_fanout_scaling_v1.yaml
+.venv/bin/python scripts/run_fixed_fanout_benchmark.py --config configs/fixed_fanout_scaling_v1.yaml
 ```
 
 #### 3. Evaluate Runs
 ```bash
-python scripts/evaluate_fixed_fanout.py --config configs/fixed_fanout_scaling_v1.yaml
+.venv/bin/python scripts/evaluate_fixed_fanout.py --config configs/fixed_fanout_scaling_v1.yaml
 ```
 
 #### 4. Summarize Results & Compute Marginal Gains
 ```bash
-python scripts/summarize_fixed_fanout.py --config configs/fixed_fanout_scaling_v1.yaml
+.venv/bin/python scripts/summarize_fixed_fanout.py --config configs/fixed_fanout_scaling_v1.yaml
 ```
 
 ### Major Outputs (`outputs/fixed_fanout_scaling_v1/`)

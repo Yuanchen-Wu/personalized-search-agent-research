@@ -32,6 +32,7 @@ def call_gemini(
     max_retries: int = 3,
     temperature: float = 0.7,
     response_mime_type: Optional[str] = None,
+    seed: Optional[int] = None,
 ) -> str:
     """Call Gemini with a single text prompt and return the response text.
 
@@ -42,6 +43,7 @@ def call_gemini(
         temperature: Sampling temperature.
         response_mime_type: If set to ``"application/json"``, asks Gemini to
             return JSON. Useful for structured fan-out generation.
+        seed: Random seed for model sampling generation.
 
     Returns:
         The model's text output (stripped). Returns an empty string if the
@@ -57,6 +59,8 @@ def call_gemini(
     config_kwargs = {"temperature": temperature}
     if response_mime_type is not None:
         config_kwargs["response_mime_type"] = response_mime_type
+    if seed is not None:
+        config_kwargs["seed"] = seed
     gen_config = types.GenerateContentConfig(**config_kwargs)
 
     last_err: Optional[Exception] = None

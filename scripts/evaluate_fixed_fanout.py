@@ -250,7 +250,10 @@ def main():
     if args.limit:
         runs = runs[:args.limit]
 
-    print(f"Loaded {len(runs)} runs to evaluate using model '{model}'.")
+    print("\n======================================================================")
+    print(" [STAGE 2/3] EVALUATION: Fanout, Retrieval & Final Response Judging")
+    print("======================================================================")
+    print(f"Loaded {len(runs)} runs to evaluate using evaluator model '{model}'.")
 
     # Run evaluations with thread pool pacing
     evaluator_max_workers = 10
@@ -260,25 +263,36 @@ def main():
     retrieval_results = []
     final_results = []
 
-    print("\n--- Running Fanout Evaluation ---")
+    t_eval_start = time.time()
+
+    print("\n--- Sub-stage 2a: Fanout Query Evaluation ---")
     with ThreadPoolExecutor(max_workers=evaluator_max_workers) as executor:
         futures = [executor.submit(evaluate_fanout_for_run, run, rubrics, model) for run in runs]
-        for f in as_completed(futures):
-            fanout_results.append(f.result())
+        for idx, f in enumerate(as_completed(futures), start=1):
+            res = f.result()
+            fanout_results.append(res)
+            if idx % 10 == 0 or idx == len(runs):
+                print(f"  [Fanout Query Eval Progress] {idx}/{len(runs)} complete ({idx/len(runs)*100:.1f}%)")
             time.sleep(pacing_delay)
 
-    print("\n--- Running Retrieval Evaluation ---")
+    print("\n--- Sub-stage 2b: Retrieval Evidence Evaluation ---")
     with ThreadPoolExecutor(max_workers=evaluator_max_workers) as executor:
         futures = [executor.submit(evaluate_retrieval_for_run, run, rubrics, model) for run in runs]
-        for f in as_completed(futures):
-            retrieval_results.append(f.result())
+        for idx, f in enumerate(as_completed(futures), start=1):
+            res = f.result()
+            retrieval_results.append(res)
+            if idx % 20 == 0 or idx == len(runs):
+                print(f"  [Retrieval Evidence Eval Progress] {idx}/{len(runs)} complete ({idx/len(runs)*100:.1f}%)")
             time.sleep(pacing_delay)
 
-    print("\n--- Running Final Response Evaluation ---")
+    print("\n--- Sub-stage 2c: Final Response Evaluation ---")
     with ThreadPoolExecutor(max_workers=evaluator_max_workers) as executor:
         futures = [executor.submit(evaluate_final_response_for_run, run, rubrics, model) for run in runs]
-        for f in as_completed(futures):
-            final_results.append(f.result())
+        for idx, f in enumerate(as_completed(futures), start=1):
+            res = f.result()
+            final_results.append(res)
+            if idx % 20 == 0 or idx == len(runs):
+                print(f"  [Final Response Eval Progress] {idx}/{len(runs)} complete ({idx/len(runs)*100:.1f}%)")
             time.sleep(pacing_delay)
 
     # Save output JSONL files
@@ -295,7 +309,8 @@ def main():
         for r in final_results:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
 
-    print(f"\nEvaluation complete. Saved:\n  - {fanout_scores_path}\n  - {retrieval_scores_path}\n  - {final_scores_path}")
+    t_eval_elapsed = time.time() - t_eval_start
+    print(f"\n[STAGE 2/3 COMPLETE] Evaluation finished in {t_eval_elapsed/60.0:.2f} minutes. Scores saved:\n  - {fanout_scores_path}\n  - {retrieval_scores_path}\n  - {final_scores_path}")
 
 
 if __name__ == "__main__":

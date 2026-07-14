@@ -76,6 +76,7 @@ def main(argv: Optional[List[str]] = None) -> None:
     parser.add_argument("--overwrite", action="store_true", default=False)
     parser.add_argument("--dry_run", action="store_true", default=False)
     parser.add_argument("--no_cache", action="store_true", default=False)
+    parser.add_argument("--all_persona_pairings", action="store_true", default=False, help="Cross-pair queries with all personas (up to 1387 pairs) instead of targeted 1-to-1 personas (72 pairs)")
     args = parser.parse_args(argv)
 
     with open(args.config, "r", encoding="utf-8") as f:
@@ -121,19 +122,19 @@ def main(argv: Optional[List[str]] = None) -> None:
     if args.query_ids:
         queries = [q for q in queries if q.query_id in args.query_ids]
 
-    if args.limit is not None:
-        queries = queries[:args.limit]
-
     # Build unique query/persona pairs
     qp_pairs: List[Tuple[QueryRecord, Optional[Persona]]] = []
     persona_map = personas
     for q in queries:
         target_pid = q.metadata.get("persona_id")
-        if target_pid and target_pid in persona_map:
+        if not args.all_persona_pairings and target_pid and target_pid in persona_map:
             qp_pairs.append((q, persona_map[target_pid]))
         else:
             for p in persona_map.values():
                 qp_pairs.append((q, p))
+
+    if args.limit is not None:
+        qp_pairs = qp_pairs[:args.limit]
 
     total_planned_runs = len(qp_pairs) * len(methods)
 
@@ -160,7 +161,11 @@ def main(argv: Optional[List[str]] = None) -> None:
 
     completed_keys = load_completed_run_keys(runs_path) if args.resume else set()
 
-    print(f"Starting benchmark: {len(qp_pairs)} pairs x {len(methods)} methods = {total_planned_runs} total runs.")
+    print("\n======================================================================")
+    print(" [STAGE 1/3] BENCHMARK EXECUTION: Generating Plans, Searching & Synthesizing")
+    print("======================================================================")
+    print(f"Total pairs to process: {len(qp_pairs)} | Methods per pair: {methods}")
+    print(f"Total planned runs: {total_planned_runs} | Config file: {args.config}")
     if completed_keys:
         print(f"Found {len(completed_keys)} previously completed runs in {runs_path}. Resuming...")
 
@@ -320,7 +325,7 @@ def main(argv: Optional[List[str]] = None) -> None:
             print(f"  [SUCCESS] Written run {run_log.run_id} | method={method} (k={k}) | latency={total_run_latency:.2f}s")
 
     elapsed = time.time() - start_time
-    print(f"\nBenchmark completed {run_counter} runs in {elapsed:.2f}s. Results saved to {runs_path}")
+    print(f"\n[STAGE 1/3 COMPLETE] Benchmark finished {run_counter} runs in {elapsed/60.0:.2f} minutes. Runs written to {runs_path}")
 
 
 if __name__ == "__main__":

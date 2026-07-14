@@ -118,6 +118,10 @@ def main():
     if not os.path.isabs(frontier_path): frontier_path = os.path.join(_PROJECT_ROOT, frontier_path)
     if not os.path.isabs(marginal_gains_path): marginal_gains_path = os.path.join(_PROJECT_ROOT, marginal_gains_path)
 
+    print("\n======================================================================")
+    print(" [STAGE 3/3] SUMMARIZATION: Quality-Cost Frontier & Paired Marginal Gains")
+    print("======================================================================")
+
     # 1. Load run records
     runs_by_id: Dict[str, Dict[str, Any]] = {}
     runs_by_pair: Dict[Tuple[str, str], Dict[str, Dict[str, Any]]] = defaultdict(dict)
@@ -385,7 +389,7 @@ def main():
                     f"{pct_wor:.2f}",
                 ])
 
-    print(f"Summary tables and marginal gain analysis written successfully:\n"
+    print(f"\n[STAGE 3/3 COMPLETE] Statistical summarization finished successfully! Written files:\n"
           f"  - {summary_method_path}\n"
           f"  - {summary_tt_path}\n"
           f"  - {summary_tc_path}\n"
