@@ -67,7 +67,7 @@ def evaluate_run(run, rubrics, model="gemini-flash-latest", include_latent_profi
     }
 
     try:
-        response = call_gemini(prompt, model=model, temperature=0.1)
+        response = call_gemini(prompt, model=model, temperature=0.1, throttle=False)
         response_json = json.loads(clean_json_response(response))
         if "scores" not in response_json or "rationale" not in response_json:
             raise ValueError("Missing 'scores' or 'rationale' in JSON output.")

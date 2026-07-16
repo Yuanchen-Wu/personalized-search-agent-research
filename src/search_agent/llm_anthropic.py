@@ -8,6 +8,8 @@ the ``anthropic`` package -- only an actual call does. Use model ids like
 
 from __future__ import annotations
 
+from typing import Optional
+
 from .config import get_anthropic_api_key
 from .llm_client import LLMClient, retry_after_from_error
 
@@ -31,16 +33,27 @@ class AnthropicClient(LLMClient):
         return self._get_or_build_sdk(factory)
 
     def _raw_generate(
-        self, prompt: str, *, model: str, temperature: float, json_mode: bool
+        self,
+        prompt: str,
+        *,
+        model: str,
+        temperature: float,
+        json_mode: bool,
+        seed: Optional[int] = None,
     ) -> str:
         # TODO(M3): the Messages API has no JSON mode, so `json_mode` is a no-op
         # here -- we rely on the prompt's "return strict JSON" instruction plus the
         # callers' tolerant parser (fanout._extract_json / utils.parse_json_response).
         # Verify output parses cleanly on the first real Claude run (not yet
-        # live-tested). Anthropic has no seed parameter.
+        # live-tested). Anthropic has no seed parameter, so `seed` is ignored.
+        # The Messages API *requires* max_tokens, so fall back to 8192 when
+        # LLM_MAX_OUTPUT_TOKENS is unset (override the env var to change it).
+        max_tokens = self._max_output_tokens()
+        if max_tokens is None:
+            max_tokens = 8192
         response = self._client().messages.create(
             model=model,
-            max_tokens=self._max_output_tokens(),
+            max_tokens=max_tokens,
             temperature=temperature,
             messages=[{"role": "user", "content": prompt}],
         )

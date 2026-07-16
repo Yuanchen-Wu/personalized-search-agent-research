@@ -39,17 +39,23 @@ class GeminiClient(LLMClient):
         return self._get_or_build_sdk(factory)
 
     def _raw_generate(
-        self, prompt: str, *, model: str, temperature: float, json_mode: bool
+        self,
+        prompt: str,
+        *,
+        model: str,
+        temperature: float,
+        json_mode: bool,
+        seed: Optional[int] = None,
     ) -> str:
         from google.genai import types
 
-        config_kwargs = {
-            "temperature": temperature,
-            "max_output_tokens": self._max_output_tokens(),
-        }
-        seed = self._seed()
-        if seed is not None:
-            config_kwargs["seed"] = seed
+        config_kwargs = {"temperature": temperature}
+        max_output_tokens = self._max_output_tokens()
+        if max_output_tokens is not None:
+            config_kwargs["max_output_tokens"] = max_output_tokens
+        effective_seed = seed if seed is not None else self._seed()
+        if effective_seed is not None:
+            config_kwargs["seed"] = effective_seed
         if json_mode:
             config_kwargs["response_mime_type"] = "application/json"
         response = self._client().models.generate_content(
@@ -78,12 +84,16 @@ def call_gemini(
     temperature: float = 0.7,
     response_mime_type: Optional[str] = None,
     seed: Optional[int] = None,
+    throttle: bool = True,
 ) -> str:
     """Backward-compatible shim. Prefer ``llm_client.generate``.
 
     Routes through the provider abstraction so existing callers transparently get
     multi-provider support and shared rate limiting. ``response_mime_type=
-    "application/json"`` maps to ``json_mode=True``.
+    "application/json"`` maps to ``json_mode=True``. ``seed`` and ``throttle`` are
+    forwarded to :meth:`LLMClient.generate` — the per-call ``seed`` overrides
+    ``LLM_SEED``, and ``throttle=False`` skips client-side pacing for callers that
+    manage their own rate (e.g. the self-pacing judge harness).
     """
     return get_client(model).generate(
         prompt,
@@ -91,4 +101,6 @@ def call_gemini(
         temperature=temperature,
         json_mode=(response_mime_type == "application/json"),
         max_retries=max_retries,
+        seed=seed,
+        throttle=throttle,
     )

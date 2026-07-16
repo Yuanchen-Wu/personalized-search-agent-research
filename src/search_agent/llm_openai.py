@@ -13,6 +13,8 @@ standard Chat Completions call below covers the common case.
 
 from __future__ import annotations
 
+from typing import Optional
+
 from .config import get_openai_api_key
 from .llm_client import LLMClient, retry_after_from_error
 
@@ -39,17 +41,25 @@ class OpenAIClient(LLMClient):
         return self._get_or_build_sdk(factory)
 
     def _raw_generate(
-        self, prompt: str, *, model: str, temperature: float, json_mode: bool
+        self,
+        prompt: str,
+        *,
+        model: str,
+        temperature: float,
+        json_mode: bool,
+        seed: Optional[int] = None,
     ) -> str:
         kwargs = {
             "model": model,
             "messages": [{"role": "user", "content": prompt}],
             "temperature": temperature,
-            "max_tokens": self._max_output_tokens(),
         }
-        seed = self._seed()
-        if seed is not None:
-            kwargs["seed"] = seed
+        max_output_tokens = self._max_output_tokens()
+        if max_output_tokens is not None:
+            kwargs["max_tokens"] = max_output_tokens
+        effective_seed = seed if seed is not None else self._seed()
+        if effective_seed is not None:
+            kwargs["seed"] = effective_seed
         if json_mode and self.supports_response_format:
             # TODO(M3): json_object mode requires the literal word "json" in the
             # prompt; ours use "JSON" (uppercase). Verify acceptance on the first

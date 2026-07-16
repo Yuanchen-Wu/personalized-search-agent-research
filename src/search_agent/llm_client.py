@@ -71,7 +71,13 @@ class LLMClient(ABC):
     # --- provider-specific hooks -------------------------------------------
     @abstractmethod
     def _raw_generate(
-        self, prompt: str, *, model: str, temperature: float, json_mode: bool
+        self,
+        prompt: str,
+        *,
+        model: str,
+        temperature: float,
+        json_mode: bool,
+        seed: Optional[int],
     ) -> str:
         """Make the actual provider API call and return the response text."""
 
@@ -93,20 +99,21 @@ class LLMClient(ABC):
         except ValueError:
             return self.default_max_rpm
 
-    def _max_output_tokens(self) -> int:
-        """Upper bound on generated tokens, shared across all providers.
+    def _max_output_tokens(self) -> Optional[int]:
+        """Optional hard cap on generated tokens (``LLM_MAX_OUTPUT_TOKENS``).
 
-        A safety ceiling that prevents pathological, impossible-to-score runaway
-        output; it sits at/below the model's own max output, so normal answers are
-        never truncated. Override with LLM_MAX_OUTPUT_TOKENS.
+        Off by default (``None``) so output is bounded only by the model's own
+        maximum and long answers are never silently truncated. Set the env var to
+        impose a ceiling (e.g. to bound pathological runaway output). Providers
+        whose API *requires* a max (Anthropic) supply their own fallback.
         """
         raw = os.environ.get("LLM_MAX_OUTPUT_TOKENS")
         if raw is None:
-            return 8192
+            return None
         try:
             return int(raw)
         except ValueError:
-            return 8192
+            return None
 
     def _timeout_seconds(self) -> float:
         """Per-call API timeout (LLM_TIMEOUT_SECONDS, default 120) so a hung
@@ -199,6 +206,8 @@ class LLMClient(ABC):
         temperature: float = 0.7,
         json_mode: bool = False,
         max_retries: int = 6,
+        seed: Optional[int] = None,
+        throttle: bool = True,
     ) -> str:
         """Generate text, with per-provider pacing and quota-aware retries.
 
@@ -208,6 +217,13 @@ class LLMClient(ABC):
             temperature: Sampling temperature.
             json_mode: Ask the provider to return strict JSON where supported.
             max_retries: Attempts before giving up.
+            seed: Per-call generation seed; takes precedence over the ``LLM_SEED``
+                env default. ``None`` => ``LLM_SEED`` or the provider default.
+                Ignored by providers without a seed parameter (Anthropic).
+            throttle: Apply client-side per-provider pacing before the first
+                attempt. Pass ``False`` when the caller already manages its own
+                concurrency/rate (e.g. the judge harness paces itself) to avoid
+                throttling twice.
 
         Returns:
             The model's text output (stripped); ``""`` if it produced none.
@@ -217,10 +233,19 @@ class LLMClient(ABC):
         """
         last_err: Optional[Exception] = None
         for attempt in range(1, max_retries + 1):
-            self._throttle()
+            # Pace only the first attempt; retries are already spaced by
+            # _retry_after_seconds below, so re-throttling here would double the
+            # wait and let failed attempts run the shared per-provider RPM cursor
+            # away into the future, stalling other threads.
+            if throttle and attempt == 1:
+                self._throttle()
             try:
                 return self._raw_generate(
-                    prompt, model=model, temperature=temperature, json_mode=json_mode
+                    prompt,
+                    model=model,
+                    temperature=temperature,
+                    json_mode=json_mode,
+                    seed=seed,
                 )
             except Exception as err:  # noqa: BLE001 - broad retry coverage
                 last_err = err
@@ -296,6 +321,8 @@ def generate(
     temperature: float = 0.7,
     json_mode: bool = False,
     max_retries: int = 6,
+    seed: Optional[int] = None,
+    throttle: bool = True,
 ) -> str:
     """Convenience entrypoint: route ``model`` to its provider and generate."""
     return get_client(model).generate(
@@ -304,4 +331,6 @@ def generate(
         temperature=temperature,
         json_mode=json_mode,
         max_retries=max_retries,
+        seed=seed,
+        throttle=throttle,
     )
