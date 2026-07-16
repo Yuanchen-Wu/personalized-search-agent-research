@@ -65,3 +65,40 @@ def get_tavily_api_key() -> str:
             "key, or export TAVILY_API_KEY in your shell."
         )
     return key
+
+
+def get_anthropic_api_key() -> str:
+    """Return the Anthropic API key from the environment or raise a clear error."""
+    key = os.environ.get("ANTHROPIC_API_KEY")
+    if not key:
+        raise MissingAPIKeyError(
+            "ANTHROPIC_API_KEY is not set. Copy .env.example to .env and add your "
+            "key, or export ANTHROPIC_API_KEY in your shell."
+        )
+    return key
+
+
+def get_openai_api_key() -> str:
+    """Return the OpenAI API key from the environment or raise a clear error."""
+    key = os.environ.get("OPENAI_API_KEY")
+    if not key:
+        raise MissingAPIKeyError(
+            "OPENAI_API_KEY is not set. Copy .env.example to .env and add your "
+            "key, or export OPENAI_API_KEY in your shell."
+        )
+    return key
+
+
+def get_llama_api_key() -> str:
+    """Return the Llama API key from the environment or raise a clear error.
+
+    Used for Meta's Llama API and other OpenAI-compatible Llama hosts. For a
+    keyless local endpoint (e.g. Ollama), set LLAMA_API_KEY to any non-empty value.
+    """
+    key = os.environ.get("LLAMA_API_KEY")
+    if not key:
+        raise MissingAPIKeyError(
+            "LLAMA_API_KEY is not set. Copy .env.example to .env and add your "
+            "key, or export LLAMA_API_KEY in your shell."
+        )
+    return key

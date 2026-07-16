@@ -76,7 +76,7 @@ def evaluate_run(run, rubrics, model="gemini-flash-latest", include_latent_profi
 
     # Call Gemini for Quality
     try:
-        q_response = call_gemini(quality_prompt, model=model, temperature=0.1)
+        q_response = call_gemini(quality_prompt, model=model, temperature=0.1, throttle=False)
         q_json = json.loads(clean_json_response(q_response))
         if "scores" in q_json and "rationale" in q_json:
             result["scores"].update(q_json["scores"])
@@ -88,7 +88,7 @@ def evaluate_run(run, rubrics, model="gemini-flash-latest", include_latent_profi
 
     # Call Gemini for Faithfulness
     try:
-        f_response = call_gemini(faithfulness_prompt, model=model, temperature=0.1)
+        f_response = call_gemini(faithfulness_prompt, model=model, temperature=0.1, throttle=False)
         f_json = json.loads(clean_json_response(f_response))
         if "scores" in f_json and "rationale" in f_json:
             result["scores"].update(f_json["scores"])
