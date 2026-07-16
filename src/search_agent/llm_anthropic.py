@@ -11,7 +11,7 @@ from __future__ import annotations
 from typing import Optional
 
 from .config import get_anthropic_api_key
-from .llm_client import LLMClient, retry_after_from_error
+from .llm_client import LLMClient
 
 
 class AnthropicClient(LLMClient):
@@ -73,9 +73,3 @@ class AnthropicClient(LLMClient):
                 f"(stop_reason={getattr(response, 'stop_reason', None)!r})"
             )
         return text
-
-    def _retry_after_seconds(self, err: Exception, attempt: int) -> float:
-        retry_after = retry_after_from_error(err)
-        if retry_after is not None:
-            return min(retry_after + 1.0, 90.0)
-        return min(2.0 ** (attempt - 1), 30.0)

@@ -67,13 +67,14 @@ class GeminiClient(LLMClient):
         return text.strip() if text else ""
 
     def _retry_after_seconds(self, err: Exception, attempt: int) -> float:
-        """Honor Gemini's ``retryDelay`` hint on 429s; else exponential backoff."""
+        """Honor Gemini's ``retryDelay`` body hint on 429s; else defer to the base
+        (``Retry-After`` header / capped exponential backoff)."""
         text = str(err)
         if "429" in text or "RESOURCE_EXHAUSTED" in text:
             m = re.search(r"retryDelay['\"]?\s*[:=]\s*['\"]?(\d+(?:\.\d+)?)\s*s", text)
             if m:
                 return min(float(m.group(1)) + 1.0, 90.0)
-        return min(2.0 ** (attempt - 1), 30.0)
+        return super()._retry_after_seconds(err, attempt)
 
 
 def call_gemini(

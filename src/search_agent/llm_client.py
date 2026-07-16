@@ -84,9 +84,13 @@ class LLMClient(ABC):
     def _retry_after_seconds(self, err: Exception, attempt: int) -> float:
         """Seconds to wait before retrying after ``err`` on ``attempt``.
 
-        Default: capped exponential backoff. Providers override to honor a
-        server-supplied hint (Gemini ``retryDelay`` / a ``Retry-After`` header).
+        Honors a server-supplied ``Retry-After`` header when the SDK error exposes
+        one (Anthropic/OpenAI); otherwise capped exponential backoff. Gemini
+        overrides to also parse its ``retryDelay`` body hint, then defers here.
         """
+        retry_after = retry_after_from_error(err)
+        if retry_after is not None:
+            return min(retry_after + 1.0, 90.0)
         return min(2.0 ** (attempt - 1), 30.0)
 
     # --- shared behavior ----------------------------------------------------
@@ -177,6 +181,12 @@ class LLMClient(ABC):
         if any(t in s for t in (
             "401", "403", "404", "400", "422", "unauthorized", "permission denied",
             "invalid api key", "api key not valid", "not found", "invalid_request",
+            # deterministically fatal — retrying only burns the retry budget:
+            "context_length_exceeded", "context length", "maximum context",
+            "prompt is too long", "too many tokens", "string_above_max_length",
+            "content_filter", "content filter", "content_policy",
+            "content management policy", "insufficient_quota", "model_not_found",
+            "does not exist", "unsupported",
         )):
             return False
         return True  # unknown: default to retry (batch robustness)
