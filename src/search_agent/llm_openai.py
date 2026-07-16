@@ -49,11 +49,20 @@ class OpenAIClient(LLMClient):
         json_mode: bool,
         seed: Optional[int] = None,
     ) -> str:
-        kwargs = {
-            "model": model,
-            "messages": [{"role": "user", "content": prompt}],
-            "temperature": temperature,
-        }
+        messages = [{"role": "user", "content": prompt}]
+        if json_mode:
+            # Steer JSON with a system message. The lowercase "json" also satisfies
+            # the literal-word requirement of OpenAI's json_object mode, and gives
+            # response_format-less endpoints (Llama) a nudge; the caller's tolerant
+            # parser remains the backstop.
+            messages.insert(
+                0,
+                {
+                    "role": "system",
+                    "content": "Respond with only valid json — no prose, no markdown fences.",
+                },
+            )
+        kwargs = {"model": model, "messages": messages, "temperature": temperature}
         max_output_tokens = self._max_output_tokens()
         if max_output_tokens is not None:
             kwargs["max_tokens"] = max_output_tokens
@@ -61,12 +70,18 @@ class OpenAIClient(LLMClient):
         if effective_seed is not None:
             kwargs["seed"] = effective_seed
         if json_mode and self.supports_response_format:
-            # TODO(M3): json_object mode requires the literal word "json" in the
-            # prompt; ours use "JSON" (uppercase). Verify acceptance on the first
-            # real OpenAI run (not yet live-tested).
             kwargs["response_format"] = {"type": "json_object"}
         response = self._client().chat.completions.create(**kwargs)
-        return (response.choices[0].message.content or "").strip()
+        # Surface an empty/refused/truncated-to-nothing completion instead of
+        # silently returning "" (which the caller would treat as a valid answer).
+        choice = response.choices[0]
+        content = choice.message.content
+        if not content:
+            raise RuntimeError(
+                "OpenAI returned no text content "
+                f"(finish_reason={getattr(choice, 'finish_reason', None)!r})"
+            )
+        return content.strip()
 
     def _retry_after_seconds(self, err: Exception, attempt: int) -> float:
         retry_after = retry_after_from_error(err)

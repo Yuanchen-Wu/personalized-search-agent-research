@@ -159,7 +159,9 @@ class LLMClient(ABC):
         if isinstance(code, bool):
             code = None  # bool is an int subclass; ignore
         if isinstance(code, int):
-            if code == 429:
+            # 429 plus 408/409/425 (request-timeout / conflict / too-early) are
+            # transient and worth retrying; other 4xx are client errors.
+            if code in (429, 408, 409, 425):
                 return True
             if 400 <= code < 500:
                 return False

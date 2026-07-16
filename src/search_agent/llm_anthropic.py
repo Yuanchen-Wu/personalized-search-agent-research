@@ -41,28 +41,38 @@ class AnthropicClient(LLMClient):
         json_mode: bool,
         seed: Optional[int] = None,
     ) -> str:
-        # TODO(M3): the Messages API has no JSON mode, so `json_mode` is a no-op
-        # here -- we rely on the prompt's "return strict JSON" instruction plus the
-        # callers' tolerant parser (fanout._extract_json / utils.parse_json_response).
-        # Verify output parses cleanly on the first real Claude run (not yet
-        # live-tested). Anthropic has no seed parameter, so `seed` is ignored.
-        # The Messages API *requires* max_tokens, so fall back to 8192 when
-        # LLM_MAX_OUTPUT_TOKENS is unset (override the env var to change it).
+        # The Messages API has no native JSON mode, so when json_mode is set we
+        # steer output with a system instruction and lean on the caller's tolerant
+        # parser as a backstop (not yet live-tested on Claude -- see M3). Anthropic
+        # has no seed parameter, so `seed` is ignored. The API *requires*
+        # max_tokens, so fall back to 8192 when LLM_MAX_OUTPUT_TOKENS is unset.
         max_tokens = self._max_output_tokens()
         if max_tokens is None:
             max_tokens = 8192
-        response = self._client().messages.create(
-            model=model,
-            max_tokens=max_tokens,
-            temperature=temperature,
-            messages=[{"role": "user", "content": prompt}],
-        )
+        kwargs = {
+            "model": model,
+            "max_tokens": max_tokens,
+            "temperature": temperature,
+            "messages": [{"role": "user", "content": prompt}],
+        }
+        if json_mode:
+            kwargs["system"] = (
+                "Respond with only valid JSON -- no prose, no explanation, and no "
+                "markdown code fences."
+            )
+        response = self._client().messages.create(**kwargs)
         parts = [
             block.text
             for block in response.content
             if getattr(block, "type", None) == "text"
         ]
-        return "".join(parts).strip()
+        text = "".join(parts).strip()
+        if not text:
+            raise RuntimeError(
+                "Anthropic returned no text content "
+                f"(stop_reason={getattr(response, 'stop_reason', None)!r})"
+            )
+        return text
 
     def _retry_after_seconds(self, err: Exception, attempt: int) -> float:
         retry_after = retry_after_from_error(err)
