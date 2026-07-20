@@ -612,3 +612,49 @@ Return STRICT JSON, no prose, with exactly these fields:
 Return ONLY the JSON object."""
 
 
+# ---------------------------------------------------------------------------
+# Draft-answer critic (prototype): judges the DRAFT ANSWER instead of the evidence,
+# so re-fanning is driven by what the ANSWER still fails to do -- not by raw coverage.
+#
+# LEAK-FREE CONTRACT (load-bearing): shown ONLY agent-visible inputs -- the user
+# question, ``persona.render_for_agent()``, this round's retrieved evidence, and the
+# agent's OWN draft answer. It is NEVER shown the frozen per-query evaluation rubric /
+# gold intent (that is reserved for the out-of-loop evaluators). Using the rubric-aware
+# final judge here would be leakage; this critic is a leak-free self-assessment, exactly
+# like the retrieval judge.
+# ---------------------------------------------------------------------------
+ANSWER_CRITIC_PROMPT_V1 = """You are a critical reviewer of a DRAFT answer written by a personalized search agent. A round of web search produced some evidence and the agent drafted an answer from it. Rate how well the DRAFT ANSWER serves THIS user's request, and say what it still fails to do so the next search round can gather what the answer actually needs.
+
+Reason ONLY from the information below: the user's question, what is known about the user (stated details + recent history, some possibly unrelated -- infer what is genuinely relevant and do NOT over-personalize), the evidence retrieved this round, and the draft answer. There is NO answer key or gold rubric available to you; judge the draft purely on its merits. You do NOT decide whether to stop -- you only score the answer; a separate controller applies the approval threshold.
+
+User question: {user_query!r}
+
+What is known about the user:
+{persona_block}
+
+Evidence retrieved this round ({num_evidence} results):
+{evidence_digest}
+
+DRAFT ANSWER to review:
+{draft_answer}
+
+Rate the draft on this 1-5 scale. Score STRICTLY against what a genuinely useful answer for THIS specific user would need -- not merely whether it is on-topic. LLM raters inflate: a 5 must be RARE, and when torn between two scores choose the lower.
+  5 = Excellent and rare. Directly addresses the user's most likely underlying goal, applies the constraints that actually matter for them (budget/jurisdiction/timeline/eligibility/level), is specific and non-generic, stays grounded in the evidence, and names the key unknowns/caveats where relevant.
+  4 = Strong. Addresses the core need and the main relevant constraint, but misses a materially relevant constraint, specificity, or an important caveat.
+  3 = Usable but generic. Answers the surface question but does not tailor to the user's specific situation, or misses a materially relevant constraint.
+  2 = Weak. On-topic but does not address the user's actual need, or is vague / unsupported by the evidence.
+  1 = Off-target or unhelpful for this user.
+
+Diagnose the shortfall: is a needed fact MISSING from the evidence (retrieval problem -> more search helps), or did the answer FAIL TO USE evidence it already had (synthesis problem -> more search will NOT help)? Set ``needs_more_evidence`` accordingly, and focus ``feedback`` on what to SEARCH next only when more evidence would actually help.
+
+Return STRICT JSON, no prose, with exactly these fields:
+{{
+  "answer_score": <integer 1-5 from the scale above>,
+  "answer_gaps": ["short phrase for each way the answer still falls short; [] if none"],
+  "needs_more_evidence": true or false,
+  "feedback": "one or two sentences on what to search for next to improve the answer (empty if none)",
+  "rationale": "one or two sentences justifying the score"
+}}
+Return ONLY the JSON object."""
+
+

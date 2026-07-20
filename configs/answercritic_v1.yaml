@@ -1,0 +1,36 @@
+experiment_name: answercritic_v1
+
+# Leak-free draft-answer-critic loop (phase 2). Each round: fan-out -> search -> DRAFT
+# answer -> leak-free answer critic -> approve or re-fan on what the ANSWER needs.
+# Run at the max-persistence threshold so lower answer-score thresholds are derivable
+# post-hoc from the per-round drafts (the "t=5 trick"). ISOLATED output dir -> phase-1
+# data (outputs/adaptive_refanout_v1/) is never touched.
+
+answercritic:
+  max_rounds: 6                  # cap on fan-out -> draft -> critique rounds
+  approval_threshold: 5          # max-persistence; thresholds 3/4/5 derived post-hoc from drafts
+  judge_samples: 3               # K critic votes/round, averaged -> fractional answer_score
+  judge_temperature: 0.2
+
+search:
+  search_depth: basic
+  max_results_per_branch: 5
+
+models:
+  planner: gemini-3.5-flash      # fan-out generator
+  synthesizer: gemini-3.5-flash  # per-round DRAFT synthesizer (hardened v2 prompt)
+  critic: gemini-3.5-flash       # leak-free draft-answer critic
+
+reproducibility:
+  seed: 42
+
+data:
+  # Reuse the SAME 72 (query, persona) pairs as phase 1 (pulled from its tau=5 records).
+  pairs_source: outputs/adaptive_refanout_v1/runs_tau_grid.jsonl
+  pairs_method: refanout_k4_t5
+
+outputs:
+  run_dir: outputs/answercritic_v1
+  runs_path: outputs/answercritic_v1/runs_answercritic.jsonl
+  # Reuse phase-1 / C2 search cache so overlapping queries are cache hits (read+write):
+  search_cache_path: outputs/fixed_fanout_scaling_v1/search_cache.jsonl
