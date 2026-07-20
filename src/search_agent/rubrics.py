@@ -7,7 +7,7 @@ re-join the rubric here, keyed by ``query_id``, so they grade against the
 *frozen* rubric authored before any answer existed — instead of the
 agent-invisible persona answer key (``latent_profile`` / ``description``).
 
-See ``reports/notes/benchmark_data_spec.md`` §7 for the judge contract.
+See ``reports/local/benchmark_data_spec.md`` §7 for the judge contract.
 """
 
 from __future__ import annotations

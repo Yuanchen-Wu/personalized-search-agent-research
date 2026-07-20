@@ -1,0 +1,18 @@
+experiment_name: adaptive_refanout_synthhard
+
+# Synthesis-hardening ablation scoring config. Isolated inputs/outputs so the baseline
+# grid data and scores (runs_tau_grid.jsonl, *_scores.jsonl) are NEVER overwritten.
+# Scores refanout_k4_t5_hard (hardened synthesis on the SAME tau=5 evidence).
+
+data:
+  personas_path: data/synthetic_personas_v1.jsonl
+  queries_path: data/synthetic_queries_v1.jsonl
+
+models:
+  evaluator: gemini-3.5-flash        # same evaluator as the baseline grid
+
+outputs:
+  runs_path: outputs/adaptive_refanout_v1/runs_synthhard.jsonl
+  fanout_scores_path: outputs/adaptive_refanout_v1/fanout_scores_synthhard.jsonl
+  retrieval_scores_path: outputs/adaptive_refanout_v1/retrieval_scores_synthhard.jsonl
+  final_response_scores_path: outputs/adaptive_refanout_v1/final_response_scores_synthhard.jsonl

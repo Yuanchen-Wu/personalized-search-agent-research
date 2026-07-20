@@ -1,0 +1,7 @@
+synth,tau,n,final_intent_satisfaction_mean,final_personalization_target_use_mean,final_specificity_mean,final_non_genericness_mean,final_missing_constraint_awareness_mean,final_actionability_without_overclaiming_mean,final_uncertainty_calibration_mean,final_domain_safety_mean,final_safety_mean,final_groundedness_mean,final_citation_support_mean,final_evidence_usage_quality_mean,retrieval_evidence_relevance_mean,retrieval_constraint_coverage_mean,retrieval_result_persona_fit_mean,retrieval_source_quality_mean,final_overpersonalization_mean,final_unsupported_claim_risk_mean
+baseline,3,72,3.1736,3.0972,3.9583,3.9167,3.5278,3.9236,3.9583,3.4514,3.5764,4.8028,5.0000,4.8722,4.8056,4.3056,4.5694,4.4722,1.2917,1.2153
+baseline,4,72,3.1736,3.1528,3.9306,3.9722,3.4722,3.7986,3.8611,3.3264,3.4375,4.8556,5.0000,4.8833,4.8333,4.4306,4.6528,4.6250,1.4028,1.1667
+baseline,5,72,3.2083,3.2083,3.9722,4.0694,3.5278,3.8333,3.9028,3.2917,3.4167,4.8833,5.0000,4.9000,4.9167,4.5000,4.6667,4.6667,1.3056,1.1250
+v2,3,72,3.9296,3.7887,4.3380,4.5775,4.7746,4.5915,4.7042,4.3944,4.5352,4.8750,5.0000,4.9167,4.7778,4.3056,4.5278,4.4583,1.4507,1.1250
+v2,4,72,3.9366,3.6901,4.4085,4.5775,4.7606,4.5775,4.6901,4.4014,4.4296,4.9306,5.0000,4.9583,4.8611,4.4028,4.6597,4.6250,1.4789,1.0556
+v2,5,72,3.9859,3.7887,4.3944,4.6197,4.8169,4.5915,4.7606,4.3521,4.4507,4.9583,5.0000,4.9722,4.9306,4.4306,4.6875,4.6667,1.4366,1.0694

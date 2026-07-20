@@ -1,0 +1,18 @@
+experiment_name: adaptive_refanout_v2synth
+
+# "Fixed synthesis" grid scoring config: v2 hardened synthesis is the DEFAULT final query,
+# applied over tau in {3,4,5} evidence (refanout_k4_t{3,4,5}_v2). Isolated inputs/outputs so
+# the baseline grid, v1, and v2-tau5 ablation files are all preserved.
+
+data:
+  personas_path: data/synthetic_personas_v1.jsonl
+  queries_path: data/synthetic_queries_v1.jsonl
+
+models:
+  evaluator: gemini-3.5-flash
+
+outputs:
+  runs_path: outputs/adaptive_refanout_v1/runs_v2synth_grid.jsonl
+  fanout_scores_path: outputs/adaptive_refanout_v1/fanout_scores_v2synth.jsonl
+  retrieval_scores_path: outputs/adaptive_refanout_v1/retrieval_scores_v2synth.jsonl
+  final_response_scores_path: outputs/adaptive_refanout_v1/final_response_scores_v2synth.jsonl

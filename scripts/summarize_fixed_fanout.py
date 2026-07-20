@@ -16,6 +16,7 @@ import csv
 import json
 import math
 import os
+import re
 import sys
 import numpy as np
 import yaml
@@ -84,6 +85,48 @@ def extract_domain(url: str) -> str:
     return url.split(":", 1)[0]
 
 
+_FIXED_K = {"fixed_k1": 1, "fixed_k2": 2, "fixed_k4": 4, "fixed_k8": 8}
+_ADAPTIVE_RE = re.compile(r"^adaptive_[bk](\d+)")
+
+
+def _requested_k(method: str) -> int:
+    """Requested breadth: fixed_kK -> K; adaptive_[bk]N -> N (budget cap / fixed k); else 0."""
+    if method in _FIXED_K:
+        return _FIXED_K[method]
+    m = _ADAPTIVE_RE.match(method or "")
+    return int(m.group(1)) if m else 0
+
+
+def _merge_runs(path, runs_by_id, runs_by_pair):
+    """Load a runs.jsonl into runs_by_id / runs_by_pair (run_ids are globally unique)."""
+    if not os.path.exists(path):
+        return
+    with open(path, "r", encoding="utf-8") as f:
+        for line in f:
+            if not line.strip():
+                continue
+            d = json.loads(line)
+            rid = d["run_id"]
+            runs_by_id[rid] = d
+            q_id = d["query_id"]
+            p_id = d.get("persona_id") or "none"
+            method = d.get("method") or d.get("variant")
+            runs_by_pair[(q_id, p_id)][method] = d
+
+
+def _merge_scores(path, prefix, scores_by_run):
+    """Load one score file, prefixing metric names (final_/retrieval_/fanout_)."""
+    if not os.path.exists(path):
+        return
+    with open(path, "r", encoding="utf-8") as f:
+        for line in f:
+            if line.strip():
+                d = json.loads(line)
+                for k, v in d.get("scores", {}).items():
+                    if isinstance(v, (int, float)):
+                        scores_by_run[d["run_id"]][f"{prefix}{k}"] = float(v)
+
+
 def main():
     parser = argparse.ArgumentParser(description="Summarize fixed fanout scaling experiment results.")
     parser.add_argument("--config", default="configs/fixed_fanout_scaling_v1.yaml")
@@ -122,52 +165,27 @@ def main():
     print(" [STAGE 3/3] SUMMARIZATION: Quality-Cost Frontier & Paired Marginal Gains")
     print("======================================================================")
 
-    # 1. Load run records
+    # 1+2. Load run records + scores. Merge this experiment's dir with any
+    # `additional_result_dirs` so multiple method families (e.g. fixed_k* + adaptive_*)
+    # land on ONE frontier without re-scoring already-scored runs. run_ids are globally
+    # unique, so the merge is collision-free.
     runs_by_id: Dict[str, Dict[str, Any]] = {}
     runs_by_pair: Dict[Tuple[str, str], Dict[str, Dict[str, Any]]] = defaultdict(dict)
-
-    if os.path.exists(runs_path):
-        with open(runs_path, "r", encoding="utf-8") as f:
-            for line in f:
-                if not line.strip():
-                    continue
-                d = json.loads(line)
-                rid = d["run_id"]
-                runs_by_id[rid] = d
-                q_id = d["query_id"]
-                p_id = d.get("persona_id") or "none"
-                method = d.get("method") or d.get("variant")
-                runs_by_pair[(q_id, p_id)][method] = d
-
-    # 2. Load scores
     scores_by_run: Dict[str, Dict[str, float]] = defaultdict(dict)
-    
-    if os.path.exists(final_scores_path):
-        with open(final_scores_path, "r", encoding="utf-8") as f:
-            for line in f:
-                if line.strip():
-                    d = json.loads(line)
-                    for k, v in d.get("scores", {}).items():
-                        if isinstance(v, (int, float)):
-                            scores_by_run[d["run_id"]][f"final_{k}"] = float(v)
 
-    if os.path.exists(retrieval_scores_path):
-        with open(retrieval_scores_path, "r", encoding="utf-8") as f:
-            for line in f:
-                if line.strip():
-                    d = json.loads(line)
-                    for k, v in d.get("scores", {}).items():
-                        if isinstance(v, (int, float)):
-                            scores_by_run[d["run_id"]][f"retrieval_{k}"] = float(v)
+    _merge_runs(runs_path, runs_by_id, runs_by_pair)
+    _merge_scores(final_scores_path, "final_", scores_by_run)
+    _merge_scores(retrieval_scores_path, "retrieval_", scores_by_run)
+    _merge_scores(fanout_scores_path, "fanout_", scores_by_run)
 
-    if os.path.exists(fanout_scores_path):
-        with open(fanout_scores_path, "r", encoding="utf-8") as f:
-            for line in f:
-                if line.strip():
-                    d = json.loads(line)
-                    for k, v in d.get("scores", {}).items():
-                        if isinstance(v, (int, float)):
-                            scores_by_run[d["run_id"]][f"fanout_{k}"] = float(v)
+    for extra_dir in config.get("additional_result_dirs", []):
+        if not os.path.isabs(extra_dir):
+            extra_dir = os.path.join(_PROJECT_ROOT, extra_dir)
+        _merge_runs(os.path.join(extra_dir, "runs.jsonl"), runs_by_id, runs_by_pair)
+        _merge_scores(os.path.join(extra_dir, "final_response_scores.jsonl"), "final_", scores_by_run)
+        _merge_scores(os.path.join(extra_dir, "retrieval_scores.jsonl"), "retrieval_", scores_by_run)
+        _merge_scores(os.path.join(extra_dir, "fanout_scores.jsonl"), "fanout_", scores_by_run)
+        print(f"  merged additional result dir: {extra_dir}")
 
     # Enrich run records with direct non-LLM metrics
     for rid, run in runs_by_id.items():
@@ -175,8 +193,11 @@ def main():
         urls = [r.get("url") for r in raw_results if r.get("url")]
         unique_urls = set(urls)
         domains = set(extract_domain(u) for u in unique_urls)
-        dup_count = sum(1 for r in raw_results if r.get("is_duplicate_url"))
-        dup_rate = dup_count / float(len(raw_results)) if raw_results else 0.0
+        # Bug D fix: is_duplicate_url is never set on raw_search_results (dedup writes
+        # it onto deduplicated_search_results instead), so the old dup_count was always 0.
+        # Compute the real cross-branch URL redundancy from unique/raw URL counts.
+        n_urls = len(urls)
+        dup_rate = 1.0 - (len(unique_urls) / n_urls) if n_urls else 0.0
 
         scores_by_run[rid]["realized_k"] = float(run.get("realized_fanout_count", len(run.get("fanout_branches", []))))
         scores_by_run[rid]["tavily_calls"] = float(run.get("num_tavily_calls", run.get("cost_proxy", {}).get("num_tavily_calls", 0)))
@@ -187,6 +208,14 @@ def main():
         scores_by_run[rid]["total_synthesis_context_size"] = float(run.get("total_synthesis_context_size", 0))
         scores_by_run[rid]["planner_calls"] = float(run.get("num_planner_calls", 1))
         scores_by_run[rid]["synthesis_calls"] = float(run.get("num_synthesis_calls", 1))
+        scores_by_run[rid]["assessor_calls"] = float(run.get("num_assessor_calls", 0))
+        # Honest total-LLM-call cost axis (the assessor is a real cost for adaptive).
+        scores_by_run[rid]["total_llm_calls"] = (
+            float(run.get("num_planner_calls", 1))
+            + float(run.get("num_synthesis_calls", 1))
+            + float(run.get("num_assessor_calls", 0))
+        )
+        scores_by_run[rid]["assessor_latency"] = float(run.get("assessor_latency", 0.0))
         scores_by_run[rid]["search_latency"] = float(run.get("search_latency", 0.0))
         scores_by_run[rid]["synthesis_latency"] = float(run.get("synthesis_latency", 0.0))
         scores_by_run[rid]["total_latency"] = float(run.get("total_latency", 0.0))
@@ -272,6 +301,8 @@ def main():
             "mean_synthesis_context_size",
             "mean_planner_calls",
             "mean_synthesis_calls",
+            "mean_assessor_calls",
+            "mean_total_llm_calls",
             "mean_search_latency",
             "mean_total_latency",
         ]
@@ -280,11 +311,9 @@ def main():
         headers.extend([f"{m}_mean" for m in score_metrics])
         writer.writerow(headers)
 
-        req_k_map = {"fixed_k1": 1, "fixed_k2": 2, "fixed_k4": 4, "fixed_k8": 8}
-
         for (grp_name, grp_type, method), m_data in sorted(frontier_groups.items()):
             sc = max(len(v) for v in m_data.values()) if m_data else 0
-            req_k = req_k_map.get(method, 0)
+            req_k = _requested_k(method)
             realized_k = compute_stats(m_data.get("realized_k", []))["mean"]
             tavily_calls = compute_stats(m_data.get("tavily_calls", []))["mean"]
             u_urls = compute_stats(m_data.get("unique_urls", []))["mean"]
@@ -293,6 +322,8 @@ def main():
             synth_ctx = compute_stats(m_data.get("total_synthesis_context_size", []))["mean"]
             p_calls = compute_stats(m_data.get("planner_calls", []))["mean"]
             s_calls = compute_stats(m_data.get("synthesis_calls", []))["mean"]
+            a_calls = compute_stats(m_data.get("assessor_calls", []))["mean"]
+            tot_llm = compute_stats(m_data.get("total_llm_calls", []))["mean"]
             s_lat = compute_stats(m_data.get("search_latency", []))["mean"]
             t_lat = compute_stats(m_data.get("total_latency", []))["mean"]
 
@@ -310,6 +341,8 @@ def main():
                 f"{synth_ctx:.1f}",
                 f"{p_calls:.2f}",
                 f"{s_calls:.2f}",
+                f"{a_calls:.2f}",
+                f"{tot_llm:.2f}",
                 f"{s_lat:.2f}",
                 f"{t_lat:.2f}",
             ]
@@ -324,6 +357,17 @@ def main():
         ("fixed_k8", "fixed_k4", "k4_to_k8"),
         ("fixed_k4", "fixed_k1", "k1_to_k4"),
         ("fixed_k8", "fixed_k1", "k1_to_k8"),
+        # Mechanism A (fixed budget): adaptive_kN vs fixed_kN at the SAME breadth ->
+        # identical retrieval cost, so the paired diff isolates iterative query selection.
+        # This is the clean, headline comparison.
+        ("adaptive_k4", "fixed_k4", "adaptiveK4_vs_k4"),
+        # Mechanism B (variable budget): instance-paired (same query,persona), NOT
+        # evidence-nested. "does adaptive match/beat fixed-k quality at lower per-query cost?"
+        ("adaptive_b4", "fixed_k2", "adaptiveB4_vs_k2"),
+        ("adaptive_b6", "fixed_k4", "adaptiveB6_vs_k4"),
+        ("adaptive_b8", "fixed_k2", "adaptiveB8_vs_k2"),
+        ("adaptive_b8", "fixed_k8", "adaptiveB8_vs_k8"),
+        ("adaptive_b12", "fixed_k8", "adaptiveB12_vs_k8"),
     ]
 
     paired_diffs: Dict[Tuple[str, str], Dict[str, List[float]]] = defaultdict(lambda: defaultdict(list))
@@ -360,7 +404,7 @@ def main():
             "pct_worsened",
         ])
 
-        for comp_name in ["k1_to_k2", "k2_to_k4", "k4_to_k8", "k1_to_k4", "k1_to_k8"]:
+        for comp_name in [c[2] for c in comparisons]:
             metrics_dict = paired_diffs.get(comp_name, {})
             for metric in sorted(metrics_dict.keys()):
                 diffs = metrics_dict[metric]

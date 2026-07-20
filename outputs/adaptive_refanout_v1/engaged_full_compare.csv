@@ -1,0 +1,7 @@
+subset,tau,n,v2_intent,v2_constraint_coverage,v2_source_quality
+full,3,72,3.9296,4.3056,4.4583
+full,4,72,3.9366,4.4028,4.6250
+full,5,72,3.9859,4.4306,4.6667
+engaged,3,55,3.8704,4.2000,4.3818
+engaged,4,55,3.8333,4.3091,4.5636
+engaged,5,55,3.9091,4.3636,4.6545

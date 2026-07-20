@@ -20,3 +20,6 @@ dist/
 .DS_Store
 .idea/
 .vscode/
+
+# Local-only planning / notes docs (kept out of the repo)
+reports/local/

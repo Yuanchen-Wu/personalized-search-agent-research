@@ -43,6 +43,7 @@ from search_agent.schemas import (
     SearchResult,
 )
 from search_agent.synthesize import synthesize_answer
+from search_agent.adaptive_loop import AssessDecision, run_adaptive_retrieval
 
 
 class TestFixedFanoutScaling(unittest.TestCase):
@@ -393,6 +394,133 @@ class TestFixedFanoutScaling(unittest.TestCase):
 
         self.assertEqual(log.variant, "V1_generic_fanout")
         self.assertEqual(log.experiment_name, "placement_ablation_v1")
+
+
+class TestAdaptiveBudgetModes(unittest.TestCase):
+    """Fixed-budget (adaptive_kN) vs variable-budget (adaptive_bN) controller behavior.
+
+    All plan/search/assessor calls are stubbed -- no network or API keys. The core
+    invariant under test: fixed-budget mode spends EXACTLY budget_cap searches
+    (cost-matched to fixed_k), backfilling from the shared plan when the assessor
+    proposes too few new queries.
+    """
+
+    def setUp(self):
+        self.persona = Persona(
+            persona_id="p1", description="d", macro_domain="education", attributes={}
+        )
+        # 8-branch shared plan with distinct queries (matches SEED_PLAN_POOL_SIZE).
+        self.plan = [
+            FanoutBranch(branch_type="generic", query=f"plan query {i}", priority_rank=i)
+            for i in range(1, 9)
+        ]
+
+    @staticmethod
+    def _stub_search():
+        return (
+            [SearchResult(title="T", url="http://x.com", content="c", score=0.5,
+                          rank=1, branch_type="generic", branch_query="bq")],
+            False,
+        )
+
+    def _plan_return(self):
+        return ("plan_1", list(self.plan), [], True)
+
+    @patch("search_agent.adaptive_loop.assess_and_propose")
+    @patch("search_agent.adaptive_loop.search_tavily_cached")
+    @patch("search_agent.adaptive_loop.get_or_create_shared_plan")
+    def test_fixed_budget_reaches_exact_k_via_proposals(self, mock_plan, mock_search, mock_assess):
+        mock_plan.return_value = self._plan_return()
+        mock_search.return_value = self._stub_search()
+        # seed=2 + two accepted proposals (per_round_cap=1) => realized 4, no backfill.
+        mock_assess.side_effect = [
+            AssessDecision(sufficient=False, proposed_branches=[
+                FanoutBranch(branch_type="supplementary", query="novel alpha")]),
+            AssessDecision(sufficient=False, proposed_branches=[
+                FanoutBranch(branch_type="supplementary", query="novel beta")]),
+        ]
+        result = run_adaptive_retrieval(
+            user_query="q", persona=self.persona, query_id="q1",
+            budget_cap=4, seed_size=2, max_rounds=5, per_round_cap=1,
+            fill_to_budget=True, use_cache=False,
+        )
+        self.assertEqual(result.cost.realized_fanout_count, 4)
+        self.assertEqual(result.cost.num_backfilled, 0)
+        self.assertEqual(len(result.branches), 4)
+        self.assertEqual([b.priority_rank for b in result.branches], [1, 2, 3, 4])
+
+    @patch("search_agent.adaptive_loop.assess_and_propose")
+    @patch("search_agent.adaptive_loop.search_tavily_cached")
+    @patch("search_agent.adaptive_loop.get_or_create_shared_plan")
+    def test_fixed_budget_backfills_when_assessor_says_sufficient(self, mock_plan, mock_search, mock_assess):
+        mock_plan.return_value = self._plan_return()
+        mock_search.return_value = self._stub_search()
+        # Assessor immediately calls it sufficient and proposes nothing -> must still
+        # reach k by backfilling from the plan; the "sufficient" is only a side-signal.
+        mock_assess.return_value = AssessDecision(sufficient=True, proposed_branches=[])
+        result = run_adaptive_retrieval(
+            user_query="q", persona=self.persona, query_id="q1",
+            budget_cap=4, seed_size=2, max_rounds=5, per_round_cap=1,
+            fill_to_budget=True, use_cache=False,
+        )
+        self.assertEqual(result.cost.realized_fanout_count, 4)
+        self.assertEqual(result.cost.num_backfilled, 2)
+        self.assertTrue(result.cost.sufficient_before_budget)
+        self.assertEqual(result.cost.stop_reason, "filled_to_budget")
+
+    @patch("search_agent.adaptive_loop.assess_and_propose")
+    @patch("search_agent.adaptive_loop.search_tavily_cached")
+    @patch("search_agent.adaptive_loop.get_or_create_shared_plan")
+    def test_fixed_budget_backfills_on_duplicate_proposals(self, mock_plan, mock_search, mock_assess):
+        mock_plan.return_value = self._plan_return()
+        mock_search.return_value = self._stub_search()
+        # Proposes only a near-duplicate of an already-searched seed query -> filtered,
+        # so the loop can't advance on its own and backfill must complete the budget.
+        mock_assess.return_value = AssessDecision(
+            sufficient=False,
+            proposed_branches=[FanoutBranch(branch_type="generic", query="plan query 1")],
+        )
+        result = run_adaptive_retrieval(
+            user_query="q", persona=self.persona, query_id="q1",
+            budget_cap=4, seed_size=2, max_rounds=5, per_round_cap=1,
+            fill_to_budget=True, use_cache=False,
+        )
+        self.assertEqual(result.cost.realized_fanout_count, 4)
+        self.assertEqual(result.cost.num_backfilled, 2)
+
+    @patch("search_agent.adaptive_loop.assess_and_propose")
+    @patch("search_agent.adaptive_loop.search_tavily_cached")
+    @patch("search_agent.adaptive_loop.get_or_create_shared_plan")
+    def test_variable_budget_still_stops_on_sufficient(self, mock_plan, mock_search, mock_assess):
+        mock_plan.return_value = self._plan_return()
+        mock_search.return_value = self._stub_search()
+        mock_assess.return_value = AssessDecision(sufficient=True, proposed_branches=[])
+        result = run_adaptive_retrieval(
+            user_query="q", persona=self.persona, query_id="q1",
+            budget_cap=8, seed_size=2, max_rounds=5, per_round_cap=4,
+            fill_to_budget=False, use_cache=False,
+        )
+        # Early stop at the seed; no backfill in variable mode.
+        self.assertEqual(result.cost.realized_fanout_count, 2)
+        self.assertEqual(result.cost.stop_reason, "sufficient")
+        self.assertEqual(result.cost.num_backfilled, 0)
+
+    def test_parse_adaptive_method_encodes_mode(self):
+        from scripts.run_fixed_fanout_benchmark import parse_adaptive_method
+        self.assertEqual(
+            parse_adaptive_method("adaptive_k4"),
+            {"budget_cap": 4, "strictness": None, "fill_to_budget": True},
+        )
+        self.assertEqual(
+            parse_adaptive_method("adaptive_b8"),
+            {"budget_cap": 8, "strictness": None, "fill_to_budget": False},
+        )
+        self.assertEqual(
+            parse_adaptive_method("adaptive_b8_strict"),
+            {"budget_cap": 8, "strictness": "strict", "fill_to_budget": False},
+        )
+        self.assertTrue(parse_adaptive_method("adaptive_k4_lenient")["fill_to_budget"])
+        self.assertIsNone(parse_adaptive_method("fixed_k4"))
 
 
 if __name__ == "__main__":

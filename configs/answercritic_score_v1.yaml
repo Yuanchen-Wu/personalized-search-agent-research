@@ -1,0 +1,18 @@
+experiment_name: answercritic_score_v1
+
+# Scores the derived answer-critic grid (answercritic_t{3,4,5}) with the out-of-loop
+# frozen-rubric evaluators. Isolated inputs/outputs -> phase-1 and the raw answer-critic
+# runs are untouched.
+
+data:
+  personas_path: data/synthetic_personas_v1.jsonl
+  queries_path: data/synthetic_queries_v1.jsonl
+
+models:
+  evaluator: gemini-3.5-flash
+
+outputs:
+  runs_path: outputs/answercritic_v1/runs_answercritic_grid.jsonl
+  fanout_scores_path: outputs/answercritic_v1/fanout_scores.jsonl
+  retrieval_scores_path: outputs/answercritic_v1/retrieval_scores.jsonl
+  final_response_scores_path: outputs/answercritic_v1/final_response_scores.jsonl
