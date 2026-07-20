@@ -1,0 +1,7 @@
+synth,tau,n,final_intent_satisfaction_mean,final_personalization_target_use_mean,final_specificity_mean,final_non_genericness_mean,final_missing_constraint_awareness_mean,final_groundedness_mean,retrieval_evidence_relevance_mean,retrieval_constraint_coverage_mean,retrieval_result_persona_fit_mean,retrieval_source_quality_mean
+baseline,3,55,3.1364,2.9091,3.9273,3.9273,3.5273,4.7782,4.7455,4.2000,4.4727,4.3818
+baseline,4,55,3.1545,2.9455,3.9273,3.9818,3.4545,4.8473,4.7818,4.3455,4.5818,4.5636
+baseline,5,55,3.2000,3.0182,3.9818,4.1091,3.5091,4.8836,4.8909,4.4364,4.6182,4.6545
+v2,3,55,3.8704,3.6296,4.2778,4.5556,4.7778,4.8364,4.7091,4.2000,4.4727,4.3818
+v2,4,55,3.8333,3.5185,4.3704,4.5370,4.7593,4.9091,4.8182,4.3091,4.6091,4.5636
+v2,5,55,3.9091,3.6545,4.3455,4.6000,4.8545,4.9455,4.9091,4.3636,4.6273,4.6545

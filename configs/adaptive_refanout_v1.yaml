@@ -1,0 +1,70 @@
+experiment_name: adaptive_refanout_v1
+
+# Re-fanout adaptive loop (C3). Each round is a FULL k-query fan-out -> search ->
+# judge the RETRIEVAL; if not good enough, regenerate the whole fan-out with the
+# judge's feedback and retry (rejected rounds are DISCARDED). Synthesis uses ONLY
+# the approved round's docs. The method name refanout_kN sets the per-round fan-out
+# width (matched to fixed_kN for comparability). Optional threshold suffix _tN sets
+# the approval bar (e.g. refanout_k4_t3), the knob swept to trace the frontier.
+methods:
+  # Run ONLY tau=5 (with max_rounds=6): the per-round trajectory is tau-INDEPENDENT
+  # (judge is tau-blind; controller applies the bar) and every round's evidence is
+  # logged, so tau=3 / tau=4.5 outcomes are derivable post-hoc from this superset via
+  # a re-synthesis pass (TBD). Pairs q_1-q_5 already carry real t3/t4p5 runs -> they
+  # validate that derivation.
+  - refanout_k4_t5       # tau=5 (forced persistence; runs the full trajectory)
+
+refanout:
+  max_rounds: 6                  # cap on fan-out -> search -> judge rounds (smaller caps derived post-hoc, nested)
+  approval_threshold: 4          # approve a round when its (mean) coverage_score (1-5) >= this
+  judge_samples: 3               # K: poll the retrieval judge K times/round, average -> fractional score (denoises the ±2 judge swing)
+  judge_temperature: 0.2         # judge sampling temp; must be > 0 so the K votes vary and averaging actually denoises
+
+search:
+  search_depth: basic
+  max_results_per_branch: 5
+
+synthesis:
+  evidence_budget_mode: all      # 'all' or 'fixed_document_budget'
+  max_documents: null
+  max_context_chars: null
+
+models:
+  planner: gemini-3.5-flash       # fan-out generator (pinned for reproducibility; replaces the floating gemini-flash-latest alias)
+  synthesizer: gemini-3.5-flash
+  assessor: gemini-3.5-flash
+  judge: gemini-3.5-flash         # in-loop retrieval judge
+  evaluator: gemini-3.5-flash     # out-of-loop scoring judges (used at the scoring stage)
+
+reproducibility:
+  seed: 42
+  cache_fanout_plans: true
+  cache_search_results: true
+  resume_existing_runs: true
+
+data:
+  personas_path: data/synthetic_personas_v1.jsonl
+  queries_path: data/synthetic_queries_v1.jsonl
+
+# For the combined frontier: the summarizer merges these dirs' runs+scores with
+# this experiment's, so fixed_k* and refanout_* land on ONE quality_cost_frontier.csv
+# without re-scoring the frozen 288 C2 runs.
+additional_result_dirs:
+  - outputs/fixed_fanout_scaling_v1
+
+outputs:
+  run_dir: outputs/adaptive_refanout_v1
+  runs_path: outputs/adaptive_refanout_v1/runs_tau_grid.jsonl   # SCORING input: derived tau={3,4,5} grid (216 recs) from runs_grid.jsonl (raw t5 generation)
+  # REUSE C2's search cache so any repeated queries are cache hits (re-fanout queries
+  # are usually novel -> real Tavily calls, which is the honest variable cost):
+  fanout_plans_path: outputs/fixed_fanout_scaling_v1/fanout_plans.jsonl
+  search_cache_path: outputs/fixed_fanout_scaling_v1/search_cache.jsonl
+  fanout_scores_path: outputs/adaptive_refanout_v1/fanout_scores.jsonl
+  retrieval_scores_path: outputs/adaptive_refanout_v1/retrieval_scores.jsonl
+  final_response_scores_path: outputs/adaptive_refanout_v1/final_response_scores.jsonl
+  summary_by_method_path: outputs/adaptive_refanout_v1/summary_by_method.csv
+  summary_by_method_task_type_path: outputs/adaptive_refanout_v1/summary_by_method_task_type.csv
+  summary_by_method_task_category_path: outputs/adaptive_refanout_v1/summary_by_method_task_category.csv
+  summary_by_method_domain_path: outputs/adaptive_refanout_v1/summary_by_method_domain.csv
+  quality_cost_frontier_path: outputs/adaptive_refanout_v1/quality_cost_frontier.csv
+  marginal_gains_path: outputs/adaptive_refanout_v1/marginal_gains.csv

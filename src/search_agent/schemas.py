@@ -310,6 +310,9 @@ class RunLog:
     exact_synthesis_evidence: List[Dict[str, Any]] = field(default_factory=list)
     num_planner_calls: int = 0
     num_synthesis_calls: int = 0
+    num_assessor_calls: int = 0  # adaptive loop: # assess+propose / retrieval-judge LLM calls (0 for fixed)
+    num_refanout_rounds: int = 0  # re-fanout loop: total fan-out->search->judge rounds (0 otherwise)
+    approved_round: Optional[int] = None  # re-fanout loop: 1-indexed round whose evidence was used (None if none approved)
     num_tavily_calls: int = 0
     num_cache_hits: int = 0
     num_cache_misses: int = 0
@@ -320,6 +323,7 @@ class RunLog:
     planner_latency: float = 0.0
     search_latency: float = 0.0
     synthesis_latency: float = 0.0
+    assessor_latency: float = 0.0  # adaptive loop: summed assess+propose call latency
     total_latency: float = 0.0
     events: List[Dict[str, Any]] = field(default_factory=list)
 
