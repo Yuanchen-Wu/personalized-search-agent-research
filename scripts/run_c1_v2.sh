@@ -1,16 +1,27 @@
 #!/usr/bin/env bash
 # One-command C1 rerun: full 6-variant placement ablation on benchmark v2.
 #
-# On the experiment laptop (needs GEMINI_API_KEY + TAVILY_API_KEY in .env):
+# On the experiment laptop (needs GEMINI_API_KEY + TAVILY_API_KEY in .env;
+# the one Gemini key serves every Gemini model):
 #
-#     bash scripts/run_c1_v2.sh
+#     bash scripts/run_c1_v2.sh                                # baseline agent: gemini-3.5-flash
+#     bash scripts/run_c1_v2.sh --agent-model gemini-3.1-pro   # comparison arm, run per model
 #
-# That single invocation bootstraps .venv if needed, validates the setup, runs
-# all 432 agent runs (72 pairs x 6 variants), judges fanout / retrieval /
-# final-response (post-split answer-quality + evidence-faithfulness pair),
-# summarizes, and writes a provenance manifest. Everything lands in
-# outputs/placement_ablation_v2/, which is exactly what
-# notebooks/placement_ablation_analysis_final.ipynb reads (RESULTS_DIR).
+# One invocation = one agent model's full pipeline: bootstraps .venv if
+# needed, validates the setup, runs all 432 agent runs (72 pairs x 6
+# variants), judges fanout / retrieval / final-response (post-split
+# answer-quality + evidence-faithfulness pair), summarizes, and writes a
+# provenance manifest. The baseline model lands in
+# outputs/placement_ablation_v2/ (what the analysis notebook's RESULTS_DIR
+# reads); every other agent model gets its own sibling dir
+# outputs/placement_ablation_v2_<model>/ with an auto-generated config, so
+# per-model results never mix and each arm resumes independently. That
+# per-model-dir layout is what scripts/make_paper_figures.py's MODELS
+# placeholder consumes for cross-model figures.
+#
+# The JUDGE model is deliberately FIXED (gemini-flash-latest) and not a
+# parameter: it is the constant measuring stick across C1/C2/C3 and across
+# agent models — vary the agent, never the judge.
 #
 # The command is safe to interrupt and re-invoke at any point (battery death,
 # quota exhaustion, Ctrl-C): every completed agent run and every completed
@@ -19,34 +30,53 @@
 # what's left instead of re-running or duplicating finished work.
 #
 # Options:
-#   --smoke        End-to-end shakeout on the first 12 jobs (2 queries x 6
-#                  variants) before committing to the full batch. A later full
-#                  run resumes both the agent and judge stages from there.
-#   --dry-run      Preflight + plan preview only; no API calls.
-#   --force-eval   Re-run judge stages even if outputs look complete.
-#   AGENT_MODEL=   Agent model (default gemini-3.5-flash, as in C2/C3).
-#   JUDGE_MODEL=   Judge model (default gemini-flash-latest, matching all
-#                  prior scoring).
+#   --agent-model NAME   Model that does the search-agent work (fanout,
+#                        synthesis). Default gemini-3.5-flash = the baseline
+#                        used for C2/C3. Run the script once per model you
+#                        want to compare.
+#   --smoke              End-to-end shakeout on the first 12 jobs (2 queries
+#                        x 6 variants) before committing to the full batch. A
+#                        later full run resumes agent and judge stages.
+#   --dry-run            Preflight + plan preview only; no API calls.
+#   --force-eval         Discard judge scores for this arm and re-judge.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-CONFIG=configs/placement_ablation_v2.yaml
-OUT_DIR=outputs/placement_ablation_v2
-RUNS="$OUT_DIR/runs.jsonl"
+BASE_CONFIG=configs/placement_ablation_v2.yaml
+BASE_OUT_DIR=outputs/placement_ablation_v2
 PY=.venv/bin/python
-AGENT_MODEL="${AGENT_MODEL:-gemini-3.5-flash}"
-JUDGE_MODEL="${JUDGE_MODEL:-gemini-flash-latest}"
+BASELINE_AGENT_MODEL="gemini-3.5-flash"
+AGENT_MODEL="$BASELINE_AGENT_MODEL"
+# Fixed measuring stick across C1/C2/C3 and across agent models. Never vary
+# this — the agent model (--agent-model) is the experimental axis.
+JUDGE_MODEL="gemini-flash-latest"
 MAX_AGENT_PASSES="${MAX_AGENT_PASSES:-3}"
 
 LIMIT="" DRY=0 FORCE_EVAL=0
-for arg in "$@"; do
-  case "$arg" in
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --agent-model) [ $# -ge 2 ] || { echo "--agent-model needs a value"; exit 2; }
+                   AGENT_MODEL="$2"; shift ;;
+    --agent-model=*) AGENT_MODEL="${1#*=}" ;;
     --smoke) LIMIT=12 ;;
     --dry-run) DRY=1 ;;
     --force-eval) FORCE_EVAL=1 ;;
-    *) echo "unknown option: $arg (see header of $0)"; exit 2 ;;
+    *) echo "unknown option: $1 (see header of $0)"; exit 2 ;;
   esac
+  shift
 done
+
+# Baseline model uses the standard dir + config; any other agent model gets a
+# sibling dir with a derived config so arms never mix and resume independently.
+if [ "$AGENT_MODEL" = "$BASELINE_AGENT_MODEL" ]; then
+  OUT_DIR="$BASE_OUT_DIR"
+  CONFIG="$BASE_CONFIG"
+else
+  MODEL_TAG=$(printf '%s' "$AGENT_MODEL" | tr -c 'a-zA-Z0-9._-' '-')
+  OUT_DIR="${BASE_OUT_DIR}_${MODEL_TAG}"
+  CONFIG="$OUT_DIR/config.yaml"   # generated after the venv exists (preflight)
+fi
+RUNS="$OUT_DIR/runs.jsonl"
 
 mkdir -p "$OUT_DIR/logs"
 STARTED_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)
@@ -60,9 +90,25 @@ if [ ! -x "$PY" ]; then
 fi
 "$PY" -c "import yaml, dotenv" 2>/dev/null || "$PY" -m pip install -q -r requirements.txt
 
-for f in "$CONFIG" data/v2/synthetic_queries_v2.jsonl data/v2/synthetic_personas_v2.jsonl; do
+for f in "$BASE_CONFIG" data/v2/synthetic_queries_v2.jsonl data/v2/synthetic_personas_v2.jsonl; do
   [ -f "$f" ] || { echo "   MISSING: $f (pull latest main)"; exit 1; }
 done
+
+# Non-baseline agent model: derive this arm's config from the base one by
+# re-pointing every output path into $OUT_DIR (data paths stay shared).
+if [ "$CONFIG" != "$BASE_CONFIG" ]; then
+  "$PY" - "$BASE_CONFIG" "$OUT_DIR" "$MODEL_TAG" "$CONFIG" <<'EOF'
+import sys, yaml
+base_path, out_dir, tag, dst = sys.argv[1:5]
+cfg = yaml.safe_load(open(base_path))
+base_prefix = cfg["outputs"]["run_dir"]
+cfg["experiment_name"] = f'{cfg["experiment_name"]}_{tag}'
+cfg["outputs"] = {k: v.replace(base_prefix, out_dir) for k, v in cfg["outputs"].items()}
+with open(dst, "w") as fh:
+    yaml.safe_dump(cfg, fh, sort_keys=False)
+print(f"   agent-model arm config -> {dst}")
+EOF
+fi
 
 # API keys: hard requirement for a real run, warning only for --dry-run.
 if ! "$PY" -c "
@@ -246,5 +292,12 @@ print(json.dumps(manifest["artifact_rows"], indent=2))
 EOF
 
 echo
-echo "== DONE. Next: open notebooks/placement_ablation_analysis_final.ipynb and Run-All"
-echo "   (RESULTS_DIR already points at $OUT_DIR)."
+if [ "$AGENT_MODEL" = "$BASELINE_AGENT_MODEL" ]; then
+  echo "== DONE (baseline arm: $AGENT_MODEL). Next: open"
+  echo "   notebooks/placement_ablation_analysis_final.ipynb and Run-All"
+  echo "   (RESULTS_DIR already points at $OUT_DIR)."
+else
+  echo "== DONE (comparison arm: $AGENT_MODEL) -> $OUT_DIR"
+  echo "   Compare against the baseline by pointing the notebook's RESULTS_DIR"
+  echo "   here, or via the MODELS map in scripts/make_paper_figures.py."
+fi
