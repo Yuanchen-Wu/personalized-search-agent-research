@@ -1,0 +1,337 @@
+macro_domain,task_type,metric,contrast_name,variant_a,variant_b,mean_a,mean_b,diff_a_minus_b,higher_is_better
+education,retrieval_sensitive,fanout_faithfulness_to_user_query,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.81,4.75,0.06,true
+education,retrieval_sensitive,fanout_faithfulness_to_user_query,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.75,4.75,0.00,true
+education,retrieval_sensitive,fanout_faithfulness_to_user_query,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.83,4.75,0.08,true
+education,retrieval_sensitive,fanout_faithfulness_to_user_query,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.83,4.81,0.03,true
+education,retrieval_sensitive,fanout_faithfulness_to_user_query,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.83,4.75,0.08,true
+education,retrieval_sensitive,fanout_faithfulness_to_user_query,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.92,4.83,0.08,true
+education,retrieval_sensitive,fanout_overpersonalization_risk,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,1.00,1.00,0.00,false
+education,retrieval_sensitive,fanout_overpersonalization_risk,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,1.28,1.00,0.28,false
+education,retrieval_sensitive,fanout_overpersonalization_risk,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,1.25,1.00,0.25,false
+education,retrieval_sensitive,fanout_overpersonalization_risk,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,1.25,1.00,0.25,false
+education,retrieval_sensitive,fanout_overpersonalization_risk,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,1.25,1.28,-0.03,false
+education,retrieval_sensitive,fanout_overpersonalization_risk,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,1.22,1.25,-0.03,false
+education,retrieval_sensitive,fanout_persona_field_use,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,1.69,1.67,0.03,true
+education,retrieval_sensitive,fanout_persona_field_use,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,3.97,1.67,2.31,true
+education,retrieval_sensitive,fanout_persona_field_use,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,3.86,1.67,2.19,true
+education,retrieval_sensitive,fanout_persona_field_use,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,3.86,1.69,2.17,true
+education,retrieval_sensitive,fanout_persona_field_use,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,3.86,3.97,-0.11,true
+education,retrieval_sensitive,fanout_persona_field_use,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,3.58,3.86,-0.28,true
+education,retrieval_sensitive,fanout_query_diversity,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,2.83,3.03,-0.19,true
+education,retrieval_sensitive,fanout_query_diversity,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,3.86,3.03,0.83,true
+education,retrieval_sensitive,fanout_query_diversity,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,3.89,3.03,0.86,true
+education,retrieval_sensitive,fanout_query_diversity,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,3.89,2.83,1.06,true
+education,retrieval_sensitive,fanout_query_diversity,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,3.89,3.86,0.03,true
+education,retrieval_sensitive,fanout_query_diversity,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.06,3.89,0.17,true
+education,retrieval_sensitive,fanout_query_specificity,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,2.56,2.61,-0.06,true
+education,retrieval_sensitive,fanout_query_specificity,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.19,2.61,1.58,true
+education,retrieval_sensitive,fanout_query_specificity,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.17,2.61,1.56,true
+education,retrieval_sensitive,fanout_query_specificity,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.17,2.56,1.61,true
+education,retrieval_sensitive,fanout_query_specificity,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.17,4.19,-0.03,true
+education,retrieval_sensitive,fanout_query_specificity,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.00,4.17,-0.17,true
+education,retrieval_sensitive,fanout_search_realism,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.50,4.50,0.00,true
+education,retrieval_sensitive,fanout_search_realism,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.67,4.50,0.17,true
+education,retrieval_sensitive,fanout_search_realism,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.69,4.50,0.19,true
+education,retrieval_sensitive,fanout_search_realism,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.69,4.50,0.19,true
+education,retrieval_sensitive,fanout_search_realism,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.69,4.67,0.03,true
+education,retrieval_sensitive,fanout_search_realism,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.44,4.69,-0.25,true
+education,retrieval_sensitive,final_actionability_without_overclaiming,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.44,3.69,0.75,true
+education,retrieval_sensitive,final_actionability_without_overclaiming,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.25,3.69,0.56,true
+education,retrieval_sensitive,final_actionability_without_overclaiming,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.64,3.69,0.94,true
+education,retrieval_sensitive,final_actionability_without_overclaiming,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.64,4.44,0.19,true
+education,retrieval_sensitive,final_actionability_without_overclaiming,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.64,4.25,0.39,true
+education,retrieval_sensitive,final_actionability_without_overclaiming,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.58,4.64,-0.06,true
+education,retrieval_sensitive,final_citation_support,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,1.28,1.44,-0.17,true
+education,retrieval_sensitive,final_citation_support,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,1.56,1.44,0.11,true
+education,retrieval_sensitive,final_citation_support,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,1.33,1.44,-0.11,true
+education,retrieval_sensitive,final_citation_support,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,1.33,1.28,0.06,true
+education,retrieval_sensitive,final_citation_support,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,1.33,1.56,-0.22,true
+education,retrieval_sensitive,final_citation_support,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,1.31,1.33,-0.03,true
+education,retrieval_sensitive,final_contradiction_with_evidence,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,1.08,1.11,-0.03,true
+education,retrieval_sensitive,final_contradiction_with_evidence,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,1.03,1.11,-0.08,true
+education,retrieval_sensitive,final_contradiction_with_evidence,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,1.25,1.11,0.14,true
+education,retrieval_sensitive,final_contradiction_with_evidence,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,1.25,1.08,0.17,true
+education,retrieval_sensitive,final_contradiction_with_evidence,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,1.25,1.03,0.22,true
+education,retrieval_sensitive,final_contradiction_with_evidence,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,1.28,1.25,0.03,true
+education,retrieval_sensitive,final_domain_safety,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.33,4.03,0.31,true
+education,retrieval_sensitive,final_domain_safety,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.17,4.03,0.14,true
+education,retrieval_sensitive,final_domain_safety,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.14,4.03,0.11,true
+education,retrieval_sensitive,final_domain_safety,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.14,4.33,-0.19,true
+education,retrieval_sensitive,final_domain_safety,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.14,4.17,-0.03,true
+education,retrieval_sensitive,final_domain_safety,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.14,4.14,0.00,true
+education,retrieval_sensitive,final_evidence_usage_quality,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,1.81,1.81,0.00,true
+education,retrieval_sensitive,final_evidence_usage_quality,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,2.03,1.81,0.22,true
+education,retrieval_sensitive,final_evidence_usage_quality,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,1.69,1.81,-0.11,true
+education,retrieval_sensitive,final_evidence_usage_quality,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,1.69,1.81,-0.11,true
+education,retrieval_sensitive,final_evidence_usage_quality,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,1.69,2.03,-0.33,true
+education,retrieval_sensitive,final_evidence_usage_quality,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,1.67,1.69,-0.03,true
+education,retrieval_sensitive,final_groundedness,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,1.83,1.75,0.08,true
+education,retrieval_sensitive,final_groundedness,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,2.03,1.75,0.28,true
+education,retrieval_sensitive,final_groundedness,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,1.69,1.75,-0.06,true
+education,retrieval_sensitive,final_groundedness,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,1.69,1.83,-0.14,true
+education,retrieval_sensitive,final_groundedness,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,1.69,2.03,-0.33,true
+education,retrieval_sensitive,final_groundedness,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,1.61,1.69,-0.08,true
+education,retrieval_sensitive,final_intent_satisfaction,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,3.83,2.75,1.08,true
+education,retrieval_sensitive,final_intent_satisfaction,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,3.44,2.75,0.69,true
+education,retrieval_sensitive,final_intent_satisfaction,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.06,2.75,1.31,true
+education,retrieval_sensitive,final_intent_satisfaction,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.06,3.83,0.22,true
+education,retrieval_sensitive,final_intent_satisfaction,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.06,3.44,0.61,true
+education,retrieval_sensitive,final_intent_satisfaction,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.21,4.06,0.15,true
+education,retrieval_sensitive,final_missing_constraint_awareness,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.17,3.61,0.56,true
+education,retrieval_sensitive,final_missing_constraint_awareness,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.03,3.61,0.42,true
+education,retrieval_sensitive,final_missing_constraint_awareness,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.36,3.61,0.75,true
+education,retrieval_sensitive,final_missing_constraint_awareness,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.36,4.17,0.19,true
+education,retrieval_sensitive,final_missing_constraint_awareness,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.36,4.03,0.33,true
+education,retrieval_sensitive,final_missing_constraint_awareness,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.56,4.36,0.19,true
+education,retrieval_sensitive,final_non_genericness,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.39,3.44,0.94,true
+education,retrieval_sensitive,final_non_genericness,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.25,3.44,0.81,true
+education,retrieval_sensitive,final_non_genericness,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.69,3.44,1.25,true
+education,retrieval_sensitive,final_non_genericness,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.69,4.39,0.31,true
+education,retrieval_sensitive,final_non_genericness,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.69,4.25,0.44,true
+education,retrieval_sensitive,final_non_genericness,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.62,4.69,-0.07,true
+education,retrieval_sensitive,final_overpersonalization,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,1.58,2.08,-0.50,false
+education,retrieval_sensitive,final_overpersonalization,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,1.83,2.08,-0.25,false
+education,retrieval_sensitive,final_overpersonalization,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,1.28,2.08,-0.81,false
+education,retrieval_sensitive,final_overpersonalization,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,1.28,1.58,-0.31,false
+education,retrieval_sensitive,final_overpersonalization,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,1.28,1.83,-0.56,false
+education,retrieval_sensitive,final_overpersonalization,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,1.31,1.28,0.03,false
+education,retrieval_sensitive,final_personalization_target_use,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,3.81,2.53,1.28,true
+education,retrieval_sensitive,final_personalization_target_use,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,3.53,2.53,1.00,true
+education,retrieval_sensitive,final_personalization_target_use,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.22,2.53,1.69,true
+education,retrieval_sensitive,final_personalization_target_use,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.22,3.81,0.42,true
+education,retrieval_sensitive,final_personalization_target_use,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.22,3.53,0.69,true
+education,retrieval_sensitive,final_personalization_target_use,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.32,4.22,0.10,true
+education,retrieval_sensitive,final_safety,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.44,4.28,0.17,true
+education,retrieval_sensitive,final_safety,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.31,4.28,0.03,true
+education,retrieval_sensitive,final_safety,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.36,4.28,0.08,true
+education,retrieval_sensitive,final_safety,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.36,4.44,-0.08,true
+education,retrieval_sensitive,final_safety,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.36,4.31,0.06,true
+education,retrieval_sensitive,final_safety,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.36,4.36,0.00,true
+education,retrieval_sensitive,final_specificity,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.28,3.61,0.67,true
+education,retrieval_sensitive,final_specificity,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.22,3.61,0.61,true
+education,retrieval_sensitive,final_specificity,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.61,3.61,1.00,true
+education,retrieval_sensitive,final_specificity,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.61,4.28,0.33,true
+education,retrieval_sensitive,final_specificity,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.61,4.22,0.39,true
+education,retrieval_sensitive,final_specificity,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.51,4.61,-0.10,true
+education,retrieval_sensitive,final_uncertainty_calibration,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.31,3.81,0.50,true
+education,retrieval_sensitive,final_uncertainty_calibration,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.28,3.81,0.47,true
+education,retrieval_sensitive,final_uncertainty_calibration,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.67,3.81,0.86,true
+education,retrieval_sensitive,final_uncertainty_calibration,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.67,4.31,0.36,true
+education,retrieval_sensitive,final_uncertainty_calibration,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.67,4.28,0.39,true
+education,retrieval_sensitive,final_uncertainty_calibration,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.62,4.67,-0.04,true
+education,retrieval_sensitive,final_unsupported_claim_risk,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.22,4.25,-0.03,true
+education,retrieval_sensitive,final_unsupported_claim_risk,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.00,4.25,-0.25,true
+education,retrieval_sensitive,final_unsupported_claim_risk,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.42,4.25,0.17,true
+education,retrieval_sensitive,final_unsupported_claim_risk,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.42,4.22,0.19,true
+education,retrieval_sensitive,final_unsupported_claim_risk,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.42,4.00,0.42,true
+education,retrieval_sensitive,final_unsupported_claim_risk,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.44,4.42,0.03,true
+education,retrieval_sensitive,retrieval_constraint_coverage,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,3.06,2.89,0.17,true
+education,retrieval_sensitive,retrieval_constraint_coverage,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,3.86,2.89,0.97,true
+education,retrieval_sensitive,retrieval_constraint_coverage,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,3.72,2.89,0.83,true
+education,retrieval_sensitive,retrieval_constraint_coverage,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,3.72,3.06,0.67,true
+education,retrieval_sensitive,retrieval_constraint_coverage,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,3.72,3.86,-0.14,true
+education,retrieval_sensitive,retrieval_constraint_coverage,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,3.31,3.72,-0.42,true
+education,retrieval_sensitive,retrieval_disconfirming_coverage,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,5.00,0.00,true
+education,retrieval_sensitive,retrieval_disconfirming_coverage,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.97,5.00,-0.03,true
+education,retrieval_sensitive,retrieval_disconfirming_coverage,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.83,5.00,-0.17,true
+education,retrieval_sensitive,retrieval_disconfirming_coverage,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.83,5.00,-0.17,true
+education,retrieval_sensitive,retrieval_disconfirming_coverage,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.83,4.97,-0.14,true
+education,retrieval_sensitive,retrieval_disconfirming_coverage,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,3.36,4.83,-1.47,true
+education,retrieval_sensitive,retrieval_distractor_robustness,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,5.00,0.00,true
+education,retrieval_sensitive,retrieval_distractor_robustness,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,5.00,5.00,0.00,true
+education,retrieval_sensitive,retrieval_distractor_robustness,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.92,5.00,-0.08,true
+education,retrieval_sensitive,retrieval_distractor_robustness,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.92,5.00,-0.08,true
+education,retrieval_sensitive,retrieval_distractor_robustness,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.92,5.00,-0.08,true
+education,retrieval_sensitive,retrieval_distractor_robustness,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.89,4.92,-0.03,true
+education,retrieval_sensitive,retrieval_evidence_relevance,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.08,3.97,0.11,true
+education,retrieval_sensitive,retrieval_evidence_relevance,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.39,3.97,0.42,true
+education,retrieval_sensitive,retrieval_evidence_relevance,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.42,3.97,0.44,true
+education,retrieval_sensitive,retrieval_evidence_relevance,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.42,4.08,0.33,true
+education,retrieval_sensitive,retrieval_evidence_relevance,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.42,4.39,0.03,true
+education,retrieval_sensitive,retrieval_evidence_relevance,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.06,4.42,-0.36,true
+education,retrieval_sensitive,retrieval_result_persona_fit,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,3.03,2.75,0.28,true
+education,retrieval_sensitive,retrieval_result_persona_fit,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.08,2.75,1.33,true
+education,retrieval_sensitive,retrieval_result_persona_fit,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.03,2.75,1.28,true
+education,retrieval_sensitive,retrieval_result_persona_fit,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.03,3.03,1.00,true
+education,retrieval_sensitive,retrieval_result_persona_fit,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.03,4.08,-0.06,true
+education,retrieval_sensitive,retrieval_result_persona_fit,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,3.25,4.03,-0.78,true
+education,retrieval_sensitive,retrieval_source_quality,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.31,4.33,-0.03,true
+education,retrieval_sensitive,retrieval_source_quality,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.50,4.33,0.17,true
+education,retrieval_sensitive,retrieval_source_quality,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.39,4.33,0.06,true
+education,retrieval_sensitive,retrieval_source_quality,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.39,4.31,0.08,true
+education,retrieval_sensitive,retrieval_source_quality,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.39,4.50,-0.11,true
+education,retrieval_sensitive,retrieval_source_quality,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.28,4.39,-0.11,true
+education,retrieval_sensitive,retrieval_unsafe_or_overpersonalized_retrieval_risk,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.97,5.00,-0.03,false
+education,retrieval_sensitive,retrieval_unsafe_or_overpersonalized_retrieval_risk,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.94,5.00,-0.06,false
+education,retrieval_sensitive,retrieval_unsafe_or_overpersonalized_retrieval_risk,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.86,5.00,-0.14,false
+education,retrieval_sensitive,retrieval_unsafe_or_overpersonalized_retrieval_risk,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.86,4.97,-0.11,false
+education,retrieval_sensitive,retrieval_unsafe_or_overpersonalized_retrieval_risk,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.86,4.94,-0.08,false
+education,retrieval_sensitive,retrieval_unsafe_or_overpersonalized_retrieval_risk,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.92,4.86,0.06,false
+education,synthesis_sensitive,fanout_faithfulness_to_user_query,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.92,4.92,0.00,true
+education,synthesis_sensitive,fanout_faithfulness_to_user_query,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.94,4.92,0.03,true
+education,synthesis_sensitive,fanout_faithfulness_to_user_query,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.92,4.92,0.00,true
+education,synthesis_sensitive,fanout_faithfulness_to_user_query,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.92,4.92,0.00,true
+education,synthesis_sensitive,fanout_faithfulness_to_user_query,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.92,4.94,-0.03,true
+education,synthesis_sensitive,fanout_faithfulness_to_user_query,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.94,4.92,0.03,true
+education,synthesis_sensitive,fanout_overpersonalization_risk,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,1.00,1.00,0.00,false
+education,synthesis_sensitive,fanout_overpersonalization_risk,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,1.08,1.00,0.08,false
+education,synthesis_sensitive,fanout_overpersonalization_risk,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,1.08,1.00,0.08,false
+education,synthesis_sensitive,fanout_overpersonalization_risk,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,1.08,1.00,0.08,false
+education,synthesis_sensitive,fanout_overpersonalization_risk,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,1.08,1.08,0.00,false
+education,synthesis_sensitive,fanout_overpersonalization_risk,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,1.08,1.08,0.00,false
+education,synthesis_sensitive,fanout_persona_field_use,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,2.17,1.81,0.36,true
+education,synthesis_sensitive,fanout_persona_field_use,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,3.69,1.81,1.89,true
+education,synthesis_sensitive,fanout_persona_field_use,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.06,1.81,2.25,true
+education,synthesis_sensitive,fanout_persona_field_use,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.06,2.17,1.89,true
+education,synthesis_sensitive,fanout_persona_field_use,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.06,3.69,0.36,true
+education,synthesis_sensitive,fanout_persona_field_use,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.39,4.06,0.33,true
+education,synthesis_sensitive,fanout_query_diversity,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,3.11,3.00,0.11,true
+education,synthesis_sensitive,fanout_query_diversity,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,3.61,3.00,0.61,true
+education,synthesis_sensitive,fanout_query_diversity,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.00,3.00,1.00,true
+education,synthesis_sensitive,fanout_query_diversity,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.00,3.11,0.89,true
+education,synthesis_sensitive,fanout_query_diversity,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.00,3.61,0.39,true
+education,synthesis_sensitive,fanout_query_diversity,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.72,4.00,0.72,true
+education,synthesis_sensitive,fanout_query_specificity,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,2.86,2.78,0.08,true
+education,synthesis_sensitive,fanout_query_specificity,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,3.83,2.78,1.06,true
+education,synthesis_sensitive,fanout_query_specificity,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.28,2.78,1.50,true
+education,synthesis_sensitive,fanout_query_specificity,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.28,2.86,1.42,true
+education,synthesis_sensitive,fanout_query_specificity,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.28,3.83,0.44,true
+education,synthesis_sensitive,fanout_query_specificity,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.53,4.28,0.25,true
+education,synthesis_sensitive,fanout_search_realism,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.50,4.53,-0.03,true
+education,synthesis_sensitive,fanout_search_realism,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.56,4.53,0.03,true
+education,synthesis_sensitive,fanout_search_realism,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.72,4.53,0.19,true
+education,synthesis_sensitive,fanout_search_realism,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.72,4.50,0.22,true
+education,synthesis_sensitive,fanout_search_realism,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.72,4.56,0.17,true
+education,synthesis_sensitive,fanout_search_realism,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.83,4.72,0.11,true
+education,synthesis_sensitive,final_actionability_without_overclaiming,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.28,3.75,0.53,true
+education,synthesis_sensitive,final_actionability_without_overclaiming,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.17,3.75,0.42,true
+education,synthesis_sensitive,final_actionability_without_overclaiming,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.61,3.75,0.86,true
+education,synthesis_sensitive,final_actionability_without_overclaiming,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.61,4.28,0.33,true
+education,synthesis_sensitive,final_actionability_without_overclaiming,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.61,4.17,0.44,true
+education,synthesis_sensitive,final_actionability_without_overclaiming,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.50,4.61,-0.11,true
+education,synthesis_sensitive,final_citation_support,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,1.36,1.53,-0.17,true
+education,synthesis_sensitive,final_citation_support,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,1.22,1.53,-0.31,true
+education,synthesis_sensitive,final_citation_support,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,1.17,1.53,-0.36,true
+education,synthesis_sensitive,final_citation_support,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,1.17,1.36,-0.19,true
+education,synthesis_sensitive,final_citation_support,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,1.17,1.22,-0.06,true
+education,synthesis_sensitive,final_citation_support,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,1.14,1.17,-0.03,true
+education,synthesis_sensitive,final_contradiction_with_evidence,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,1.00,1.14,-0.14,true
+education,synthesis_sensitive,final_contradiction_with_evidence,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,1.08,1.14,-0.06,true
+education,synthesis_sensitive,final_contradiction_with_evidence,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,1.00,1.14,-0.14,true
+education,synthesis_sensitive,final_contradiction_with_evidence,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,1.00,1.00,0.00,true
+education,synthesis_sensitive,final_contradiction_with_evidence,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,1.00,1.08,-0.08,true
+education,synthesis_sensitive,final_contradiction_with_evidence,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,1.06,1.00,0.06,true
+education,synthesis_sensitive,final_domain_safety,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.19,4.08,0.11,true
+education,synthesis_sensitive,final_domain_safety,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.39,4.08,0.31,true
+education,synthesis_sensitive,final_domain_safety,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.47,4.08,0.39,true
+education,synthesis_sensitive,final_domain_safety,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.47,4.19,0.28,true
+education,synthesis_sensitive,final_domain_safety,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.47,4.39,0.08,true
+education,synthesis_sensitive,final_domain_safety,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.39,4.47,-0.08,true
+education,synthesis_sensitive,final_evidence_usage_quality,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,1.86,2.08,-0.22,true
+education,synthesis_sensitive,final_evidence_usage_quality,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,1.69,2.08,-0.39,true
+education,synthesis_sensitive,final_evidence_usage_quality,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,1.64,2.08,-0.44,true
+education,synthesis_sensitive,final_evidence_usage_quality,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,1.64,1.86,-0.22,true
+education,synthesis_sensitive,final_evidence_usage_quality,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,1.64,1.69,-0.06,true
+education,synthesis_sensitive,final_evidence_usage_quality,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,1.56,1.64,-0.08,true
+education,synthesis_sensitive,final_groundedness,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,1.86,2.08,-0.22,true
+education,synthesis_sensitive,final_groundedness,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,1.72,2.08,-0.36,true
+education,synthesis_sensitive,final_groundedness,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,1.56,2.08,-0.53,true
+education,synthesis_sensitive,final_groundedness,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,1.56,1.86,-0.31,true
+education,synthesis_sensitive,final_groundedness,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,1.56,1.72,-0.17,true
+education,synthesis_sensitive,final_groundedness,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,1.53,1.56,-0.03,true
+education,synthesis_sensitive,final_intent_satisfaction,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,3.47,2.53,0.94,true
+education,synthesis_sensitive,final_intent_satisfaction,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,3.36,2.53,0.83,true
+education,synthesis_sensitive,final_intent_satisfaction,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.00,2.53,1.47,true
+education,synthesis_sensitive,final_intent_satisfaction,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.00,3.47,0.53,true
+education,synthesis_sensitive,final_intent_satisfaction,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.00,3.36,0.64,true
+education,synthesis_sensitive,final_intent_satisfaction,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,3.94,4.00,-0.06,true
+education,synthesis_sensitive,final_missing_constraint_awareness,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,3.67,3.11,0.56,true
+education,synthesis_sensitive,final_missing_constraint_awareness,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,3.81,3.11,0.69,true
+education,synthesis_sensitive,final_missing_constraint_awareness,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.06,3.11,0.94,true
+education,synthesis_sensitive,final_missing_constraint_awareness,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.06,3.67,0.39,true
+education,synthesis_sensitive,final_missing_constraint_awareness,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.06,3.81,0.25,true
+education,synthesis_sensitive,final_missing_constraint_awareness,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,3.92,4.06,-0.14,true
+education,synthesis_sensitive,final_non_genericness,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,3.97,2.92,1.06,true
+education,synthesis_sensitive,final_non_genericness,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,3.64,2.92,0.72,true
+education,synthesis_sensitive,final_non_genericness,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.53,2.92,1.61,true
+education,synthesis_sensitive,final_non_genericness,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.53,3.97,0.56,true
+education,synthesis_sensitive,final_non_genericness,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.53,3.64,0.89,true
+education,synthesis_sensitive,final_non_genericness,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.39,4.53,-0.14,true
+education,synthesis_sensitive,final_overpersonalization,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,1.39,1.83,-0.44,false
+education,synthesis_sensitive,final_overpersonalization,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,1.50,1.83,-0.33,false
+education,synthesis_sensitive,final_overpersonalization,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,1.28,1.83,-0.56,false
+education,synthesis_sensitive,final_overpersonalization,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,1.28,1.39,-0.11,false
+education,synthesis_sensitive,final_overpersonalization,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,1.28,1.50,-0.22,false
+education,synthesis_sensitive,final_overpersonalization,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,1.31,1.28,0.03,false
+education,synthesis_sensitive,final_personalization_target_use,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,3.33,2.36,0.97,true
+education,synthesis_sensitive,final_personalization_target_use,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,3.25,2.36,0.89,true
+education,synthesis_sensitive,final_personalization_target_use,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.03,2.36,1.67,true
+education,synthesis_sensitive,final_personalization_target_use,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.03,3.33,0.69,true
+education,synthesis_sensitive,final_personalization_target_use,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.03,3.25,0.78,true
+education,synthesis_sensitive,final_personalization_target_use,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,3.89,4.03,-0.14,true
+education,synthesis_sensitive,final_safety,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.36,4.25,0.11,true
+education,synthesis_sensitive,final_safety,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.53,4.25,0.28,true
+education,synthesis_sensitive,final_safety,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.58,4.25,0.33,true
+education,synthesis_sensitive,final_safety,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.58,4.36,0.22,true
+education,synthesis_sensitive,final_safety,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.58,4.53,0.06,true
+education,synthesis_sensitive,final_safety,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.50,4.58,-0.08,true
+education,synthesis_sensitive,final_specificity,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.00,3.22,0.78,true
+education,synthesis_sensitive,final_specificity,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,3.83,3.22,0.61,true
+education,synthesis_sensitive,final_specificity,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.47,3.22,1.25,true
+education,synthesis_sensitive,final_specificity,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.47,4.00,0.47,true
+education,synthesis_sensitive,final_specificity,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.47,3.83,0.64,true
+education,synthesis_sensitive,final_specificity,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.33,4.47,-0.14,true
+education,synthesis_sensitive,final_uncertainty_calibration,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,3.97,3.58,0.39,true
+education,synthesis_sensitive,final_uncertainty_calibration,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.22,3.58,0.64,true
+education,synthesis_sensitive,final_uncertainty_calibration,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.50,3.58,0.92,true
+education,synthesis_sensitive,final_uncertainty_calibration,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.50,3.97,0.53,true
+education,synthesis_sensitive,final_uncertainty_calibration,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.50,4.22,0.28,true
+education,synthesis_sensitive,final_uncertainty_calibration,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.17,4.50,-0.33,true
+education,synthesis_sensitive,final_unsupported_claim_risk,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.14,3.89,0.25,true
+education,synthesis_sensitive,final_unsupported_claim_risk,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.22,3.89,0.33,true
+education,synthesis_sensitive,final_unsupported_claim_risk,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.53,3.89,0.64,true
+education,synthesis_sensitive,final_unsupported_claim_risk,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.53,4.14,0.39,true
+education,synthesis_sensitive,final_unsupported_claim_risk,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.53,4.22,0.31,true
+education,synthesis_sensitive,final_unsupported_claim_risk,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.53,4.53,0.00,true
+education,synthesis_sensitive,retrieval_constraint_coverage,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,2.69,2.64,0.06,true
+education,synthesis_sensitive,retrieval_constraint_coverage,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,3.11,2.64,0.47,true
+education,synthesis_sensitive,retrieval_constraint_coverage,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,3.33,2.64,0.69,true
+education,synthesis_sensitive,retrieval_constraint_coverage,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,3.33,2.69,0.64,true
+education,synthesis_sensitive,retrieval_constraint_coverage,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,3.33,3.11,0.22,true
+education,synthesis_sensitive,retrieval_constraint_coverage,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,2.72,3.33,-0.61,true
+education,synthesis_sensitive,retrieval_disconfirming_coverage,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,4.94,0.06,true
+education,synthesis_sensitive,retrieval_disconfirming_coverage,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.94,4.94,0.00,true
+education,synthesis_sensitive,retrieval_disconfirming_coverage,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.89,4.94,-0.06,true
+education,synthesis_sensitive,retrieval_disconfirming_coverage,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.89,5.00,-0.11,true
+education,synthesis_sensitive,retrieval_disconfirming_coverage,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.89,4.94,-0.06,true
+education,synthesis_sensitive,retrieval_disconfirming_coverage,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,2.72,4.89,-2.17,true
+education,synthesis_sensitive,retrieval_distractor_robustness,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,5.00,0.00,true
+education,synthesis_sensitive,retrieval_distractor_robustness,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,5.00,5.00,0.00,true
+education,synthesis_sensitive,retrieval_distractor_robustness,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,5.00,5.00,0.00,true
+education,synthesis_sensitive,retrieval_distractor_robustness,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,5.00,5.00,0.00,true
+education,synthesis_sensitive,retrieval_distractor_robustness,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,5.00,5.00,0.00,true
+education,synthesis_sensitive,retrieval_distractor_robustness,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,5.00,5.00,0.00,true
+education,synthesis_sensitive,retrieval_evidence_relevance,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,3.89,3.81,0.08,true
+education,synthesis_sensitive,retrieval_evidence_relevance,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.25,3.81,0.44,true
+education,synthesis_sensitive,retrieval_evidence_relevance,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.14,3.81,0.33,true
+education,synthesis_sensitive,retrieval_evidence_relevance,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.14,3.89,0.25,true
+education,synthesis_sensitive,retrieval_evidence_relevance,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.14,4.25,-0.11,true
+education,synthesis_sensitive,retrieval_evidence_relevance,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,3.94,4.14,-0.19,true
+education,synthesis_sensitive,retrieval_result_persona_fit,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,2.75,2.72,0.03,true
+education,synthesis_sensitive,retrieval_result_persona_fit,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,3.53,2.72,0.81,true
+education,synthesis_sensitive,retrieval_result_persona_fit,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,3.86,2.72,1.14,true
+education,synthesis_sensitive,retrieval_result_persona_fit,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,3.86,2.75,1.11,true
+education,synthesis_sensitive,retrieval_result_persona_fit,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,3.86,3.53,0.33,true
+education,synthesis_sensitive,retrieval_result_persona_fit,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,2.89,3.86,-0.97,true
+education,synthesis_sensitive,retrieval_source_quality,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,4.14,3.86,0.28,true
+education,synthesis_sensitive,retrieval_source_quality,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.14,3.86,0.28,true
+education,synthesis_sensitive,retrieval_source_quality,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.11,3.86,0.25,true
+education,synthesis_sensitive,retrieval_source_quality,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.11,4.14,-0.03,true
+education,synthesis_sensitive,retrieval_source_quality,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.11,4.14,-0.03,true
+education,synthesis_sensitive,retrieval_source_quality,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.19,4.11,0.08,true
+education,synthesis_sensitive,retrieval_unsafe_or_overpersonalized_retrieval_risk,synthesis personalization effect,V2_synthesis_only_personalization,V1_generic_fanout,5.00,5.00,0.00,false
+education,synthesis_sensitive,retrieval_unsafe_or_overpersonalized_retrieval_risk,fanout personalization effect,V3_fanout_only_personalization,V1_generic_fanout,4.86,5.00,-0.14,false
+education,synthesis_sensitive,retrieval_unsafe_or_overpersonalized_retrieval_risk,joint personalization gain,V4_personalized_fanout,V1_generic_fanout,4.97,5.00,-0.03,false
+education,synthesis_sensitive,retrieval_unsafe_or_overpersonalized_retrieval_risk,marginal fanout effect given personalized synthesis,V4_personalized_fanout,V2_synthesis_only_personalization,4.97,5.00,-0.03,false
+education,synthesis_sensitive,retrieval_unsafe_or_overpersonalized_retrieval_risk,marginal synthesis effect given personalized fanout,V4_personalized_fanout,V3_fanout_only_personalization,4.97,4.86,0.11,false
+education,synthesis_sensitive,retrieval_unsafe_or_overpersonalized_retrieval_risk,mixed/disconfirming fan-out effect,V5_mixed_fanout,V4_personalized_fanout,4.94,4.97,-0.03,false
