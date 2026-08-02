@@ -109,6 +109,13 @@ def main(argv: Optional[List[str]] = None) -> None:
     parser.add_argument("--model", default=DEFAULT_GEMINI_MODEL)
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--balanced-subset", action="store_true", help="Run a balanced subset of 30 queries (10 per domain)")
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Skip (query, persona, variant) jobs already logged in the output "
+        "file, so a crashed or partial batch can be re-invoked without "
+        "duplicating runs.",
+    )
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args(argv)
 
@@ -134,6 +141,27 @@ def main(argv: Optional[List[str]] = None) -> None:
         queries = get_balanced_subset(queries, n_per_domain=10)
     personas = load_personas(p_path)
     plan = build_plan(queries, personas, variants)
+
+    if args.resume and os.path.exists(out_path):
+        done = set()
+        with open(out_path, "r", encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    rec = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                done.add((rec.get("query_id"), rec.get("persona_id"), rec.get("variant")))
+        before = len(plan)
+        plan = [
+            (q, p, v)
+            for (q, p, v) in plan
+            if (q.query_id, p.persona_id if p else None, v) not in done
+        ]
+        print(f"[run_batch] resume: {before - len(plan)} jobs already logged, {len(plan)} remaining.")
+
     if args.limit is not None:
         plan = plan[: args.limit]
 
