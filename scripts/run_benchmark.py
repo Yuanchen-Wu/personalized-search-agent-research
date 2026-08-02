@@ -110,6 +110,14 @@ def main(argv: Optional[List[str]] = None) -> None:
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--balanced-subset", action="store_true", help="Run a balanced subset of 30 queries (10 per domain)")
     parser.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        help="Concurrent agent runs (default 1 = serial). Gemini pacing stays "
+        "correct at any worker count: calls share one global rate budget "
+        "(GEMINI_MAX_RPM), and 429s back off honoring the server's retryDelay.",
+    )
+    parser.add_argument(
         "--resume",
         action="store_true",
         help="Skip (query, persona, variant) jobs already logged in the output "
@@ -176,21 +184,48 @@ def main(argv: Optional[List[str]] = None) -> None:
         return
 
     failures = 0
-    for i, (q, persona, variant) in enumerate(plan, start=1):
-        pid = persona.persona_id if persona else None
-        print(f"[{i}/{total}] variant={variant} persona={pid} query_id={q.query_id}")
-        try:
-            run_log = run_agent(
+    if args.workers > 1:
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+
+        def _one(job):
+            q, persona, variant = job
+            return run_agent(
                 query_record=q,
                 persona=persona,
                 variant=variant,
                 model=args.model,
                 experiment_name=experiment_name,
             )
-            append_run_log(run_log, path=out_path)
-        except Exception as err:
-            failures += 1
-            print(f"    ERROR: {err}")
+
+        with ThreadPoolExecutor(max_workers=args.workers) as pool:
+            futures = {pool.submit(_one, job): job for job in plan}
+            # Appends happen only here on the main thread (single writer), one
+            # completed run at a time, so resume stays crash-safe.
+            for i, fut in enumerate(as_completed(futures), start=1):
+                q, persona, variant = futures[fut]
+                pid = persona.persona_id if persona else None
+                try:
+                    append_run_log(fut.result(), path=out_path)
+                    print(f"[{i}/{total}] done variant={variant} persona={pid} query_id={q.query_id}")
+                except Exception as err:
+                    failures += 1
+                    print(f"[{i}/{total}] ERROR variant={variant} persona={pid} query_id={q.query_id}: {err}")
+    else:
+        for i, (q, persona, variant) in enumerate(plan, start=1):
+            pid = persona.persona_id if persona else None
+            print(f"[{i}/{total}] variant={variant} persona={pid} query_id={q.query_id}")
+            try:
+                run_log = run_agent(
+                    query_record=q,
+                    persona=persona,
+                    variant=variant,
+                    model=args.model,
+                    experiment_name=experiment_name,
+                )
+                append_run_log(run_log, path=out_path)
+            except Exception as err:
+                failures += 1
+                print(f"    ERROR: {err}")
 
     print(f"[run_batch] done. {total - failures}/{total} succeeded. Logs appended to {out_path}")
 

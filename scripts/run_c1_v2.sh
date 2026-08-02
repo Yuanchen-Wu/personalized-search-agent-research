@@ -39,6 +39,9 @@
 #                        later full run resumes agent and judge stages.
 #   --dry-run            Preflight + plan preview only; no API calls.
 #   --force-eval         Discard judge scores for this arm and re-judge.
+#   AGENT_WORKERS=N      Concurrent agent runs (default 8).
+#   GEMINI_MAX_RPM=N     Shared pace for agent-side Gemini calls (default 150
+#                        here; the code's own default is a free-tier 15).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -51,6 +54,14 @@ AGENT_MODEL="$BASELINE_AGENT_MODEL"
 # this — the agent model (--agent-model) is the experimental axis.
 JUDGE_MODEL="gemini-flash-latest"
 MAX_AGENT_PASSES="${MAX_AGENT_PASSES:-3}"
+
+# Speed knobs. The agent stage runs AGENT_WORKERS runs concurrently, and all
+# agent-side Gemini calls share one global pace of GEMINI_MAX_RPM (the code's
+# built-in default of 15 RPM is free-tier-friendly but ~10x slower than a paid
+# key needs to be). 429s auto-retry honoring the server's retryDelay, so a
+# too-high RPM degrades gracefully rather than failing runs.
+AGENT_WORKERS="${AGENT_WORKERS:-8}"
+export GEMINI_MAX_RPM="${GEMINI_MAX_RPM:-150}"
 
 LIMIT="" DRY=0 FORCE_EVAL=0
 while [ $# -gt 0 ]; do
@@ -111,16 +122,37 @@ EOF
 fi
 
 # API keys: hard requirement for a real run, warning only for --dry-run.
-if ! "$PY" -c "
-from search_agent.config import get_gemini_api_key, get_tavily_api_key
-get_gemini_api_key(); get_tavily_api_key()
-print('   API keys: present (values not shown)')
-" 2>/dev/null; then
-  if [ "$DRY" = 1 ]; then
-    echo "   API keys: NOT set (ok for --dry-run)"
-  else
-    echo "   API keys missing: put GEMINI_API_KEY and TAVILY_API_KEY in .env"; exit 1
-  fi
+# (src/ must be on sys.path for the import — the scripts do this themselves,
+# a bare `python -c` does not, which used to misreport imports as missing keys.)
+KEYCHECK_RC=0
+KEYCHECK_OUT=$("$PY" - 2>&1 <<'EOF'
+import sys
+sys.path.insert(0, "src")
+try:
+    from search_agent.config import get_gemini_api_key, get_tavily_api_key
+except Exception as e:
+    print(f"environment problem (NOT a key problem): {e}")
+    sys.exit(2)
+missing = []
+for name, fn in (("GEMINI_API_KEY", get_gemini_api_key), ("TAVILY_API_KEY", get_tavily_api_key)):
+    try:
+        fn()
+    except Exception:
+        missing.append(name)
+if missing:
+    print("missing: " + ", ".join(missing))
+    sys.exit(1)
+print("present (values not shown)")
+EOF
+) || KEYCHECK_RC=$?
+if [ "$KEYCHECK_RC" = 0 ]; then
+  echo "   API keys: $KEYCHECK_OUT"
+elif [ "$DRY" = 1 ]; then
+  echo "   API keys: $KEYCHECK_OUT (ok for --dry-run)"
+else
+  echo "   API key check failed: $KEYCHECK_OUT"
+  echo "   Keys belong in .env at the repo root (KEY=value, no quotes needed)."
+  exit 1
 fi
 
 "$PY" scripts/validate_experiment_setup.py --config "$CONFIG" \
@@ -199,7 +231,7 @@ if [ "$DRY" = 1 ]; then
   exit 0
 fi
 
-echo "== [1/5] Agent runs (model=$AGENT_MODEL${LIMIT:+, smoke limit=$LIMIT})"
+echo "== [1/5] Agent runs (model=$AGENT_MODEL, workers=$AGENT_WORKERS, gemini rpm=$GEMINI_MAX_RPM${LIMIT:+, smoke limit=$LIMIT})"
 sanitize_runs
 EXPECTED_REMAINING=$(remaining_jobs)
 [ -n "$LIMIT" ] && [ "$EXPECTED_REMAINING" -gt "$LIMIT" ] && EXPECTED_REMAINING=$LIMIT
@@ -212,6 +244,7 @@ while [ "$EXPECTED_REMAINING" -gt 0 ]; do
   fi
   echo "   pass $PASS: $EXPECTED_REMAINING jobs to run"
   "$PY" scripts/run_benchmark.py --config "$CONFIG" --model "$AGENT_MODEL" \
+    --workers "$AGENT_WORKERS" \
     --resume ${LIMIT:+--limit "$LIMIT"} 2>&1 | tee -a "$OUT_DIR/logs/agent_runs.log" | tail -3
   NEW_REMAINING=$(remaining_jobs)
   [ -n "$LIMIT" ] && break   # smoke mode: one pass is the point
