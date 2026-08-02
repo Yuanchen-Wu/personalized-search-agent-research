@@ -285,7 +285,8 @@ def provider_for(model: str) -> str:
     if not isinstance(model, str) or not model.strip():
         raise ValueError(f"model must be a non-empty string, got {model!r}.")
     m = model.lower()
-    if m.startswith(("gemini", "models/gemini")):
+    # Gemma models are served by the same Gemini API (same GEMINI_API_KEY).
+    if m.startswith(("gemini", "models/gemini", "gemma", "models/gemma")):
         return "gemini"
     if m.startswith(("claude", "anthropic/")):
         return "anthropic"
@@ -295,7 +296,7 @@ def provider_for(model: str) -> str:
         return "llama"
     raise ValueError(
         f"No provider registered for model {model!r}. "
-        "Expected a prefix of: gemini-*, claude-*, gpt-*/o1-*/o3-*, llama-*."
+        "Expected a prefix of: gemini-*/gemma-*, claude-*, gpt-*/o1-*/o3-*, llama-*."
     )
 
 
