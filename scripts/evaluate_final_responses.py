@@ -20,6 +20,7 @@ from search_agent.rubrics import (
     format_rubric,
     load_rubrics,
 )
+from search_agent.eval_resume import append_score, prepare_scores_file
 
 
 def clean_json_response(text: str) -> str:
@@ -116,6 +117,12 @@ def main():
         help="A/B mode: also feed the curated persona answer key (latent_profile + "
         "description) to the judge. Default off = leak-free, rubric-only grading.",
     )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Discard any existing scores file and re-judge everything "
+        "(default resumes: good rows are kept, only what's missing is judged).",
+    )
     args = parser.parse_args()
 
     with open(args.config, "r") as f:
@@ -150,6 +157,12 @@ def main():
     if args.limit:
         runs = runs[:args.limit]
 
+    done_ids = prepare_scores_file(out_path, force=args.force)
+    if done_ids:
+        already = sum(1 for r in runs if r.get("run_id") in done_ids)
+        runs = [r for r in runs if r.get("run_id") not in done_ids]
+        print(f"[resume] {already} runs already scored; {len(runs)} left to judge.")
+
     missing = sum(1 for r in runs if r.get("query_id") not in rubrics)
     if missing:
         print(f"[WARNING] {missing}/{len(runs)} runs had no matching rubric (graded with empty rubric).")
@@ -158,32 +171,27 @@ def main():
     evaluator_max_workers = 15
     pacing_delay = 60.0 / evaluator_rpm
 
-    results_map = {}
+    written = 0
+    with open(out_path, "a", encoding="utf-8") as out_fh:
+        with ThreadPoolExecutor(max_workers=evaluator_max_workers) as executor:
+            future_to_idx = {}
+            for idx, run in enumerate(runs):
+                print(f"Submitting final response evaluation {idx+1}/{len(runs)} (run_id: {run.get('run_id')})...")
+                future = executor.submit(evaluate_run, run, rubrics, args.model, args.include_latent_profile)
+                future_to_idx[future] = idx
+                time.sleep(pacing_delay)
 
-    with ThreadPoolExecutor(max_workers=evaluator_max_workers) as executor:
-        future_to_idx = {}
-        for idx, run in enumerate(runs):
-            print(f"Submitting final response evaluation {idx+1}/{len(runs)} (run_id: {run.get('run_id')})...")
-            future = executor.submit(evaluate_run, run, rubrics, args.model, args.include_latent_profile)
-            future_to_idx[future] = idx
-            time.sleep(pacing_delay)
+            for future in as_completed(future_to_idx):
+                idx = future_to_idx[future]
+                try:
+                    res = future.result()
+                    append_score(out_fh, res)  # incremental: survives interruption mid-stage
+                    written += 1
+                    print(f"Completed final response evaluation {idx+1}/{len(runs)} (run_id: {res.get('run_id')}).")
+                except Exception as e:
+                    print(f"Error in final response evaluation {idx+1}: {e}")
 
-        for future in as_completed(future_to_idx):
-            idx = future_to_idx[future]
-            try:
-                res = future.result()
-                results_map[idx] = res
-                print(f"Completed final response evaluation {idx+1}/{len(runs)} (run_id: {res.get('run_id')}).")
-            except Exception as e:
-                print(f"Error in final response evaluation {idx+1}: {e}")
-
-    results = [results_map[k] for k in sorted(results_map.keys())]
-
-    with open(out_path, "w") as f:
-        for r in results:
-            f.write(json.dumps(r) + "\n")
-
-    print(f"Evaluated {len(results)} runs. Final response scores saved to {out_path}")
+    print(f"Judged {written} runs this invocation ({len(done_ids)} resumed). Final response scores in {out_path}")
 
 
 if __name__ == "__main__":
