@@ -12,14 +12,16 @@
 # outputs/placement_ablation_v2/, which is exactly what
 # notebooks/placement_ablation_analysis_final.ipynb reads (RESULTS_DIR).
 #
-# The command is safe to re-invoke: agent runs resume from runs.jsonl instead
-# of duplicating, and judge stages are skipped when their output is already
-# complete and error-free.
+# The command is safe to interrupt and re-invoke at any point (battery death,
+# quota exhaustion, Ctrl-C): every completed agent run and every completed
+# judge call is already on disk (appended + flushed as it finishes), and the
+# next invocation repairs any part-written tail line and resumes from exactly
+# what's left instead of re-running or duplicating finished work.
 #
 # Options:
 #   --smoke        End-to-end shakeout on the first 12 jobs (2 queries x 6
 #                  variants) before committing to the full batch. A later full
-#                  run resumes the agent stage and re-judges everything.
+#                  run resumes both the agent and judge stages from there.
 #   --dry-run      Preflight + plan preview only; no API calls.
 #   --force-eval   Re-run judge stages even if outputs look complete.
 #   AGENT_MODEL=   Agent model (default gemini-3.5-flash, as in C2/C3).
@@ -95,9 +97,13 @@ plan = {(q["query_id"], q["persona_id"], v) for q in queries for v in variants}
 done = Counter()
 if os.path.exists(sys.argv[2]):
     for l in open(sys.argv[2]):
-        if l.strip():
+        if not l.strip():
+            continue
+        try:
             r = json.loads(l)
-            done[(r.get("query_id"), r.get("persona_id"), r.get("variant"))] += 1
+        except json.JSONDecodeError:
+            continue  # part-written tail line; sanitize_runs repairs the file
+        done[(r.get("query_id"), r.get("persona_id"), r.get("variant"))] += 1
 dups = {k: c for k, c in done.items() if c > 1 and k in plan}
 if dups:
     print(f"[warn] {len(dups)} duplicate (query,persona,variant) triples in runs.jsonl", file=sys.stderr)
@@ -105,8 +111,42 @@ print(len(plan - set(done)))
 EOF
 }
 
+# Repair runs.jsonl in place: drop part-written tail lines (power loss during
+# an append) and duplicate (query,persona,variant) records so the evaluators
+# and resume logic see a clean file. No-op when the file is already healthy.
+sanitize_runs() {
+  [ -f "$RUNS" ] || return 0
+  "$PY" - "$RUNS" <<'EOF'
+import json, os, sys
+path = sys.argv[1]
+kept, seen, corrupt, dups = [], set(), 0, 0
+for line in open(path, encoding="utf-8"):
+    s = line.strip()
+    if not s:
+        continue
+    try:
+        r = json.loads(s)
+    except json.JSONDecodeError:
+        corrupt += 1
+        continue
+    key = (r.get("query_id"), r.get("persona_id"), r.get("variant"))
+    if key in seen:
+        dups += 1
+        continue
+    seen.add(key)
+    kept.append(s)
+if corrupt or dups:
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(kept) + ("\n" if kept else ""))
+    os.replace(tmp, path)
+    print(f"   repaired runs.jsonl: kept {len(kept)} runs, dropped {corrupt} corrupt + {dups} duplicate lines")
+EOF
+}
+
 if [ "$DRY" = 1 ]; then
   echo "== DRY RUN: plan preview"
+  sanitize_runs
   "$PY" scripts/run_benchmark.py --config "$CONFIG" --model "$AGENT_MODEL" \
     --resume --dry-run ${LIMIT:+--limit "$LIMIT"}
   echo "   remaining agent jobs: $(remaining_jobs)"
@@ -114,6 +154,7 @@ if [ "$DRY" = 1 ]; then
 fi
 
 echo "== [1/5] Agent runs (model=$AGENT_MODEL${LIMIT:+, smoke limit=$LIMIT})"
+sanitize_runs
 EXPECTED_REMAINING=$(remaining_jobs)
 [ -n "$LIMIT" ] && [ "$EXPECTED_REMAINING" -gt "$LIMIT" ] && EXPECTED_REMAINING=$LIMIT
 PASS=1
@@ -138,8 +179,8 @@ done
 RUN_COUNT=$(grep -c . "$RUNS")
 echo "   agent runs complete: $RUN_COUNT records in runs.jsonl"
 
-# A judge stage is skipped when its output already has one row per run and no
-# embedded per-row error field (each evaluator overwrites wholesale on re-run).
+# Post-stage gate: complete = one row per run, no embedded per-row error.
+# (The evaluators themselves resume incrementally; this is the safety net.)
 stage_complete() {  # $1 = scores file
   "$PY" - "$1" "$RUN_COUNT" <<'EOF'
 import json, os, sys
@@ -154,20 +195,20 @@ else: print("ok")
 EOF
 }
 
+# Judge stages resume internally: previously-scored rows are kept, error rows
+# are cleaned and retried, and only what's missing is judged. A fully complete
+# stage is a ~2s no-op with zero API calls, so we always invoke them.
 run_judge() {  # $1 = step label, $2 = script, $3 = scores file
+  local force_flag=""
+  if [ "$FORCE_EVAL" = 1 ]; then force_flag="--force"; fi
+  echo "== [$1] $2 (model=$JUDGE_MODEL)"
+  "$PY" "scripts/$2" --config "$CONFIG" --model "$JUDGE_MODEL" $force_flag \
+    2>&1 | tee "$OUT_DIR/logs/$2.log" | tail -2
   local status
   status=$(stage_complete "$3")
-  if [ "$status" = "ok" ] && [ "$FORCE_EVAL" != 1 ]; then
-    echo "== [$1] $2: already complete, skipping (use --force-eval to redo)"
-    return
-  fi
-  echo "== [$1] $2 (model=$JUDGE_MODEL; previous state: $status)"
-  "$PY" "scripts/$2" --config "$CONFIG" --model "$JUDGE_MODEL" \
-    2>&1 | tee "$OUT_DIR/logs/$2.log" | tail -2
-  status=$(stage_complete "$3")
   if [ "$status" != "ok" ]; then
-    echo "   WARNING: $2 finished but output is '$status'."
-    echo "   Re-invoke this script to retry the stage (judge stages re-run wholesale)."
+    echo "   WARNING: $2 output is '$status' after this pass."
+    echo "   Re-invoke this script; the stage resumes and retries only what failed."
     exit 1
   fi
 }
