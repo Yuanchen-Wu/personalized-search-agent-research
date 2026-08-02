@@ -39,9 +39,19 @@
 #                        later full run resumes agent and judge stages.
 #   --dry-run            Preflight + plan preview only; no API calls.
 #   --force-eval         Discard judge scores for this arm and re-judge.
+#   --retry-empty-searches
+#                        Strip runs whose searches returned no evidence (e.g.
+#                        after a Tavily rate-limit incident) so the agent stage
+#                        re-runs exactly those; their stale judge rows are
+#                        purged too. Fix the cause (key tier / TAVILY_MAX_RPM)
+#                        before using this.
 #   AGENT_WORKERS=N      Concurrent agent runs (default 8).
 #   GEMINI_MAX_RPM=N     Shared pace for agent-side Gemini calls (default 150
 #                        here; the code's own default is a free-tier 15).
+#   TAVILY_MAX_RPM=N     Shared pace for Tavily searches (default 90 = safe
+#                        for a dev key's 100/min cap; set 600+ with a
+#                        production key's 1,000/min). Searches queue politely
+#                        at any worker count instead of getting blocked.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -62,8 +72,12 @@ MAX_AGENT_PASSES="${MAX_AGENT_PASSES:-3}"
 # too-high RPM degrades gracefully rather than failing runs.
 AGENT_WORKERS="${AGENT_WORKERS:-8}"
 export GEMINI_MAX_RPM="${GEMINI_MAX_RPM:-150}"
+export TAVILY_MAX_RPM="${TAVILY_MAX_RPM:-90}"
+# Max % of runs allowed to end up with zero retrieved evidence before the
+# pipeline refuses to judge (a quota failure must never pass as an experiment).
+EMPTY_EVIDENCE_TOLERANCE_PCT="${EMPTY_EVIDENCE_TOLERANCE_PCT:-2}"
 
-LIMIT="" DRY=0 FORCE_EVAL=0
+LIMIT="" DRY=0 FORCE_EVAL=0 RETRY_EMPTY=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --agent-model) [ $# -ge 2 ] || { echo "--agent-model needs a value"; exit 2; }
@@ -72,6 +86,7 @@ while [ $# -gt 0 ]; do
     --smoke) LIMIT=12 ;;
     --dry-run) DRY=1 ;;
     --force-eval) FORCE_EVAL=1 ;;
+    --retry-empty-searches) RETRY_EMPTY=1 ;;
     *) echo "unknown option: $1 (see header of $0)"; exit 2 ;;
   esac
   shift
@@ -231,8 +246,54 @@ if [ "$DRY" = 1 ]; then
   exit 0
 fi
 
-echo "== [1/5] Agent runs (model=$AGENT_MODEL, workers=$AGENT_WORKERS, gemini rpm=$GEMINI_MAX_RPM${LIMIT:+, smoke limit=$LIMIT})"
+# Strip evidence-free runs (and their stale judge rows) so resume re-runs them.
+retry_empty_searches() {
+  [ -f "$RUNS" ] || return 0
+  "$PY" - "$RUNS" "$OUT_DIR" <<'EOF'
+import json, os, sys
+runs_path, out_dir = sys.argv[1], sys.argv[2]
+runs = [json.loads(l) for l in open(runs_path, encoding="utf-8") if l.strip()]
+keep = [r for r in runs if r.get("raw_search_results")]
+dropped = len(runs) - len(keep)
+if not dropped:
+    print("   no evidence-free runs to strip")
+    raise SystemExit
+tmp = runs_path + ".tmp"
+with open(tmp, "w", encoding="utf-8") as fh:
+    for r in keep:
+        fh.write(json.dumps(r, ensure_ascii=False) + "\n")
+os.replace(tmp, runs_path)
+valid = {r.get("run_id") for r in keep}
+for name in ("fanout_scores.jsonl", "retrieval_scores.jsonl", "final_response_scores.jsonl"):
+    p = os.path.join(out_dir, name)
+    if not os.path.exists(p):
+        continue
+    rows, orphans = [], 0
+    for l in open(p, encoding="utf-8"):
+        if not l.strip():
+            continue
+        try:
+            row = json.loads(l)
+        except json.JSONDecodeError:
+            orphans += 1
+            continue
+        if row.get("run_id") in valid:
+            rows.append(l.rstrip("\n"))
+        else:
+            orphans += 1
+    if orphans:
+        tmp = p + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as fh:
+            fh.write("\n".join(rows) + ("\n" if rows else ""))
+        os.replace(tmp, p)
+        print(f"   purged {orphans} stale judge rows from {name}")
+print(f"   stripped {dropped} evidence-free runs; {len(keep)} kept — resume will re-run the stripped jobs")
+EOF
+}
+
+echo "== [1/5] Agent runs (model=$AGENT_MODEL, workers=$AGENT_WORKERS, gemini rpm=$GEMINI_MAX_RPM, tavily rpm=$TAVILY_MAX_RPM${LIMIT:+, smoke limit=$LIMIT})"
 sanitize_runs
+[ "$RETRY_EMPTY" = 1 ] && retry_empty_searches
 EXPECTED_REMAINING=$(remaining_jobs)
 [ -n "$LIMIT" ] && [ "$EXPECTED_REMAINING" -gt "$LIMIT" ] && EXPECTED_REMAINING=$LIMIT
 PASS=1
@@ -257,6 +318,23 @@ while [ "$EXPECTED_REMAINING" -gt 0 ]; do
 done
 RUN_COUNT=$(grep -c . "$RUNS")
 echo "   agent runs complete: $RUN_COUNT records in runs.jsonl"
+
+# Evidence gate: refuse to judge an arm whose retrieval silently failed.
+if ! "$PY" - "$RUNS" "$EMPTY_EVIDENCE_TOLERANCE_PCT" <<'EOF'
+import json, sys
+runs = [json.loads(l) for l in open(sys.argv[1], encoding="utf-8") if l.strip()]
+empty = sum(1 for r in runs if not r.get("raw_search_results"))
+pct = 100.0 * empty / max(1, len(runs))
+print(f"   evidence coverage: {len(runs) - empty}/{len(runs)} runs have search results ({pct:.1f}% empty)")
+sys.exit(1 if pct > float(sys.argv[2]) else 0)
+EOF
+then
+  echo "   EVIDENCE GATE FAILED: too many runs retrieved nothing (Tavily rate limit?)."
+  echo "   Check the key tier and TAVILY_MAX_RPM (dev keys: 100/min -> use <=90;"
+  echo "   production keys: 1,000/min), inspect $OUT_DIR/logs/agent_runs.log,"
+  echo "   then re-invoke with --retry-empty-searches to re-run only the dead runs."
+  exit 1
+fi
 
 # Post-stage gate: complete = one row per run, no embedded per-row error.
 # (The evaluators themselves resume incrementally; this is the safety net.)

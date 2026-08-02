@@ -7,6 +7,8 @@ Gemini downstream so that the experiment isolates personalization placement.
 
 from __future__ import annotations
 
+import os
+import threading
 import time
 from typing import List, Optional
 
@@ -18,6 +20,39 @@ from .config import (
 from .schemas import FanoutBranch, SearchResult
 
 _client = None  # lazily initialized Tavily client
+
+# Global client-side pacing for Tavily calls, mirroring the Gemini limiter.
+# Tavily enforces 100 requests/min on dev keys and 1,000/min on production
+# keys; sustained overload gets every request blocked, which silently turns
+# whole batch runs evidence-free. Set TAVILY_MAX_RPM to your key's budget
+# (e.g. 90 for a dev key, 600+ for production); unset/0 disables pacing.
+# Thread-safe: concurrent workers reserve consecutive slots in one shared
+# schedule, so total throughput respects the budget at any worker count.
+_pace_lock = threading.Lock()
+_next_slot_at = 0.0
+
+
+def _pace() -> None:
+    try:
+        rpm = float(os.environ.get("TAVILY_MAX_RPM", "0") or 0)
+    except ValueError:
+        rpm = 0.0
+    if rpm <= 0:
+        return
+    global _next_slot_at
+    interval = 60.0 / rpm
+    with _pace_lock:
+        now = time.monotonic()
+        scheduled = max(now, _next_slot_at)
+        _next_slot_at = scheduled + interval
+    wait = scheduled - now
+    if wait > 0:
+        time.sleep(wait)
+
+
+def _looks_rate_limited(err: Exception) -> bool:
+    text = str(err).lower()
+    return "429" in text or "excessive requests" in text or "rate" in text
 
 
 def _get_client():
@@ -58,6 +93,7 @@ def search_tavily(
     raw_results = None
     for attempt in range(1, max_retries + 1):
         try:
+            _pace()
             response = client.search(
                 query=query,
                 max_results=max_results,
@@ -70,7 +106,9 @@ def search_tavily(
         except Exception as err:  # noqa: BLE001 - broad retry coverage
             last_err = err
             if attempt < max_retries:
-                time.sleep(2 ** (attempt - 1))
+                # Rate-limit blocks need long waits to outlive the burst; the
+                # short exponential is for ordinary transient failures.
+                time.sleep(10.0 * attempt if _looks_rate_limited(err) else 2 ** (attempt - 1))
             else:
                 # Soft-fail: return empty so a single bad branch doesn't kill
                 # the whole run. The empty result is still visible in logs.
