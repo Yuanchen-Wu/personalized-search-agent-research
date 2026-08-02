@@ -35,6 +35,20 @@ NON_PERSONALIZED_VARIANTS = [
     v for v in VARIANTS if v not in PERSONALIZED_SYNTHESIS_VARIANTS
 ]
 
+def require_evidence(query, run_log):
+    """Treat a search-required run that retrieved nothing as a FAILED run.
+
+    Raising keeps it out of the runs log, so ``--resume`` retries it on the
+    next pass instead of letting a Tavily outage/rate-limit masquerade as a
+    completed (but evidence-free) run.
+    """
+    if getattr(query, "search_required", True) and not run_log.raw_search_results:
+        raise RuntimeError(
+            "retrieval returned no evidence for a search-required query "
+            "(Tavily rate limit or outage?) — run not logged, will retry on resume"
+        )
+    return run_log
+
 def load_queries(path: str) -> List[QueryRecord]:
     """Load queries from a JSONL file into QueryRecord objects."""
     queries: List[QueryRecord] = []
@@ -189,13 +203,13 @@ def main(argv: Optional[List[str]] = None) -> None:
 
         def _one(job):
             q, persona, variant = job
-            return run_agent(
+            return require_evidence(q, run_agent(
                 query_record=q,
                 persona=persona,
                 variant=variant,
                 model=args.model,
                 experiment_name=experiment_name,
-            )
+            ))
 
         with ThreadPoolExecutor(max_workers=args.workers) as pool:
             futures = {pool.submit(_one, job): job for job in plan}
@@ -215,13 +229,13 @@ def main(argv: Optional[List[str]] = None) -> None:
             pid = persona.persona_id if persona else None
             print(f"[{i}/{total}] variant={variant} persona={pid} query_id={q.query_id}")
             try:
-                run_log = run_agent(
+                run_log = require_evidence(q, run_agent(
                     query_record=q,
                     persona=persona,
                     variant=variant,
                     model=args.model,
                     experiment_name=experiment_name,
-                )
+                ))
                 append_run_log(run_log, path=out_path)
             except Exception as err:
                 failures += 1
