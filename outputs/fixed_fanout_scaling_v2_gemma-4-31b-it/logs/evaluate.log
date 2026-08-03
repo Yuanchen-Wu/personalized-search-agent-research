@@ -1,0 +1,61 @@
+
+======================================================================
+ [STAGE 2/3] EVALUATION: Fanout, Retrieval & Final Response Judging
+======================================================================
+Loaded 288 runs to evaluate using evaluator model 'gemini-3.5-flash'.
+
+--- Sub-stage 2a: Fanout Query Evaluation (0 resumed, 288 to judge) ---
+  [Fanout Query Eval Progress] 20/288 complete (6.9%)
+  [Fanout Query Eval Progress] 40/288 complete (13.9%)
+  [Fanout Query Eval Progress] 60/288 complete (20.8%)
+  [Fanout Query Eval Progress] 80/288 complete (27.8%)
+  [Fanout Query Eval Progress] 100/288 complete (34.7%)
+  [Fanout Query Eval Progress] 120/288 complete (41.7%)
+  [Fanout Query Eval Progress] 140/288 complete (48.6%)
+  [Fanout Query Eval Progress] 160/288 complete (55.6%)
+  [Fanout Query Eval Progress] 180/288 complete (62.5%)
+  [Fanout Query Eval Progress] 200/288 complete (69.4%)
+  [Fanout Query Eval Progress] 220/288 complete (76.4%)
+  [Fanout Query Eval Progress] 240/288 complete (83.3%)
+  [Fanout Query Eval Progress] 260/288 complete (90.3%)
+  [Fanout Query Eval Progress] 280/288 complete (97.2%)
+  [Fanout Query Eval Progress] 288/288 complete (100.0%)
+
+--- Sub-stage 2b: Retrieval Evidence Evaluation (0 resumed, 288 to judge) ---
+  [Retrieval Evidence Eval Progress] 20/288 complete (6.9%)
+  [Retrieval Evidence Eval Progress] 40/288 complete (13.9%)
+  [Retrieval Evidence Eval Progress] 60/288 complete (20.8%)
+  [Retrieval Evidence Eval Progress] 80/288 complete (27.8%)
+  [Retrieval Evidence Eval Progress] 100/288 complete (34.7%)
+  [Retrieval Evidence Eval Progress] 120/288 complete (41.7%)
+  [Retrieval Evidence Eval Progress] 140/288 complete (48.6%)
+  [Retrieval Evidence Eval Progress] 160/288 complete (55.6%)
+  [Retrieval Evidence Eval Progress] 180/288 complete (62.5%)
+  [Retrieval Evidence Eval Progress] 200/288 complete (69.4%)
+  [Retrieval Evidence Eval Progress] 220/288 complete (76.4%)
+  [Retrieval Evidence Eval Progress] 240/288 complete (83.3%)
+  [Retrieval Evidence Eval Progress] 260/288 complete (90.3%)
+  [Retrieval Evidence Eval Progress] 280/288 complete (97.2%)
+  [Retrieval Evidence Eval Progress] 288/288 complete (100.0%)
+
+--- Sub-stage 2c: Final Response Evaluation (0 resumed, 288 to judge) ---
+  [Final Response Eval Progress] 20/288 complete (6.9%)
+  [Final Response Eval Progress] 40/288 complete (13.9%)
+  [Final Response Eval Progress] 60/288 complete (20.8%)
+  [Final Response Eval Progress] 80/288 complete (27.8%)
+  [Final Response Eval Progress] 100/288 complete (34.7%)
+  [Final Response Eval Progress] 120/288 complete (41.7%)
+  [Final Response Eval Progress] 140/288 complete (48.6%)
+  [Final Response Eval Progress] 160/288 complete (55.6%)
+  [Final Response Eval Progress] 180/288 complete (62.5%)
+  [Final Response Eval Progress] 200/288 complete (69.4%)
+  [Final Response Eval Progress] 220/288 complete (76.4%)
+  [Final Response Eval Progress] 240/288 complete (83.3%)
+  [Final Response Eval Progress] 260/288 complete (90.3%)
+  [Final Response Eval Progress] 280/288 complete (97.2%)
+  [Final Response Eval Progress] 288/288 complete (100.0%)
+
+[STAGE 2/3 COMPLETE] Evaluation finished in 15.44 minutes. Scores saved:
+  - /Users/yuanchenwu/Downloads/personalized-search-agent-research/outputs/fixed_fanout_scaling_v2_gemma-4-31b-it/fanout_scores.jsonl
+  - /Users/yuanchenwu/Downloads/personalized-search-agent-research/outputs/fixed_fanout_scaling_v2_gemma-4-31b-it/retrieval_scores.jsonl
+  - /Users/yuanchenwu/Downloads/personalized-search-agent-research/outputs/fixed_fanout_scaling_v2_gemma-4-31b-it/final_response_scores.jsonl
