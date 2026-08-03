@@ -658,3 +658,28 @@ Return STRICT JSON, no prose, with exactly these fields:
 Return ONLY the JSON object."""
 
 
+
+
+PAIRWISE_FINAL_JUDGE_PROMPT_V1 = """You are a strict, fair evaluator comparing TWO final answers produced by different search-augmented assistants for the SAME user request. Decide which answer better serves THIS user, judged against the evaluation rubric below.
+
+User's question:
+{user_query}
+Task Type: {task_type} | Category: {task_category} | Domain: {macro_domain}
+
+Evaluation rubric (frozen ground truth for this query):
+{rubric_block}
+
+ANSWER A:
+{answer_a}
+
+ANSWER B:
+{answer_b}
+
+Judging rules:
+- Weigh how well each answer satisfies the rubric's gold intents, uses the must-use content, avoids should-not-use content, respects safety expectations, and serves the user's inferred situation.
+- Ignore superficial length or formatting differences; judge substance.
+- Declare "tie" ONLY if the answers are genuinely indistinguishable in rubric terms.
+
+Return ONLY JSON:
+{{"winner": "A" | "B" | "tie", "rationale": "<two sentences: the decisive rubric-relevant difference>"}}
+"""
