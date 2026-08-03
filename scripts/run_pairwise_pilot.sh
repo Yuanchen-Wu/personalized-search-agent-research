@@ -2,9 +2,12 @@
 # Pairwise-judge PILOT: calibrate the instrument on a SMALL set of benchmark
 # items before trusting it on any real comparison.
 #
-#     bash scripts/run_pairwise_pilot.sh              # 16 items x 2 contrasts (~130 flash calls)
-#     LIMIT=8 bash scripts/run_pairwise_pilot.sh      # even smaller
-#     bash scripts/run_pairwise_pilot.sh --dry-run    # no API: verify data + show commands
+#     bash scripts/run_pairwise_pilot.sh              # 16 items x 2 contrasts (~130 flash calls, <1 min)
+#     bash scripts/run_pairwise_pilot.sh --dry-run    # no API: verify data + show plan
+#
+# Judge defaults to gemini-3.6-flash at WORKERS=24 (sized for a 1k-RPM tier;
+# calls are unthrottled with retry/backoff, so 24 concurrent ~= 500-700 RPM).
+# The pilot performs NO searches — Tavily limits are irrelevant here.
 #
 # Runs two KNOWN contrasts from a C2 v2 arm (distribution-matched to the
 # instrument's real use: judging fixed_k8 vs a future adaptive arm):
@@ -25,7 +28,8 @@ QUERIES=data/synthetic_queries_v1.jsonl   # C2 runs use benchmark v1 rubrics
 OUT_DIR=outputs/pairwise
 LIMIT="${LIMIT:-16}"
 SAMPLES="${SAMPLES:-2}"
-JUDGE="${JUDGE:-gemini-3.5-flash}"
+JUDGE="${JUDGE:-gemini-3.6-flash}"
+WORKERS="${WORKERS:-24}"
 
 DRY=0
 [ "${1:-}" = "--dry-run" ] && DRY=1
@@ -54,7 +58,7 @@ EOF
     --runs-a "$ARM" --method-a "$2" --label-a "$1" \
     --runs-b "$ARM" --method-b "$4" --label-b "$3" \
     --queries "$QUERIES" --out "$OUT_DIR/$5" \
-    --model "$JUDGE" --samples "$SAMPLES" --limit "$LIMIT"
+    --model "$JUDGE" --samples "$SAMPLES" --limit "$LIMIT" --workers "$WORKERS"
 }
 
 run_contrast k1 fixed_k1 k8 fixed_k8 pilot_k1_vs_k8.jsonl

@@ -106,11 +106,11 @@ def main():
     ap.add_argument("--queries", default="data/v2/synthetic_queries_v2.jsonl",
                     help="rubric source (use the benchmark version the runs used)")
     ap.add_argument("--out", required=True)
-    ap.add_argument("--model", default="gemini-3.5-flash")
+    ap.add_argument("--model", default="gemini-3.6-flash")
     ap.add_argument("--samples", type=int, default=2, help="votes per presentation order")
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--seed", type=int, default=42)
-    ap.add_argument("--workers", type=int, default=8)
+    ap.add_argument("--workers", type=int, default=24)
     args = ap.parse_args()
 
     A = load_answers(args.runs_a, args.variant_a, args.method_a)
