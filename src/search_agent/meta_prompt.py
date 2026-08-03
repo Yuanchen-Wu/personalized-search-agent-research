@@ -712,3 +712,31 @@ Return ONLY JSON:
   "next_query": "<the one search query to run next>",
   "rationale": "<one sentence: which unmet need this targets and why it is highest-value>"}}
 """
+
+
+REVISE_DRAFT_PROMPT_V1 = """You are an expert personal research assistant revising a DRAFT answer after a reviewer's critique. Fix ONLY what the critique identifies, using the SAME retrieved evidence below -- the evidence already contains what you need; your job is to select, foreground, and reframe it for THIS user, not to invent new facts.
+
+User's question:
+{user_query}
+
+What is known about the user:
+{persona_block}
+
+Reviewer critique of the previous draft:
+{critic_feedback}
+
+Specific gaps to fix:
+{gaps_block}
+
+Previous draft:
+{prior_draft}
+
+Retrieved evidence ({num_evidence} results):
+{evidence_block}
+
+Instructions:
+- Address every listed gap explicitly; keep what the critique did not flag.
+- Every factual claim MUST remain traceable to the evidence above.
+- Where the user's situation calls for caution (financial, legal, safety), state the warning plainly.
+- Return ONLY the revised answer text.
+"""

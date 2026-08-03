@@ -1,0 +1,56 @@
+
+======================================================================
+ [STAGE 1/3] BENCHMARK EXECUTION: Generating Plans, Searching & Synthesizing
+======================================================================
+Total pairs to process: 15 | Methods per pair: ['seqpersona_k8']
+Total planned runs: 15 | Config file: configs/seqpersona_k8_v1.yaml
+Found 6 previously completed runs in /Users/j/work/projects/personalized-search-agent-research/outputs/seqpersona_k8_v1/runs.jsonl. Resuming...
+
+[run_fixed_fanout] processing 15 pairs with 6 workers
+
+--- Processing Pair [1/15] Query ID: q_1 | Persona ID: budget_nonstem_student ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_1 persona_id=budget_nonstem_student
+
+--- Processing Pair [2/15] Query ID: q_2 | Persona ID: budget_nonstem_student ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_2 persona_id=budget_nonstem_student
+
+--- Processing Pair [3/15] Query ID: q_3 | Persona ID: budget_highstem_phd ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_3 persona_id=budget_highstem_phd
+
+--- Processing Pair [6/15] Query ID: q_6 | Persona ID: budget_highstem_phd ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_6 persona_id=budget_highstem_phd
+
+--- Processing Pair [5/15] Query ID: q_5 | Persona ID: budget_nonstem_student ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_5 persona_id=budget_nonstem_student
+
+--- Processing Pair [4/15] Query ID: q_4 | Persona ID: budget_nonstem_student ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_4 persona_id=budget_nonstem_student
+
+--- Processing Pair [10/15] Query ID: q_10 | Persona ID: modbudget_nonstem_switcher ---
+
+--- Processing Pair [8/15] Query ID: q_8 | Persona ID: budget_highstem_phd ---
+
+--- Processing Pair [9/15] Query ID: q_9 | Persona ID: modbudget_nonstem_switcher ---
+
+--- Processing Pair [7/15] Query ID: q_7 | Persona ID: budget_highstem_phd ---
+
+--- Processing Pair [11/15] Query ID: q_11 | Persona ID: modbudget_nonstem_switcher ---
+
+--- Processing Pair [12/15] Query ID: q_12 | Persona ID: modbudget_nonstem_switcher ---
+  [SUCCESS-SEQPERSONA] 8f7963789af7 | method=seqpersona_k8 | steps=8 searches=8 | lat=63.55s
+
+--- Processing Pair [13/15] Query ID: q_13 | Persona ID: highbudget_highstem_pro ---
+  [SUCCESS-SEQPERSONA] 365e77303dd7 | method=seqpersona_k8 | steps=8 searches=8 | lat=73.29s
+
+--- Processing Pair [14/15] Query ID: q_14 | Persona ID: highbudget_highstem_pro ---
+  [SUCCESS-SEQPERSONA] 80a37db71a5e | method=seqpersona_k8 | steps=8 searches=8 | lat=76.86s
+
+--- Processing Pair [15/15] Query ID: q_15 | Persona ID: highbudget_highstem_pro ---
+  [SUCCESS-SEQPERSONA] d75be2109d20 | method=seqpersona_k8 | steps=8 searches=8 | lat=78.03s
+  [SUCCESS-SEQPERSONA] 9b9e43bbd9df | method=seqpersona_k8 | steps=8 searches=8 | lat=79.84s
+  [SUCCESS-SEQPERSONA] f97da098feb2 | method=seqpersona_k8 | steps=8 searches=8 | lat=84.59s
+  [SUCCESS-SEQPERSONA] 25764ed26604 | method=seqpersona_k8 | steps=8 searches=8 | lat=72.53s
+  [SUCCESS-SEQPERSONA] f3d902097a2f | method=seqpersona_k8 | steps=8 searches=8 | lat=78.20s
+  [SUCCESS-SEQPERSONA] 895f6fba45e4 | method=seqpersona_k8 | steps=8 searches=8 | lat=79.14s
+
+[STAGE 1/3 COMPLETE] Benchmark finished 9 runs in 2.60 minutes. Runs written to /Users/j/work/projects/personalized-search-agent-research/outputs/seqpersona_k8_v1/runs.jsonl

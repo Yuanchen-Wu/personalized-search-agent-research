@@ -43,7 +43,11 @@ from .evidence import (
 from .fanout import _persona_block
 from .fixed_fanout import search_tavily_cached
 from .llm_gemini import call_gemini
-from .meta_prompt import ANSWER_CRITIC_PROMPT_V1, SYNTHESIS_PROMPT_HARDENED_V2
+from .meta_prompt import (
+    ANSWER_CRITIC_PROMPT_V1,
+    REVISE_DRAFT_PROMPT_V1,
+    SYNTHESIS_PROMPT_HARDENED_V2,
+)
 from .synthesize import _format_evidence
 from .schemas import FanoutBranch, Persona, SearchResult
 
@@ -87,6 +91,23 @@ def _synthesize_draft(user_query: str, persona: Optional[Persona],
     prompt = SYNTHESIS_PROMPT_HARDENED_V2.format(
         user_query=user_query,
         persona_block=_persona_block(persona) or "(no user context provided)",
+        evidence_block=_format_evidence(evidence),
+    )
+    return call_gemini(prompt, model=model, temperature=0.4, seed=seed)
+
+
+def _revise_draft(user_query: str, persona: Optional[Persona], evidence: List[SearchResult],
+                  prior_draft: str, critic_feedback: str, gaps: List[str],
+                  model: str, seed: int) -> str:
+    """Revise the previous draft against the critic's feedback using the SAME
+    evidence — the synthesis-bound remedy (no new search)."""
+    prompt = REVISE_DRAFT_PROMPT_V1.format(
+        user_query=user_query,
+        persona_block=_persona_block(persona) or "(no user context provided)",
+        critic_feedback=critic_feedback or "(no feedback text)",
+        gaps_block="\n".join(f"- {g}" for g in gaps) or "- (none listed)",
+        prior_draft=prior_draft,
+        num_evidence=len(evidence),
         evidence_block=_format_evidence(evidence),
     )
     return call_gemini(prompt, model=model, temperature=0.4, seed=seed)
@@ -156,24 +177,38 @@ def run_answercritic_loop(*, user_query: str, persona: Optional[Persona], query_
                           judge_samples: int = 3, judge_temperature: float = 0.2, seed: int = 42,
                           search_depth: str = DEFAULT_SEARCH_DEPTH,
                           max_results_per_branch: int = DEFAULT_MAX_RESULTS_PER_BRANCH,
-                          search_cache_path: Optional[str] = None, use_cache: bool = True
+                          search_cache_path: Optional[str] = None, use_cache: bool = True,
+                          route_actions: bool = False,
+                          targeted_fanout_size: int = 2,
+                          accumulate_evidence: bool = False,
                           ) -> AnswerCriticResult:
-    """Run the fan-out -> search -> DRAFT -> critique -> re-fan loop for one (query, persona)."""
+    """Run the fan-out -> search -> DRAFT -> critique loop for one (query, persona).
+
+    Defaults reproduce the v1 pilot exactly (full re-fanout every round, evidence
+    replaced per round). ``route_actions=True`` enables the v2 loop: the critic's
+    ``needs_more_evidence`` routes each retry to the failing stage — synthesis-bound
+    rounds REVISE the draft against the critique with the same evidence (no search);
+    retrieval-bound rounds run a small ``targeted_fanout_size`` fan-out for the named
+    gaps and merge into the pool. ``accumulate_evidence=True`` keeps evidence across
+    rounds instead of discarding it (v2 default via config).
+    """
     events: List[Dict[str, Any]] = []
     prior_queries: List[str] = []
     gaps: List[str] = []
     feedback: str = ""
     n_tavily = n_synth = n_critic = 0
 
+    pool_raw: List[SearchResult] = []      # accumulated raw results (v2) or this round's (v1)
+    exec_branches: List[FanoutBranch] = [] # all branches actually searched so far
+    evidence: List[SearchResult] = []
+    draft: str = ""
+    dec = None
+
     best = None       # (score, draft, evidence, branches, round)
     approved = None
 
-    for rnd in range(1, max_rounds + 1):
-        branches, _gen_lat, _gen_att = generate_fanout(
-            user_query=user_query, persona=persona, fanout_size=fanout_size, round_idx=rnd,
-            prior_queries=prior_queries, coverage_gaps=gaps, feedback=feedback,
-            model=planner_model, seed=seed)
-
+    def _search_branches(branches) -> List[SearchResult]:
+        nonlocal n_tavily
         raw: List[SearchResult] = []
         for b in branches:
             res, _hit = search_tavily_cached(
@@ -181,21 +216,60 @@ def run_answercritic_loop(*, user_query: str, persona: Optional[Persona], query_
                 search_depth=search_depth, cache_path=search_cache_path, use_cache=use_cache)
             raw.extend(res)
             n_tavily += 1
-        evidence = select_evidence_for_synthesis(deduplicate_search_results(raw), "all", None, None)
+        return raw
 
-        draft = _synthesize_draft(user_query, persona, evidence, synthesizer_model, seed)
-        n_synth += 1
+    for rnd in range(1, max_rounds + 1):
+        if rnd == 1 or not route_actions:
+            action = "initial" if rnd == 1 else "full_refanout"
+            branches, _gen_lat, _gen_att = generate_fanout(
+                user_query=user_query, persona=persona, fanout_size=fanout_size, round_idx=rnd,
+                prior_queries=prior_queries, coverage_gaps=gaps, feedback=feedback,
+                model=planner_model, seed=seed)
+            new_raw = _search_branches(branches)
+            if accumulate_evidence:
+                pool_raw.extend(new_raw)
+                exec_branches.extend(branches)
+            else:
+                pool_raw = list(new_raw)
+                exec_branches = list(branches)
+            evidence = select_evidence_for_synthesis(deduplicate_search_results(pool_raw), "all", None, None)
+            draft = _synthesize_draft(user_query, persona, evidence, synthesizer_model, seed)
+            n_synth += 1
+        elif dec is not None and not dec.needs_more_evidence:
+            # Synthesis-bound: the critic says the ANSWER is the problem, not the
+            # evidence — revise against the critique, spend zero searches.
+            action = "revise"
+            branches = []
+            draft = _revise_draft(user_query, persona, evidence, draft,
+                                  dec.feedback, dec.answer_gaps, synthesizer_model, seed + rnd)
+            n_synth += 1
+        else:
+            # Retrieval-bound: fetch just the named gaps with a small targeted
+            # fan-out and merge into the accumulated pool, then re-draft.
+            action = "targeted_search"
+            branches, _gen_lat, _gen_att = generate_fanout(
+                user_query=user_query, persona=persona, fanout_size=targeted_fanout_size,
+                round_idx=rnd, prior_queries=prior_queries, coverage_gaps=gaps,
+                feedback=feedback, model=planner_model, seed=seed)
+            pool_raw.extend(_search_branches(branches))
+            exec_branches.extend(branches)
+            evidence = select_evidence_for_synthesis(deduplicate_search_results(pool_raw), "all", None, None)
+            draft = _synthesize_draft(user_query, persona, evidence, synthesizer_model, seed)
+            n_synth += 1
+
         dec = judge_answer(user_query=user_query, persona=persona, evidence=evidence,
                            draft_answer=draft, model=critic_model, seed=seed,
                            judge_samples=judge_samples, judge_temperature=judge_temperature)
         n_critic += 1
 
+        branches_snapshot = list(exec_branches)
         if best is None or dec.answer_score > best[0]:
-            best = (dec.answer_score, draft, evidence, branches, rnd)
+            best = (dec.answer_score, draft, evidence, branches_snapshot, rnd)
 
         is_ok = dec.answer_score >= approval_threshold
         events.append({
-            "event_type": "answercritic_round", "round": rnd, "fanout_size": len(branches),
+            "event_type": "answercritic_round", "round": rnd, "action": action,
+            "fanout_size": len(branches), "pool_results": len(pool_raw),
             "queries": [b.query for b in branches], "num_results": len(evidence),
             "answer_score": dec.answer_score, "sample_scores": dec.sample_scores,
             "approval_threshold": approval_threshold, "approved": is_ok,
@@ -210,9 +284,9 @@ def run_answercritic_loop(*, user_query: str, persona: Optional[Persona], query_
         })
 
         if is_ok:
-            approved = (dec.answer_score, draft, evidence, branches, rnd)
+            approved = (dec.answer_score, draft, evidence, branches_snapshot, rnd)
             break
-        prior_queries = [b.query for b in branches]
+        prior_queries = [b.query for b in exec_branches]
         gaps = dec.answer_gaps
         feedback = dec.feedback
 
