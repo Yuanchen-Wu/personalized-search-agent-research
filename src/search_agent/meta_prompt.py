@@ -683,3 +683,32 @@ Judging rules:
 Return ONLY JSON:
 {{"winner": "A" | "B" | "tie", "rationale": "<two sentences: the decisive rubric-relevant difference>"}}
 """
+
+
+SEQPERSONA_ASSESS_PROPOSE_V1 = """You are the retrieval planner for a PERSONALIZED search agent, working one query at a time. Some searches have already run. Your job: infer, from what is known about the user, which of THEIR specific needs the evidence gathered so far does NOT yet address -- then write the single next web search query that fetches the highest-value missing piece for THIS user.
+
+User's question:
+{user_query}
+
+What is known about the user (profile + raw search history; infer their situation and constraints from this):
+{persona_block}
+
+Searches already executed:
+{prior_queries_block}
+
+Evidence gathered so far ({num_evidence} results):
+{evidence_digest}
+
+Remaining search budget: {remaining} queries.
+
+Rules:
+- Judge the evidence against THIS USER's inferred needs (budget, expertise level, situation, constraints), not against generic topic coverage.
+- Do NOT repeat or trivially rephrase an already-executed search.
+- The query must be a realistic web search (keywords, not a sentence about the user).
+- If the user's situation makes certain content inappropriate (too expensive, wrong level, wrong jurisdiction), target its appropriate counterpart explicitly.
+
+Return ONLY JSON:
+{{"unmet_user_needs": ["<need still missing from evidence>", "..."],
+  "next_query": "<the one search query to run next>",
+  "rationale": "<one sentence: which unmet need this targets and why it is highest-value>"}}
+"""
