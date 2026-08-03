@@ -2,10 +2,11 @@
 # One-command C2 rerun: fixed fanout scaling (k = 1,2,4,8, nested prefixes)
 # on the ORIGINAL benchmark v1 data, with pinned models.
 #
-# Design (see configs/fixed_fanout_scaling_v2.yaml): the SYNTHESIZER is fixed
-# at gemini-3.5-flash for every arm and the judge stays on the fixed
-# gemini-flash-latest measuring stick — the PLANNER model (which writes the
-# ordered 8-query fanout plan) is the sole experimental variable.
+# Design (see configs/fixed_fanout_scaling_v2.yaml): the SYNTHESIZER and the
+# JUDGE are both pinned to gemini-3.5-flash — matching what the original C2's
+# flash-latest alias resolved to at run/scoring time (pre 2026-07-21) — so the
+# PLANNER model (which writes the ordered 8-query fanout plan) is the sole
+# experimental variable and results are judge-consistent with the original C2.
 #
 #     bash scripts/run_c2_v2.sh                                  # baseline planner: gemini-3.5-flash
 #     bash scripts/run_c2_v2.sh --planner-model gemini-3.6-flash # comparison arm, one per model
@@ -70,7 +71,7 @@ RUNS="$OUT_DIR/runs.jsonl"
 mkdir -p "$OUT_DIR/logs"
 STARTED_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
-echo "== [0/4] Preflight (planner=$PLANNER_MODEL, synthesizer=PINNED gemini-3.5-flash)"
+echo "== [0/4] Preflight (planner=$PLANNER_MODEL, synthesizer+judge=PINNED gemini-3.5-flash)"
 if [ ! -x "$PY" ]; then
   python3 -m venv .venv
   "$PY" -m pip install -q --upgrade pip

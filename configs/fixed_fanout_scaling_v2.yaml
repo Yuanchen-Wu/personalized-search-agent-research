@@ -12,8 +12,10 @@ experiment_name: fixed_fanout_scaling_v2
 #   - planner is the per-arm knob: scripts/run_c2_v2.sh --planner-model
 #     overrides it via a derived config; this base config pins the
 #     baseline planner (3.5-flash = same as the original C2).
-#   - evaluator stays on the fixed gemini-flash-latest measuring stick
-#     used by all C1/C2/C3 scoring.
+#   - evaluator is PINNED to gemini-3.5-flash: the original C2 was judged
+#     via the flash-latest alias while it still resolved to 3.5-flash
+#     (pre 2026-07-21), so this pin reproduces the original run's judge
+#     exactly rather than following the alias to a newer model.
 
 methods:
   - fixed_k1
@@ -38,7 +40,7 @@ synthesis:
 models:
   planner: gemini-3.5-flash
   synthesizer: gemini-3.5-flash
-  evaluator: gemini-flash-latest
+  evaluator: gemini-3.5-flash
 
 reproducibility:
   seed: 42
