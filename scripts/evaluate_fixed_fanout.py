@@ -22,6 +22,8 @@ if _PROJECT_ROOT not in sys.path:
     sys.path.insert(0, _PROJECT_ROOT)
 sys.path.insert(0, os.path.join(_PROJECT_ROOT, "src"))
 
+from search_agent.eval_resume import append_score, prepare_scores_file  # noqa: E402
+
 from search_agent.evidence import sample_retrieval_evidence_for_evaluator
 from search_agent.llm_gemini import call_gemini
 from search_agent.meta_prompt import (
@@ -216,6 +218,12 @@ def main():
     parser.add_argument("--config", default="configs/fixed_fanout_scaling_v1.yaml")
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--model", type=str, default=None)
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Discard existing scores files and re-judge everything (default "
+        "resumes: good rows kept, only missing runs judged).",
+    )
     args = parser.parse_args()
 
     with open(args.config, "r", encoding="utf-8") as f:
@@ -255,59 +263,36 @@ def main():
     print("======================================================================")
     print(f"Loaded {len(runs)} runs to evaluate using evaluator model '{model}'.")
 
-    # Run evaluations with thread pool pacing
+    # Run evaluations with thread pool pacing. Each sub-stage appends+flushes
+    # per completed judgment and resumes from prior rows, so an interruption
+    # (battery, quota) keeps everything already judged (see eval_resume).
     evaluator_max_workers = 10
     pacing_delay = 0.2
 
-    fanout_results = []
-    retrieval_results = []
-    final_results = []
-
     t_eval_start = time.time()
 
-    print("\n--- Sub-stage 2a: Fanout Query Evaluation ---")
-    with ThreadPoolExecutor(max_workers=evaluator_max_workers) as executor:
-        futures = [executor.submit(evaluate_fanout_for_run, run, rubrics, model) for run in runs]
-        for idx, f in enumerate(as_completed(futures), start=1):
-            res = f.result()
-            fanout_results.append(res)
-            if idx % 10 == 0 or idx == len(runs):
-                print(f"  [Fanout Query Eval Progress] {idx}/{len(runs)} complete ({idx/len(runs)*100:.1f}%)")
-            time.sleep(pacing_delay)
-
-    print("\n--- Sub-stage 2b: Retrieval Evidence Evaluation ---")
-    with ThreadPoolExecutor(max_workers=evaluator_max_workers) as executor:
-        futures = [executor.submit(evaluate_retrieval_for_run, run, rubrics, model) for run in runs]
-        for idx, f in enumerate(as_completed(futures), start=1):
-            res = f.result()
-            retrieval_results.append(res)
-            if idx % 20 == 0 or idx == len(runs):
-                print(f"  [Retrieval Evidence Eval Progress] {idx}/{len(runs)} complete ({idx/len(runs)*100:.1f}%)")
-            time.sleep(pacing_delay)
-
-    print("\n--- Sub-stage 2c: Final Response Evaluation ---")
-    with ThreadPoolExecutor(max_workers=evaluator_max_workers) as executor:
-        futures = [executor.submit(evaluate_final_response_for_run, run, rubrics, model) for run in runs]
-        for idx, f in enumerate(as_completed(futures), start=1):
-            res = f.result()
-            final_results.append(res)
-            if idx % 20 == 0 or idx == len(runs):
-                print(f"  [Final Response Eval Progress] {idx}/{len(runs)} complete ({idx/len(runs)*100:.1f}%)")
-            time.sleep(pacing_delay)
-
-    # Save output JSONL files
-    os.makedirs(os.path.dirname(fanout_scores_path), exist_ok=True)
-    with open(fanout_scores_path, "w", encoding="utf-8") as f:
-        for r in fanout_results:
-            f.write(json.dumps(r, ensure_ascii=False) + "\n")
-
-    with open(retrieval_scores_path, "w", encoding="utf-8") as f:
-        for r in retrieval_results:
-            f.write(json.dumps(r, ensure_ascii=False) + "\n")
-
-    with open(final_scores_path, "w", encoding="utf-8") as f:
-        for r in final_results:
-            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+    stages = [
+        ("2a", "Fanout Query", evaluate_fanout_for_run, fanout_scores_path),
+        ("2b", "Retrieval Evidence", evaluate_retrieval_for_run, retrieval_scores_path),
+        ("2c", "Final Response", evaluate_final_response_for_run, final_scores_path),
+    ]
+    for tag, label, fn, out_path in stages:
+        os.makedirs(os.path.dirname(out_path), exist_ok=True)
+        done_ids = prepare_scores_file(out_path, force=args.force)
+        pending = [r for r in runs if r.get("run_id") not in done_ids]
+        print(f"\n--- Sub-stage {tag}: {label} Evaluation "
+              f"({len(runs) - len(pending)} resumed, {len(pending)} to judge) ---")
+        if not pending:
+            continue
+        with open(out_path, "a", encoding="utf-8") as out_fh:
+            with ThreadPoolExecutor(max_workers=evaluator_max_workers) as executor:
+                futures = [executor.submit(fn, run, rubrics, model) for run in pending]
+                for idx, f in enumerate(as_completed(futures), start=1):
+                    append_score(out_fh, f.result())  # incremental: survives interruption
+                    if idx % 20 == 0 or idx == len(pending):
+                        print(f"  [{label} Eval Progress] {idx}/{len(pending)} complete "
+                              f"({idx/len(pending)*100:.1f}%)")
+                    time.sleep(pacing_delay)
 
     t_eval_elapsed = time.time() - t_eval_start
     print(f"\n[STAGE 2/3 COMPLETE] Evaluation finished in {t_eval_elapsed/60.0:.2f} minutes. Scores saved:\n  - {fanout_scores_path}\n  - {retrieval_scores_path}\n  - {final_scores_path}")
