@@ -1,0 +1,15 @@
+{"query_id": "q_11", "votes": ["b", "b", "b", "b"], "wins_a": 0, "wins_b": 4, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 5683, "len_b": 5532}
+{"query_id": "q_5", "votes": ["b", "b", "b", "b"], "wins_a": 0, "wins_b": 4, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 5240, "len_b": 5127}
+{"query_id": "q_9", "votes": ["a", "a", "a", "a"], "wins_a": 4, "wins_b": 0, "ties": 0, "parse_errors": 0, "majority": "a", "len_a": 3818, "len_b": 3816}
+{"query_id": "q_15", "votes": ["b", "b", "b", "b"], "wins_a": 0, "wins_b": 4, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 4326, "len_b": 4400}
+{"query_id": "q_8", "votes": ["b", "b", "b", "b"], "wins_a": 0, "wins_b": 4, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 5720, "len_b": 5365}
+{"query_id": "q_3", "votes": ["b", "b", "b", "b"], "wins_a": 0, "wins_b": 4, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 3589, "len_b": 4540}
+{"query_id": "q_1", "votes": ["a", "a", "a", "a"], "wins_a": 4, "wins_b": 0, "ties": 0, "parse_errors": 0, "majority": "a", "len_a": 6015, "len_b": 5179}
+{"query_id": "q_6", "votes": ["b", "b", "b", "b"], "wins_a": 0, "wins_b": 4, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 4693, "len_b": 5131}
+{"query_id": "q_12", "votes": ["b", "b", "b", "b"], "wins_a": 0, "wins_b": 4, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 5331, "len_b": 6516}
+{"query_id": "q_2", "votes": ["b", "b", "b", "b"], "wins_a": 0, "wins_b": 4, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 5770, "len_b": 4053}
+{"query_id": "q_4", "votes": ["b", "b", "b", "b"], "wins_a": 0, "wins_b": 4, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 3425, "len_b": 3739}
+{"query_id": "q_7", "votes": ["parse_error", "b", "b", "b"], "wins_a": 0, "wins_b": 3, "ties": 0, "parse_errors": 1, "majority": "b", "len_a": 5091, "len_b": 6279}
+{"query_id": "q_14", "votes": ["b", "a", "b", "b"], "wins_a": 1, "wins_b": 3, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 7102, "len_b": 5695}
+{"query_id": "q_10", "votes": ["b", "b", "b", "b"], "wins_a": 0, "wins_b": 4, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 6172, "len_b": 7067}
+{"query_id": "q_13", "votes": ["b", "a", "a", "a"], "wins_a": 3, "wins_b": 1, "ties": 0, "parse_errors": 0, "majority": "a", "len_a": 7211, "len_b": 4810}
