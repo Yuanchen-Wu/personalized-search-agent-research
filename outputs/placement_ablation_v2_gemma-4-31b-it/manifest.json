@@ -1,0 +1,16 @@
+{
+  "experiment": "placement_ablation_v2 (C1 rerun, benchmark v2, 72 pairs x 6 variants)",
+  "config": "outputs/placement_ablation_v2_gemma-4-31b-it/config.yaml",
+  "git_commit": "abdb5dc89caec512c66658f14abbd622ef857455",
+  "git_dirty": true,
+  "agent_model": "gemma-4-31b-it",
+  "judge_model": "gemini-flash-latest",
+  "started_at_utc": "2026-08-02T22:02:29Z",
+  "finished_at_utc": "2026-08-02T22:38:06Z",
+  "artifact_rows": {
+    "runs.jsonl": 432,
+    "fanout_scores.jsonl": 432,
+    "retrieval_scores.jsonl": 432,
+    "final_response_scores.jsonl": 432
+  }
+}

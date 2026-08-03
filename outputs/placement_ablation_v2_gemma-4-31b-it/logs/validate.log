@@ -1,0 +1,40 @@
+Validating experiment setup using config: outputs/placement_ablation_v2_gemma-4-31b-it/config.yaml
+
+1. Checking Paths & Config
+----------------------------------------
+[PASS] Queries path: /Users/yuanchenwu/Downloads/personalized-search-agent-research/data/v2/synthetic_queries_v2.jsonl
+[PASS] Personas path: /Users/yuanchenwu/Downloads/personalized-search-agent-research/data/v2/synthetic_personas_v2.jsonl
+[PASS] retrieval_scores_path exists in config
+[INFO] Outputs will be written to: /Users/yuanchenwu/Downloads/personalized-search-agent-research/outputs/placement_ablation_v2_gemma-4-31b-it
+
+2. Checking Variants
+----------------------------------------
+[PASS] Valid variant: V0_generic_single
+[PASS] Valid variant: V1_generic_fanout
+[PASS] Valid variant: V2_synthesis_only_personalization
+[PASS] Valid variant: V3_fanout_only_personalization
+[PASS] Valid variant: V4_personalized_fanout
+[PASS] Valid variant: V5_mixed_fanout
+
+3. Checking Personas
+----------------------------------------
+Loaded 18 personas.
+  Domain: education -> 6 personas
+  Domain: legal_info -> 6 personas
+  Domain: personal_finance -> 6 personas
+  [PASS] Domain education has all 6 expected archetypes.
+  [PASS] Domain legal_info has all 6 expected archetypes.
+  [PASS] Domain personal_finance has all 6 expected archetypes.
+
+4. Checking Queries & Leakage
+----------------------------------------
+Loaded 72 queries.
+  [WARNING] Query q_18 explicitly contains all 'must_use' constraints. It might not be Level-2 ambiguous.
+  [WARNING] Query q_42 explicitly contains all 'must_use' constraints. It might not be Level-2 ambiguous.
+  [WARNING] Query q_49 explicitly contains all 'must_use' constraints. It might not be Level-2 ambiguous.
+  [WARNING] Query q_61 explicitly contains all 'must_use' constraints. It might not be Level-2 ambiguous.
+[INFO] Queries validation complete.
+
+5. Checking V4 Mixed Fanout Logs (if runs exist)
+----------------------------------------
+No run log found at runs_path. Run some benchmark tasks first to populate logs.
