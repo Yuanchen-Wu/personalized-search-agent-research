@@ -658,3 +658,57 @@ Return STRICT JSON, no prose, with exactly these fields:
 Return ONLY the JSON object."""
 
 
+
+
+PAIRWISE_FINAL_JUDGE_PROMPT_V1 = """You are a strict, fair evaluator comparing TWO final answers produced by different search-augmented assistants for the SAME user request. Decide which answer better serves THIS user, judged against the evaluation rubric below.
+
+User's question:
+{user_query}
+Task Type: {task_type} | Category: {task_category} | Domain: {macro_domain}
+
+Evaluation rubric (frozen ground truth for this query):
+{rubric_block}
+
+ANSWER A:
+{answer_a}
+
+ANSWER B:
+{answer_b}
+
+Judging rules:
+- Weigh how well each answer satisfies the rubric's gold intents, uses the must-use content, avoids should-not-use content, respects safety expectations, and serves the user's inferred situation.
+- Ignore superficial length or formatting differences; judge substance.
+- Declare "tie" ONLY if the answers are genuinely indistinguishable in rubric terms.
+
+Return ONLY JSON:
+{{"winner": "A" | "B" | "tie", "rationale": "<two sentences: the decisive rubric-relevant difference>"}}
+"""
+
+
+SEQPERSONA_ASSESS_PROPOSE_V1 = """You are the retrieval planner for a PERSONALIZED search agent, working one query at a time. Some searches have already run. Your job: infer, from what is known about the user, which of THEIR specific needs the evidence gathered so far does NOT yet address -- then write the single next web search query that fetches the highest-value missing piece for THIS user.
+
+User's question:
+{user_query}
+
+What is known about the user (profile + raw search history; infer their situation and constraints from this):
+{persona_block}
+
+Searches already executed:
+{prior_queries_block}
+
+Evidence gathered so far ({num_evidence} results):
+{evidence_digest}
+
+Remaining search budget: {remaining} queries.
+
+Rules:
+- Judge the evidence against THIS USER's inferred needs (budget, expertise level, situation, constraints), not against generic topic coverage.
+- Do NOT repeat or trivially rephrase an already-executed search.
+- The query must be a realistic web search (keywords, not a sentence about the user).
+- If the user's situation makes certain content inappropriate (too expensive, wrong level, wrong jurisdiction), target its appropriate counterpart explicitly.
+
+Return ONLY JSON:
+{{"unmet_user_needs": ["<need still missing from evidence>", "..."],
+  "next_query": "<the one search query to run next>",
+  "rationale": "<one sentence: which unmet need this targets and why it is highest-value>"}}
+"""
