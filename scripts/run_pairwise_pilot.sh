@@ -31,8 +31,9 @@ SAMPLES="${SAMPLES:-2}"
 JUDGE="${JUDGE:-gemini-3.6-flash}"
 WORKERS="${WORKERS:-24}"
 
-DRY=0
+DRY=0 VERDICT_ONLY=0
 [ "${1:-}" = "--dry-run" ] && DRY=1
+[ "${1:-}" = "--verdict" ] && VERDICT_ONLY=1
 
 for f in "$ARM" "$QUERIES"; do
   [ -f "$f" ] || { echo "MISSING: $f (need a C2 v2 arm here; override with ARM=...)"; exit 1; }
@@ -61,8 +62,10 @@ EOF
     --model "$JUDGE" --samples "$SAMPLES" --limit "$LIMIT" --workers "$WORKERS"
 }
 
-run_contrast k1 fixed_k1 k8 fixed_k8 pilot_k1_vs_k8.jsonl
-run_contrast k4 fixed_k4 k8 fixed_k8 pilot_k4_vs_k8.jsonl
+if [ "$VERDICT_ONLY" = 0 ]; then
+  run_contrast k1 fixed_k1 k8 fixed_k8 pilot_k1_vs_k8.jsonl
+  run_contrast k4 fixed_k4 k8 fixed_k8 pilot_k4_vs_k8.jsonl
+fi
 
 if [ "$DRY" = 0 ]; then
   echo
