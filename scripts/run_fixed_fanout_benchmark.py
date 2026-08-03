@@ -34,6 +34,7 @@ from search_agent.fixed_fanout import (
 )
 from search_agent.adaptive_loop import run_adaptive_retrieval
 from search_agent.adaptive_refanout import run_refanout_retrieval
+from search_agent.seq_persona import run_seqpersona_retrieval
 from search_agent.logging_utils import append_run_log, build_run_log
 from search_agent.run_agent import load_personas
 from scripts.run_benchmark import load_queries
@@ -91,6 +92,16 @@ def parse_refanout_method(method: str) -> Optional[Dict[str, Any]]:
         return None
     threshold = float(m.group(2).replace("p", ".")) if m.group(2) else None
     return {"fanout_size": int(m.group(1)), "threshold": threshold}
+
+
+_SEQPERSONA_METHOD_RE = re.compile(r"^seqpersona_k(\d+)$")
+
+
+def parse_seqpersona_method(method: str) -> Optional[Dict[str, Any]]:
+    """'seqpersona_k8' -> {'budget': 8}: one query at a time, each next query
+    proposed by the leak-free persona-gap critic; cost-matched to fixed_k8."""
+    m = _SEQPERSONA_METHOD_RE.match(method)
+    return {"budget": int(m.group(1))} if m else None
 
 
 def load_completed_run_keys(runs_path: str) -> Set[Tuple[str, str, str, int]]:
@@ -315,13 +326,70 @@ def main(argv: Optional[List[str]] = None) -> None:
         for method in methods:
             adaptive_spec = parse_adaptive_method(method)
             refanout_spec = parse_refanout_method(method)
-            if method not in method_k_map and adaptive_spec is None and refanout_spec is None:
+            seqpersona_spec = parse_seqpersona_method(method)
+            if (method not in method_k_map and adaptive_spec is None
+                    and refanout_spec is None and seqpersona_spec is None):
                 print(f"Skipping unknown method: {method}")
                 continue
 
             key = (q.query_id, pid, method, seed)
             if args.resume and key in completed_keys:
                 print(f"  [Skipped - Resumed] method={method} for query_id={q.query_id} persona_id={pid}")
+                continue
+
+            # --- Sequential persona-gap retrieval: one query at a time, critic-guided ---
+            if seqpersona_spec is not None:
+                sp = run_seqpersona_retrieval(
+                    user_query=q.query, persona=persona, query_id=q.query_id,
+                    budget=seqpersona_spec["budget"], planner_model=planner_model,
+                    seed=seed, search_depth=search_depth,
+                    max_results_per_branch=max_results_per_branch,
+                    search_cache_path=search_cache_path, use_cache=use_cache)
+                sp_dedup = deduplicate_search_results(sp.raw_results)
+                sp_unique = filter_unique_documents(sp.raw_results)
+                sp_evidence = select_evidence_for_synthesis(
+                    search_results=sp_dedup, evidence_budget_mode=evidence_budget_mode,
+                    max_documents=max_documents, max_context_chars=max_context_chars)
+                t_synth_start = time.time()
+                # Same BASE synthesizer as the fixed_k arms — the comparison
+                # must isolate the retrieval policy, not the synthesis prompt.
+                sp_answer = synthesize_answer(
+                    user_query=q.query, persona=persona, search_results=sp_evidence,
+                    variant=method, model=synthesis_model, select_results=False, seed=seed)
+                sp_synth_lat = time.time() - t_synth_start
+                sp_run_log = build_run_log(
+                    variant=method, method=method, query_record=q, persona=persona,
+                    fanout_branches=sp.branches, raw_search_results=sp.raw_results,
+                    final_answer=sp_answer,
+                    cost_proxy=CostProxy(
+                        num_gemini_calls=sp.num_planner_calls + 1,
+                        num_tavily_calls=sp.num_tavily_calls,
+                        num_fanout_branches=len(sp.branches),
+                        num_raw_results=len(sp.raw_results)),
+                    experiment_name=exp_name, seed=seed,
+                    planner_model=planner_model, synthesis_model=synthesis_model,
+                    requested_fanout_count=seqpersona_spec["budget"],
+                    realized_fanout_count=len(sp.branches),
+                    executed_fanout_prefix=[b.as_dict() for b in sp.branches],
+                    branch_types_executed=[b.branch_type for b in sp.branches],
+                    information_needs_executed=[b.information_need for b in sp.branches],
+                    priority_ranks_executed=[b.priority_rank for b in sp.branches if b.priority_rank],
+                    deduplicated_search_results=[r.as_dict() for r in sp_dedup],
+                    exact_synthesis_evidence=[r.as_dict() for r in sp_evidence],
+                    num_planner_calls=sp.num_planner_calls, num_synthesis_calls=1,
+                    num_tavily_calls=sp.num_tavily_calls,
+                    num_raw_results=len(sp.raw_results), num_unique_results=len(sp_unique),
+                    total_retrieved_context_size=compute_context_character_count(sp.raw_results),
+                    total_synthesis_context_size=compute_context_character_count(sp_evidence),
+                    planner_latency=sp.planner_latency, search_latency=sp.search_latency,
+                    synthesis_latency=sp_synth_lat,
+                    total_latency=sp.planner_latency + sp.search_latency + sp_synth_lat,
+                    events=sp.events)
+                append_run_log(sp_run_log, path=runs_path)
+                run_counter += 1
+                print(f"  [SUCCESS-SEQPERSONA] {sp_run_log.run_id} | method={method} "
+                      f"| steps={len(sp.branches)} searches={sp.num_tavily_calls} "
+                      f"| lat={sp.planner_latency + sp.search_latency + sp_synth_lat:.2f}s")
                 continue
 
             # --- Re-fanout loop (C3): fan-out -> search -> judge retrieval -> retry ---
