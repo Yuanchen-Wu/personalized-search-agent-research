@@ -1,0 +1,487 @@
+
+======================================================================
+ [STAGE 1/3] BENCHMARK EXECUTION: Generating Plans, Searching & Synthesizing
+======================================================================
+Total pairs to process: 72 | Methods per pair: ['fixed_k1', 'fixed_k2', 'fixed_k4', 'fixed_k8']
+Total planned runs: 288 | Config file: outputs/fixed_fanout_scaling_v2_gemini-3.6-flash/config.yaml
+
+[run_fixed_fanout] processing 72 pairs with 24 workers
+
+--- Processing Pair [1/72] Query ID: q_1 | Persona ID: budget_nonstem_student ---
+
+--- Processing Pair [2/72] Query ID: q_2 | Persona ID: budget_nonstem_student ---
+
+--- Processing Pair [3/72] Query ID: q_3 | Persona ID: budget_highstem_phd ---
+
+--- Processing Pair [4/72] Query ID: q_4 | Persona ID: budget_nonstem_student ---
+
+--- Processing Pair [5/72] Query ID: q_5 | Persona ID: budget_nonstem_student ---
+
+--- Processing Pair [6/72] Query ID: q_6 | Persona ID: budget_highstem_phd ---
+
+--- Processing Pair [7/72] Query ID: q_7 | Persona ID: budget_highstem_phd ---
+
+--- Processing Pair [8/72] Query ID: q_8 | Persona ID: budget_highstem_phd ---
+
+--- Processing Pair [9/72] Query ID: q_9 | Persona ID: modbudget_nonstem_switcher ---
+
+--- Processing Pair [10/72] Query ID: q_10 | Persona ID: modbudget_nonstem_switcher ---
+
+--- Processing Pair [11/72] Query ID: q_11 | Persona ID: modbudget_nonstem_switcher ---
+
+--- Processing Pair [12/72] Query ID: q_12 | Persona ID: modbudget_nonstem_switcher ---
+
+--- Processing Pair [13/72] Query ID: q_13 | Persona ID: highbudget_highstem_pro ---
+
+--- Processing Pair [14/72] Query ID: q_14 | Persona ID: highbudget_highstem_pro ---
+
+--- Processing Pair [15/72] Query ID: q_15 | Persona ID: highbudget_highstem_pro ---
+
+--- Processing Pair [16/72] Query ID: q_16 | Persona ID: highbudget_highstem_pro ---
+
+--- Processing Pair [17/72] Query ID: q_17 | Persona ID: family_modbudget ---
+
+--- Processing Pair [18/72] Query ID: q_18 | Persona ID: family_modbudget ---
+
+--- Processing Pair [19/72] Query ID: q_19 | Persona ID: family_modbudget ---
+
+--- Processing Pair [20/72] Query ID: q_20 | Persona ID: family_modbudget ---
+
+--- Processing Pair [21/72] Query ID: q_21 | Persona ID: intl_newgrad ---
+
+--- Processing Pair [22/72] Query ID: q_22 | Persona ID: intl_newgrad ---
+
+--- Processing Pair [23/72] Query ID: q_23 | Persona ID: intl_newgrad ---
+
+--- Processing Pair [24/72] Query ID: q_24 | Persona ID: intl_newgrad ---
+  [SUCCESS] Written run cd489d4e9e84 | method=fixed_k1 (k=1) | latency=22.16s
+  [SUCCESS] Written run 521fa8aa6695 | method=fixed_k1 (k=1) | latency=22.45s
+  [SUCCESS] Written run 864788fab79c | method=fixed_k1 (k=1) | latency=26.15s
+  [SUCCESS] Written run 929a28e3e078 | method=fixed_k1 (k=1) | latency=26.66s
+  [SUCCESS] Written run b150031b9fb1 | method=fixed_k1 (k=1) | latency=24.27s
+  [SUCCESS] Written run 5ad3b40aba52 | method=fixed_k1 (k=1) | latency=24.83s
+  [SUCCESS] Written run 7e985464e53b | method=fixed_k2 (k=2) | latency=31.73s
+  [SUCCESS] Written run cd3344ff6f24 | method=fixed_k1 (k=1) | latency=27.41s
+  [SUCCESS] Written run 31656d7465dc | method=fixed_k1 (k=1) | latency=28.69s
+  [SUCCESS] Written run 6eb6907e42fc | method=fixed_k1 (k=1) | latency=26.81s
+  [SUCCESS] Written run eee1f495304d | method=fixed_k1 (k=1) | latency=27.91s
+  [SUCCESS] Written run 7a5301feb71b | method=fixed_k1 (k=1) | latency=28.45s
+  [SUCCESS] Written run 51d171352e78 | method=fixed_k2 (k=2) | latency=36.03s
+  [SUCCESS] Written run 231803e35788 | method=fixed_k1 (k=1) | latency=28.67s
+  [SUCCESS] Written run 9e9c38180d88 | method=fixed_k1 (k=1) | latency=30.51s
+  [SUCCESS] Written run fd949abf1a51 | method=fixed_k1 (k=1) | latency=33.40s
+  [SUCCESS] Written run aeaa990d7c5b | method=fixed_k2 (k=2) | latency=35.95s
+  [SUCCESS] Written run 52a5193aede5 | method=fixed_k2 (k=2) | latency=34.98s
+  [SUCCESS] Written run ced641ef2046 | method=fixed_k1 (k=1) | latency=32.15s
+  [SUCCESS] Written run 3de83dd1e042 | method=fixed_k1 (k=1) | latency=33.11s
+  [SUCCESS] Written run bfd93f912cf4 | method=fixed_k1 (k=1) | latency=30.35s
+  [SUCCESS] Written run 93ceef7aafc5 | method=fixed_k1 (k=1) | latency=34.69s
+  [SUCCESS] Written run 14a62eb45e9a | method=fixed_k1 (k=1) | latency=37.87s
+  [SUCCESS] Written run f3e33753ccd0 | method=fixed_k2 (k=2) | latency=40.23s
+  [SUCCESS] Written run 3b18f79a74cf | method=fixed_k4 (k=4) | latency=59.20s
+  [SUCCESS] Written run 3785d7c95d97 | method=fixed_k2 (k=2) | latency=39.76s
+  [SUCCESS] Written run bc287b238e08 | method=fixed_k1 (k=1) | latency=40.00s
+  [SUCCESS] Written run 01d6e217838a | method=fixed_k1 (k=1) | latency=41.54s
+  [SUCCESS] Written run 65651b742d4a | method=fixed_k2 (k=2) | latency=43.26s
+  [SUCCESS] Written run dab45e8304d7 | method=fixed_k1 (k=1) | latency=55.98s
+  [SUCCESS] Written run d7521945b4d6 | method=fixed_k2 (k=2) | latency=45.10s
+  [SUCCESS] Written run a08b8a184de2 | method=fixed_k2 (k=2) | latency=44.19s
+  [SUCCESS] Written run 91f19c67f9a2 | method=fixed_k2 (k=2) | latency=45.84s
+  [SUCCESS] Written run 89d380681133 | method=fixed_k1 (k=1) | latency=43.51s
+  [SUCCESS] Written run 1652c2ea9bb4 | method=fixed_k1 (k=1) | latency=43.66s
+  [SUCCESS] Written run 5f0277654c26 | method=fixed_k2 (k=2) | latency=46.43s
+  [SUCCESS] Written run e2e58c01b9fe | method=fixed_k2 (k=2) | latency=44.28s
+  [SUCCESS] Written run f09561dedcd5 | method=fixed_k2 (k=2) | latency=47.78s
+  [SUCCESS] Written run 88bdf406003f | method=fixed_k2 (k=2) | latency=49.31s
+  [SUCCESS] Written run 7783950361d1 | method=fixed_k4 (k=4) | latency=71.93s
+  [SUCCESS] Written run 91babf971100 | method=fixed_k4 (k=4) | latency=69.11s
+  [SUCCESS] Written run 63015ca07b53 | method=fixed_k2 (k=2) | latency=50.04s
+  [SUCCESS] Written run fea7ce13e5f8 | method=fixed_k2 (k=2) | latency=51.17s
+  [SUCCESS] Written run dd8237735ade | method=fixed_k2 (k=2) | latency=54.72s
+  [SUCCESS] Written run 13e6b03495a5 | method=fixed_k8 (k=8) | latency=123.47s
+
+--- Processing Pair [25/72] Query ID: q_25 | Persona ID: tenant_low_income_eviction_risk ---
+  [SUCCESS] Written run 04ca739c2aff | method=fixed_k4 (k=4) | latency=70.77s
+  [SUCCESS] Written run 66d7de060135 | method=fixed_k2 (k=2) | latency=74.76s
+  [SUCCESS] Written run cb09b41f6b69 | method=fixed_k4 (k=4) | latency=71.27s
+  [SUCCESS] Written run d3e4b46fe25a | method=fixed_k2 (k=2) | latency=57.62s
+  [SUCCESS] Written run 748027eea9e5 | method=fixed_k4 (k=4) | latency=71.99s
+  [SUCCESS] Written run 24d3e5917905 | method=fixed_k2 (k=2) | latency=57.95s
+  [SUCCESS] Written run dd641df15cb6 | method=fixed_k2 (k=2) | latency=58.24s
+  [SUCCESS] Written run 50c86cd4dad0 | method=fixed_k4 (k=4) | latency=78.22s
+  [SUCCESS] Written run 277df3a95e56 | method=fixed_k2 (k=2) | latency=53.06s
+  [SUCCESS] Written run 064fe04d07da | method=fixed_k2 (k=2) | latency=56.97s
+  [SUCCESS] Written run a4626b012ed1 | method=fixed_k4 (k=4) | latency=76.68s
+  [SUCCESS] Written run 91ae3b362cf4 | method=fixed_k4 (k=4) | latency=77.61s
+  [SUCCESS] Written run 4f8a49e0bdef | method=fixed_k4 (k=4) | latency=80.07s
+  [SUCCESS] Written run 58c349e68eca | method=fixed_k2 (k=2) | latency=61.94s
+  [SUCCESS] Written run f96fa50d6e96 | method=fixed_k4 (k=4) | latency=74.99s
+  [SUCCESS] Written run c16c7c436b19 | method=fixed_k4 (k=4) | latency=80.25s
+  [SUCCESS] Written run 540a66f9c09d | method=fixed_k4 (k=4) | latency=82.77s
+  [SUCCESS] Written run 0b810f1d1069 | method=fixed_k4 (k=4) | latency=81.34s
+  [SUCCESS] Written run 12a034f0834d | method=fixed_k4 (k=4) | latency=81.74s
+  [SUCCESS] Written run dace65aaeb83 | method=fixed_k4 (k=4) | latency=86.28s
+  [SUCCESS] Written run da424fdf1ecc | method=fixed_k4 (k=4) | latency=84.13s
+  [SUCCESS] Written run fe28fa4eb520 | method=fixed_k4 (k=4) | latency=107.52s
+  [SUCCESS] Written run cc42ab658b16 | method=fixed_k8 (k=8) | latency=133.15s
+
+--- Processing Pair [26/72] Query ID: q_26 | Persona ID: tenant_low_income_eviction_risk ---
+  [SUCCESS] Written run eac11ead3a1b | method=fixed_k4 (k=4) | latency=88.31s
+  [SUCCESS] Written run 07401fb154f1 | method=fixed_k4 (k=4) | latency=86.87s
+  [SUCCESS] Written run 64fc71fcff5a | method=fixed_k4 (k=4) | latency=86.96s
+  [SUCCESS] Written run 28ebc46dd3d6 | method=fixed_k4 (k=4) | latency=80.08s
+  [SUCCESS] Written run 095c02fc86c3 | method=fixed_k4 (k=4) | latency=89.55s
+  [SUCCESS] Written run e5522ba0fbcc | method=fixed_k8 (k=8) | latency=132.71s
+
+--- Processing Pair [27/72] Query ID: q_27 | Persona ID: tenant_low_income_eviction_risk ---
+  [SUCCESS] Written run a0f950292888 | method=fixed_k8 (k=8) | latency=137.47s
+
+--- Processing Pair [28/72] Query ID: q_28 | Persona ID: immigrant_worker_visa_uncertain ---
+  [SUCCESS] Written run d6ce1969836f | method=fixed_k8 (k=8) | latency=140.84s
+
+--- Processing Pair [29/72] Query ID: q_29 | Persona ID: tenant_low_income_eviction_risk ---
+  [SUCCESS] Written run bfab4091dbad | method=fixed_k8 (k=8) | latency=146.08s
+
+--- Processing Pair [30/72] Query ID: q_30 | Persona ID: small_business_owner_contracts ---
+  [SUCCESS] Written run 6fadbfeefaff | method=fixed_k4 (k=4) | latency=94.71s
+  [SUCCESS] Written run e1679c05af3d | method=fixed_k8 (k=8) | latency=144.45s
+
+--- Processing Pair [31/72] Query ID: q_31 | Persona ID: immigrant_worker_visa_uncertain ---
+  [SUCCESS] Written run 66bf5513f6eb | method=fixed_k8 (k=8) | latency=141.87s
+
+--- Processing Pair [32/72] Query ID: q_32 | Persona ID: immigrant_worker_visa_uncertain ---
+  [SUCCESS] Written run 534851f331e8 | method=fixed_k8 (k=8) | latency=140.82s
+
+--- Processing Pair [33/72] Query ID: q_33 | Persona ID: immigrant_worker_visa_uncertain ---
+  [SUCCESS] Written run 283848bbe9d4 | method=fixed_k8 (k=8) | latency=142.34s
+
+--- Processing Pair [34/72] Query ID: q_34 | Persona ID: small_business_owner_contracts ---
+  [SUCCESS] Written run 594863e3978f | method=fixed_k8 (k=8) | latency=145.23s
+
+--- Processing Pair [35/72] Query ID: q_35 | Persona ID: small_business_owner_contracts ---
+  [SUCCESS] Written run 7e3fb26ff363 | method=fixed_k8 (k=8) | latency=146.52s
+
+--- Processing Pair [36/72] Query ID: q_36 | Persona ID: divorced_parent_custody_schedule ---
+  [SUCCESS] Written run 389bc9328a99 | method=fixed_k8 (k=8) | latency=150.61s
+
+--- Processing Pair [37/72] Query ID: q_37 | Persona ID: divorced_parent_custody_schedule ---
+  [SUCCESS] Written run 2ce0733934b6 | method=fixed_k8 (k=8) | latency=152.82s
+
+--- Processing Pair [38/72] Query ID: q_38 | Persona ID: small_business_owner_contracts ---
+  [SUCCESS] Written run 7c0324ae4198 | method=fixed_k8 (k=8) | latency=155.00s
+
+--- Processing Pair [39/72] Query ID: q_39 | Persona ID: divorced_parent_custody_schedule ---
+  [SUCCESS] Written run bbb6b1c3754b | method=fixed_k8 (k=8) | latency=148.38s
+
+--- Processing Pair [40/72] Query ID: q_40 | Persona ID: divorced_parent_custody_schedule ---
+  [SUCCESS] Written run 2d2f3d016b0b | method=fixed_k8 (k=8) | latency=146.87s
+
+--- Processing Pair [41/72] Query ID: q_41 | Persona ID: employee_noncompete_layoff ---
+  [SUCCESS] Written run 9354a1063dd7 | method=fixed_k8 (k=8) | latency=149.00s
+
+--- Processing Pair [42/72] Query ID: q_42 | Persona ID: employee_noncompete_layoff ---
+  [SUCCESS] Written run d9353bc8fa3d | method=fixed_k8 (k=8) | latency=150.73s
+
+--- Processing Pair [43/72] Query ID: q_43 | Persona ID: employee_noncompete_layoff ---
+  [SUCCESS] Written run 5f5588718b0c | method=fixed_k8 (k=8) | latency=151.25s
+
+--- Processing Pair [44/72] Query ID: q_44 | Persona ID: employee_noncompete_layoff ---
+  [SUCCESS] Written run 0221f8c75c9b | method=fixed_k8 (k=8) | latency=148.30s
+
+--- Processing Pair [45/72] Query ID: q_45 | Persona ID: privacy_conscious_online_creator ---
+  [SUCCESS] Written run 86ac5b2d7177 | method=fixed_k8 (k=8) | latency=152.99s
+
+--- Processing Pair [46/72] Query ID: q_46 | Persona ID: privacy_conscious_online_creator ---
+  [SUCCESS] Written run f7eaba471be2 | method=fixed_k8 (k=8) | latency=153.45s
+
+--- Processing Pair [47/72] Query ID: q_47 | Persona ID: privacy_conscious_online_creator ---
+  [SUCCESS] Written run 30c2ce455880 | method=fixed_k1 (k=1) | latency=26.85s
+  [SUCCESS] Written run f128e2471fc2 | method=fixed_k8 (k=8) | latency=159.73s
+
+--- Processing Pair [48/72] Query ID: q_48 | Persona ID: privacy_conscious_online_creator ---
+  [SUCCESS] Written run 6ef2ae2d22a2 | method=fixed_k2 (k=2) | latency=28.26s
+  [SUCCESS] Written run e5a6e3ad687d | method=fixed_k1 (k=1) | latency=22.22s
+  [SUCCESS] Written run 4757a9f0ee16 | method=fixed_k4 (k=4) | latency=33.66s
+  [SUCCESS] Written run b89901d7e6a5 | method=fixed_k2 (k=2) | latency=25.15s
+  [SUCCESS] Written run 4194b869c84c | method=fixed_k8 (k=8) | latency=40.06s
+
+--- Processing Pair [49/72] Query ID: q_49 | Persona ID: paycheck_to_paycheck_credit_rebuild ---
+  [SUCCESS] Written run aea4d15a0c42 | method=fixed_k4 (k=4) | latency=28.94s
+  [SUCCESS] Written run 50ffe0b1794b | method=fixed_k8 (k=8) | latency=52.34s
+
+--- Processing Pair [50/72] Query ID: q_50 | Persona ID: paycheck_to_paycheck_credit_rebuild ---
+  [SUCCESS] Written run c08eefb436f0 | method=fixed_k1 (k=1) | latency=19.73s
+  [SUCCESS] Written run f70e6a583f90 | method=fixed_k1 (k=1) | latency=26.55s
+  [SUCCESS] Written run d6da178c39ff | method=fixed_k2 (k=2) | latency=25.49s
+  [SUCCESS] Written run b76e7754ccc9 | method=fixed_k2 (k=2) | latency=25.82s
+  [SUCCESS] Written run 3ed265d0474a | method=fixed_k1 (k=1) | latency=23.95s
+  [SUCCESS] Written run 18015b120ec2 | method=fixed_k4 (k=4) | latency=37.31s
+  [SUCCESS] Written run 537a92aad2f2 | method=fixed_k1 (k=1) | latency=26.97s
+  [SUCCESS] Written run 6c5718ee190b | method=fixed_k1 (k=1) | latency=24.16s
+  [SUCCESS] Written run 570795e3ef24 | method=fixed_k1 (k=1) | latency=24.80s
+  [SUCCESS] Written run f9e3b3e6f5c3 | method=fixed_k4 (k=4) | latency=41.15s
+  [SUCCESS] Written run 64ccfbde43fb | method=fixed_k2 (k=2) | latency=30.45s
+  [SUCCESS] Written run 097ecb9ee6eb | method=fixed_k2 (k=2) | latency=32.04s
+  [SUCCESS] Written run f357885f551a | method=fixed_k1 (k=1) | latency=25.91s
+  [SUCCESS] Written run f93e59e1e61b | method=fixed_k2 (k=2) | latency=31.26s
+  [SUCCESS] Written run fafbaaf3b82d | method=fixed_k2 (k=2) | latency=29.89s
+  [SUCCESS] Written run edffdc468f99 | method=fixed_k1 (k=1) | latency=29.34s
+  [SUCCESS] Written run 8c5bb98e7085 | method=fixed_k8 (k=8) | latency=94.93s
+
+--- Processing Pair [51/72] Query ID: q_51 | Persona ID: paycheck_to_paycheck_credit_rebuild ---
+  [SUCCESS] Written run 5a65887b5ae1 | method=fixed_k1 (k=1) | latency=27.02s
+  [SUCCESS] Written run 5d7885e8fe7a | method=fixed_k4 (k=4) | latency=55.97s
+  [SUCCESS] Written run b1a70ab08dac | method=fixed_k1 (k=1) | latency=25.24s
+  [SUCCESS] Written run c09d6b8bc9db | method=fixed_k8 (k=8) | latency=97.57s
+
+--- Processing Pair [52/72] Query ID: q_52 | Persona ID: paycheck_to_paycheck_credit_rebuild ---
+  [SUCCESS] Written run 7bc7c37633fa | method=fixed_k4 (k=4) | latency=59.43s
+  [SUCCESS] Written run e0765638b1cc | method=fixed_k2 (k=2) | latency=38.40s
+  [SUCCESS] Written run 6dce782bf019 | method=fixed_k1 (k=1) | latency=28.56s
+  [SUCCESS] Written run 03fd02540141 | method=fixed_k1 (k=1) | latency=34.91s
+  [SUCCESS] Written run e569a27a98e7 | method=fixed_k2 (k=2) | latency=39.93s
+  [SUCCESS] Written run 4be9a02ea685 | method=fixed_k1 (k=1) | latency=30.75s
+  [SUCCESS] Written run c631ddc39f5c | method=fixed_k1 (k=1) | latency=29.60s
+  [SUCCESS] Written run 9d069b1bee11 | method=fixed_k4 (k=4) | latency=55.76s
+  [SUCCESS] Written run 5127a770c7bb | method=fixed_k1 (k=1) | latency=32.61s
+  [SUCCESS] Written run 0791b1eb2086 | method=fixed_k1 (k=1) | latency=31.97s
+  [SUCCESS] Written run 929261433e01 | method=fixed_k2 (k=2) | latency=41.67s
+  [SUCCESS] Written run 0fca49b997d8 | method=fixed_k1 (k=1) | latency=38.92s
+  [SUCCESS] Written run 062e88e6072c | method=fixed_k1 (k=1) | latency=37.97s
+  [SUCCESS] Written run 149cb069e992 | method=fixed_k1 (k=1) | latency=38.61s
+  [SUCCESS] Written run ad72020e6122 | method=fixed_k1 (k=1) | latency=41.40s
+  [SUCCESS] Written run f94a27da1651 | method=fixed_k4 (k=4) | latency=53.12s
+  [SUCCESS] Written run 814d639572b2 | method=fixed_k2 (k=2) | latency=43.26s
+  [SUCCESS] Written run f5a68e73b272 | method=fixed_k4 (k=4) | latency=67.96s
+  [SUCCESS] Written run 381163b75d7a | method=fixed_k1 (k=1) | latency=38.45s
+  [SUCCESS] Written run 9bdcee8496d9 | method=fixed_k1 (k=1) | latency=36.93s
+  [SUCCESS] Written run c661e1aefc50 | method=fixed_k2 (k=2) | latency=51.37s
+  [SUCCESS] Written run ffee1d7300e2 | method=fixed_k8 (k=8) | latency=118.44s
+
+--- Processing Pair [53/72] Query ID: q_53 | Persona ID: high_income_low_time_tech_worker ---
+  [SUCCESS] Written run 0533086792c1 | method=fixed_k2 (k=2) | latency=38.37s
+  [SUCCESS] Written run bfbf8573ec43 | method=fixed_k2 (k=2) | latency=44.94s
+  [SUCCESS] Written run b54b918a953f | method=fixed_k2 (k=2) | latency=55.57s
+  [SUCCESS] Written run 39763dc50d37 | method=fixed_k2 (k=2) | latency=46.44s
+  [SUCCESS] Written run d2e005741742 | method=fixed_k4 (k=4) | latency=69.93s
+  [SUCCESS] Written run 0c0d6df62f88 | method=fixed_k2 (k=2) | latency=42.90s
+  [SUCCESS] Written run f5841615afe2 | method=fixed_k4 (k=4) | latency=69.49s
+  [SUCCESS] Written run 0ec0965ce825 | method=fixed_k8 (k=8) | latency=120.90s
+
+--- Processing Pair [54/72] Query ID: q_54 | Persona ID: high_income_low_time_tech_worker ---
+  [SUCCESS] Written run f6775e66182b | method=fixed_k1 (k=1) | latency=34.93s
+  [SUCCESS] Written run ce29d4052fbc | method=fixed_k2 (k=2) | latency=50.91s
+  [SUCCESS] Written run 92459fa2cdc7 | method=fixed_k2 (k=2) | latency=48.74s
+  [SUCCESS] Written run 0df23b13f32f | method=fixed_k1 (k=1) | latency=46.82s
+  [SUCCESS] Written run eb99b0407bf7 | method=fixed_k2 (k=2) | latency=54.54s
+  [SUCCESS] Written run f42fc0d6d283 | method=fixed_k4 (k=4) | latency=74.59s
+  [SUCCESS] Written run 5919f9e2b1f7 | method=fixed_k2 (k=2) | latency=54.35s
+  [SUCCESS] Written run e362806ee475 | method=fixed_k8 (k=8) | latency=126.39s
+
+--- Processing Pair [55/72] Query ID: q_55 | Persona ID: high_income_low_time_tech_worker ---
+  [SUCCESS] Written run 62bea8a771fd | method=fixed_k8 (k=8) | latency=118.99s
+
+--- Processing Pair [56/72] Query ID: q_56 | Persona ID: first_gen_college_grad_student_loans ---
+  [SUCCESS] Written run 1061236d09d6 | method=fixed_k2 (k=2) | latency=52.06s
+  [SUCCESS] Written run b16b7a1e6dcc | method=fixed_k2 (k=2) | latency=51.18s
+  [SUCCESS] Written run 197f6e9ed1bb | method=fixed_k4 (k=4) | latency=81.48s
+  [SUCCESS] Written run e86508b73b52 | method=fixed_k8 (k=8) | latency=109.59s
+
+--- Processing Pair [57/72] Query ID: q_57 | Persona ID: high_income_low_time_tech_worker ---
+  [SUCCESS] Written run 5a937f952d5b | method=fixed_k4 (k=4) | latency=88.47s
+  [SUCCESS] Written run df20298b4cdf | method=fixed_k4 (k=4) | latency=69.10s
+  [SUCCESS] Written run 098eac11fce6 | method=fixed_k4 (k=4) | latency=78.61s
+  [SUCCESS] Written run e89ee47c349e | method=fixed_k4 (k=4) | latency=76.00s
+  [SUCCESS] Written run 128358482aa1 | method=fixed_k2 (k=2) | latency=50.00s
+  [SUCCESS] Written run 64b4e80f0fa0 | method=fixed_k4 (k=4) | latency=84.40s
+  [SUCCESS] Written run 7fdd26b2809e | method=fixed_k4 (k=4) | latency=83.42s
+  [SUCCESS] Written run 41e79f324447 | method=fixed_k4 (k=4) | latency=78.36s
+  [SUCCESS] Written run d46a33268749 | method=fixed_k2 (k=2) | latency=63.52s
+  [SUCCESS] Written run 899624e9ff34 | method=fixed_k8 (k=8) | latency=129.86s
+
+--- Processing Pair [58/72] Query ID: q_58 | Persona ID: first_gen_college_grad_student_loans ---
+  [SUCCESS] Written run 439cf901b0d7 | method=fixed_k8 (k=8) | latency=133.38s
+
+--- Processing Pair [59/72] Query ID: q_59 | Persona ID: first_gen_college_grad_student_loans ---
+  [SUCCESS] Written run 0a8f37ee0142 | method=fixed_k4 (k=4) | latency=83.67s
+  [SUCCESS] Written run aee3754d165c | method=fixed_k8 (k=8) | latency=130.36s
+
+--- Processing Pair [60/72] Query ID: q_60 | Persona ID: first_gen_college_grad_student_loans ---
+  [SUCCESS] Written run 1b9bcf9f3d7d | method=fixed_k4 (k=4) | latency=87.11s
+  [SUCCESS] Written run 8a962d8f3b5b | method=fixed_k4 (k=4) | latency=81.20s
+  [SUCCESS] Written run a076234fe427 | method=fixed_k4 (k=4) | latency=85.20s
+  [SUCCESS] Written run c18dcfde82ed | method=fixed_k8 (k=8) | latency=138.49s
+
+--- Processing Pair [61/72] Query ID: q_61 | Persona ID: young_family_homebuyer ---
+  [SUCCESS] Written run 4595a675e328 | method=fixed_k8 (k=8) | latency=130.24s
+
+--- Processing Pair [62/72] Query ID: q_62 | Persona ID: young_family_homebuyer ---
+  [SUCCESS] Written run 9b47f4e0bf78 | method=fixed_k8 (k=8) | latency=128.94s
+
+--- Processing Pair [63/72] Query ID: q_63 | Persona ID: young_family_homebuyer ---
+  [SUCCESS] Written run 7fa80b511639 | method=fixed_k4 (k=4) | latency=68.15s
+  [SUCCESS] Written run 86969087e9be | method=fixed_k1 (k=1) | latency=26.02s
+  [SUCCESS] Written run 43c144c24d19 | method=fixed_k8 (k=8) | latency=129.07s
+
+--- Processing Pair [64/72] Query ID: q_64 | Persona ID: young_family_homebuyer ---
+  [SUCCESS] Written run 83dae484dbfc | method=fixed_k4 (k=4) | latency=84.78s
+  [SUCCESS] Written run 4eb9c2c8d111 | method=fixed_k8 (k=8) | latency=137.11s
+
+--- Processing Pair [65/72] Query ID: q_65 | Persona ID: near_retirement_catchup ---
+  [SUCCESS] Written run dfa8e08314a6 | method=fixed_k2 (k=2) | latency=24.91s
+  [SUCCESS] Written run b5802bf62e6f | method=fixed_k8 (k=8) | latency=135.08s
+
+--- Processing Pair [66/72] Query ID: q_66 | Persona ID: near_retirement_catchup ---
+  [SUCCESS] Written run ba33f31057f5 | method=fixed_k1 (k=1) | latency=36.56s
+  [SUCCESS] Written run 180923856a77 | method=fixed_k8 (k=8) | latency=139.38s
+
+--- Processing Pair [67/72] Query ID: q_67 | Persona ID: near_retirement_catchup ---
+  [SUCCESS] Written run d7369685be00 | method=fixed_k8 (k=8) | latency=135.54s
+
+--- Processing Pair [68/72] Query ID: q_68 | Persona ID: near_retirement_catchup ---
+  [SUCCESS] Written run 7410917fbc82 | method=fixed_k8 (k=8) | latency=76.48s
+
+--- Processing Pair [69/72] Query ID: q_69 | Persona ID: freelancer_irregular_income_taxes ---
+  [SUCCESS] Written run 132246cf31a7 | method=fixed_k8 (k=8) | latency=140.60s
+
+--- Processing Pair [70/72] Query ID: q_70 | Persona ID: freelancer_irregular_income_taxes ---
+  [SUCCESS] Written run a60dedf15b29 | method=fixed_k8 (k=8) | latency=139.72s
+
+--- Processing Pair [71/72] Query ID: q_71 | Persona ID: freelancer_irregular_income_taxes ---
+  [SUCCESS] Written run 15dcaf1cf674 | method=fixed_k4 (k=4) | latency=29.50s
+  [SUCCESS] Written run 5f89d14fd651 | method=fixed_k8 (k=8) | latency=135.84s
+
+--- Processing Pair [72/72] Query ID: q_72 | Persona ID: freelancer_irregular_income_taxes ---
+  [SUCCESS] Written run edf5db21a175 | method=fixed_k8 (k=8) | latency=145.49s
+  [SUCCESS] Written run 4c8ae54d9019 | method=fixed_k2 (k=2) | latency=36.83s
+  [SUCCESS] Written run 7bf446dd49b6 | method=fixed_k8 (k=8) | latency=98.72s
+  [SUCCESS] Written run 321c12005b7c | method=fixed_k1 (k=1) | latency=24.54s
+  [SUCCESS] Written run 30fd5e89d7f0 | method=fixed_k1 (k=1) | latency=20.71s
+  [SUCCESS] Written run bfab03929622 | method=fixed_k4 (k=4) | latency=40.00s
+  [SUCCESS] Written run 598b26fcd25a | method=fixed_k8 (k=8) | latency=40.86s
+  [SUCCESS] Written run d189012966df | method=fixed_k1 (k=1) | latency=30.64s
+  [SUCCESS] Written run a85df47896fc | method=fixed_k2 (k=2) | latency=23.64s
+  [SUCCESS] Written run 85878d72b65b | method=fixed_k2 (k=2) | latency=27.13s
+  [SUCCESS] Written run 896a8797298e | method=fixed_k1 (k=1) | latency=20.89s
+  [SUCCESS] Written run 924c9c885ae4 | method=fixed_k8 (k=8) | latency=47.87s
+  [SUCCESS] Written run f954dee783c1 | method=fixed_k2 (k=2) | latency=33.42s
+  [SUCCESS] Written run d27ba1383410 | method=fixed_k2 (k=2) | latency=23.29s
+  [SUCCESS] Written run 86760b73e360 | method=fixed_k4 (k=4) | latency=32.81s
+  [SUCCESS] Written run 3e007857a6fa | method=fixed_k4 (k=4) | latency=32.14s
+  [SUCCESS] Written run f473f5dc313f | method=fixed_k4 (k=4) | latency=34.08s
+  [SUCCESS] Written run e63486aa1979 | method=fixed_k4 (k=4) | latency=41.71s
+  [SUCCESS] Written run e660a9e5ae86 | method=fixed_k8 (k=8) | latency=44.01s
+  [SUCCESS] Written run 804e0b940894 | method=fixed_k8 (k=8) | latency=50.52s
+  [SUCCESS] Written run 86d70879ac06 | method=fixed_k8 (k=8) | latency=58.48s
+  [SUCCESS] Written run 80819c1635ab | method=fixed_k8 (k=8) | latency=59.75s
+  [SUCCESS] Written run b578d5ec6702 | method=fixed_k1 (k=1) | latency=25.89s
+[search_tavily] WARNING: search failed for query 'where to hold emergency fund and down payment short term yield' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+  [SUCCESS] Written run 50dc56163852 | method=fixed_k2 (k=2) | latency=32.66s
+[search_tavily] WARNING: search failed for query 'FHA vs conventional loan cash reserve requirements first time buyer' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'high yield savings account transfer timing ACH withdrawal limits' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'tax efficient drawdown order pre retirement taxable tax deferred roth' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'childcare costs mortgage affordability assessment first time buyer' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'drawbacks percentage based budgeting irregular income cash drag risks' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'defined benefit pension plan self employed maximum tax deduction' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'Traditional and Roth IRA catch up contribution limits rules' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'how business expenses lower required 1099 tax percentage setting aside' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'how pre tax 401k contributions lower agi for student loan idr threshold' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'financial advisor net return alpha studies wealth management' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'three bucket strategy portfolio structure retirement sequence risk' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'treasury bills yield vs high yield savings account state tax exemption' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'Roth catch up vs Traditional Medicare IRMAA Social Security tax impact' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query '2026 catch up retirement contribution limits age 50 self employed' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+  [SUCCESS] Written run 9691c9b25b17 | method=fixed_k4 (k=4) | latency=43.90s
+  [SUCCESS] Written run 16ee0339d6e6 | method=fixed_k1 (k=1) | latency=28.24s
+  [SUCCESS] Written run 9a82ed78ad52 | method=fixed_k1 (k=1) | latency=37.07s
+  [SUCCESS] Written run 99a3cbf201f1 | method=fixed_k2 (k=2) | latency=32.74s
+  [SUCCESS] Written run fa9d661523ff | method=fixed_k8 (k=8) | latency=88.31s
+  [SUCCESS] Written run 911d50309cd5 | method=fixed_k2 (k=2) | latency=45.10s
+[search_tavily] WARNING: search failed for query 'childcare medical emergency fund buffer size guidelines' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'budgeting cash reserves homeownership childcare infant expenses' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'how much interest does 1000 dollars make in a high yield savings account per year' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'social security claim age 62 vs 67 breakeven analysis retirement strategy' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'tax free childcare account reconfirmation rules quarterly deadline' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'hill and valley method variable income budgeting cash buffer smoothing' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'SECURE Act 2.0 self employed retirement plan retroactive setup tax year' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+  [SUCCESS] Written run e05ebf034ba0 | method=fixed_k4 (k=4) | latency=53.28s
+[search_tavily] WARNING: search failed for query 'HSA catch up contribution limit rules age 55 and older' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'SEP IRA solo 401k contribution percentage limits self employed' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'delaying social security as sequence of returns risk hedge' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'early withdrawal penalties CD vs maintaining emergency cash buffer for family home deposit' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'Roth IRA 5 year rule penalty exceptions catch up contributions age 59 half' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'deadline to open and contribute to solo 401k sep ira 2026 tax year' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+  [SUCCESS] Written run 93698ae32afa | method=fixed_k1 (k=1) | latency=23.65s
+  [SUCCESS] Written run 8a028647e891 | method=fixed_k1 (k=1) | latency=25.84s
+  [SUCCESS] Written run 60082970963c | method=fixed_k1 (k=1) | latency=31.81s
+  [SUCCESS] Written run 4e24bfb43bab | method=fixed_k4 (k=4) | latency=61.28s
+  [SUCCESS] Written run c895166a3162 | method=fixed_k1 (k=1) | latency=28.02s
+  [SUCCESS] Written run 37eb73fe822a | method=fixed_k2 (k=2) | latency=30.89s
+  [SUCCESS] Written run 8cd660f02a93 | method=fixed_k2 (k=2) | latency=32.26s
+  [SUCCESS] Written run a80be7ef1923 | method=fixed_k8 (k=8) | latency=115.52s
+[search_tavily] WARNING: search failed for query 'pre retirement cash bucket strategy 3 year liquid buffer' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+  [SUCCESS] Written run 445508ba3c2f | method=fixed_k2 (k=2) | latency=37.62s
+[search_tavily] WARNING: search failed for query 'What is the maximum limit for the tax-free childcare account this year? comprehensive options review' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'how many months emergency fund for 1099 self employed variable income' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'Solo 401k profit sharing net self employment income tax deduction calculation' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'deadline to make catch up contributions 401k vs IRA tax year' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'profit first bank account percentage allocation irregular income' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'annuity floor strategy sequence of returns risk longevity tradeoff' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+  [SUCCESS] Written run ca198cff3c48 | method=fixed_k2 (k=2) | latency=36.31s
+  [SUCCESS] Written run 316cdbccf43a | method=fixed_k1 (k=1) | latency=28.98s
+[search_tavily] WARNING: search failed for query 'tax diversification strategy traditional roth catch up sequence of withdrawals' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'how to calculate max sep ira solo 401k contribution schedule c net profit' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+  [SUCCESS] Written run 074163e38e01 | method=fixed_k8 (k=8) | latency=127.72s
+  [SUCCESS] Written run 7b1e867cc219 | method=fixed_k4 (k=4) | latency=51.67s
+  [SUCCESS] Written run 524e14284fd7 | method=fixed_k2 (k=2) | latency=35.38s
+  [SUCCESS] Written run 1ba9e3b0c34d | method=fixed_k4 (k=4) | latency=52.52s
+  [SUCCESS] Written run d23c6e7bae8c | method=fixed_k4 (k=4) | latency=57.80s
+  [SUCCESS] Written run 5846ab588e6f | method=fixed_k1 (k=1) | latency=28.77s
+  [SUCCESS] Written run 3f99c0593bb7 | method=fixed_k4 (k=4) | latency=57.44s
+[search_tavily] WARNING: search failed for query 'how to estimate post retirement living expenses 5 years out' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'flexible retirement contribution strategies SEP IRA solo 401k variable income' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'combining self employed HSA tax deduction with Solo 401k tax strategy' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+  [SUCCESS] Written run 4d27cce9a373 | method=fixed_k4 (k=4) | latency=60.91s
+[search_tavily] WARNING: search failed for query 'pre retirement tax strategy maximizing catch up contributions 5 year timeline' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+  [SUCCESS] Written run d5245b9e323b | method=fixed_k8 (k=8) | latency=125.18s
+[search_tavily] WARNING: search failed for query 'estimated tax safe harbor rules self employed variable income' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+  [SUCCESS] Written run d2c0e3268906 | method=fixed_k8 (k=8) | latency=128.46s
+[search_tavily] WARNING: search failed for query 'moving to tax free state retirement traditional vs roth catch up strategy' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+[search_tavily] WARNING: search failed for query 'can self employed contribute to traditional roth ira and solo 401k sep ira combined limits 2026' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+  [SUCCESS] Written run 7ed8f6f52ceb | method=fixed_k2 (k=2) | latency=38.45s
+[search_tavily] WARNING: search failed for query 'multiple bank account bucket system variable freelancer income automation' after 3 attempts: This request exceeds your plan's set usage limit. Please upgrade your plan or contact support@tavily.com
+  [SUCCESS] Written run 41e173e682be | method=fixed_k1 (k=1) | latency=27.37s
+  [SUCCESS] Written run c29189ede2f6 | method=fixed_k1 (k=1) | latency=28.38s
+  [SUCCESS] Written run f57d4aa57ae3 | method=fixed_k1 (k=1) | latency=24.62s
+  [SUCCESS] Written run d8bd77c68ae7 | method=fixed_k8 (k=8) | latency=146.74s
+  [SUCCESS] Written run 8d98888bd3bd | method=fixed_k1 (k=1) | latency=28.99s
+  [SUCCESS] Written run f47ebe24be36 | method=fixed_k8 (k=8) | latency=138.52s
+  [SUCCESS] Written run ec7055862c17 | method=fixed_k1 (k=1) | latency=36.54s
+  [SUCCESS] Written run 2c7a879e2d02 | method=fixed_k1 (k=1) | latency=34.18s
+  [SUCCESS] Written run 5161d83135e0 | method=fixed_k8 (k=8) | latency=140.57s
+  [SUCCESS] Written run e9ede7890b56 | method=fixed_k1 (k=1) | latency=32.94s
+  [SUCCESS] Written run 2b475cfb51c3 | method=fixed_k2 (k=2) | latency=35.71s
+  [SUCCESS] Written run f4c9e789160b | method=fixed_k4 (k=4) | latency=61.32s
+  [SUCCESS] Written run 501945a54eac | method=fixed_k2 (k=2) | latency=40.78s
+  [SUCCESS] Written run 4094e0d0d272 | method=fixed_k2 (k=2) | latency=38.57s
+  [SUCCESS] Written run 7f66dea0cb97 | method=fixed_k2 (k=2) | latency=42.39s
+  [SUCCESS] Written run 78ce4316672c | method=fixed_k2 (k=2) | latency=48.63s
+  [SUCCESS] Written run 2306e6ba30c2 | method=fixed_k2 (k=2) | latency=47.51s
+  [SUCCESS] Written run 1861aab48951 | method=fixed_k4 (k=4) | latency=58.20s
+  [SUCCESS] Written run eccf6f6c50a9 | method=fixed_k2 (k=2) | latency=45.38s
+  [SUCCESS] Written run c9100ca59880 | method=fixed_k4 (k=4) | latency=60.95s
+  [SUCCESS] Written run 0efe7a5955b5 | method=fixed_k8 (k=8) | latency=146.22s
+  [SUCCESS] Written run 111dd2cc8a11 | method=fixed_k4 (k=4) | latency=63.83s
+  [SUCCESS] Written run 528725f79349 | method=fixed_k4 (k=4) | latency=64.75s
+  [SUCCESS] Written run fba7e96a7cdd | method=fixed_k4 (k=4) | latency=68.25s
+  [SUCCESS] Written run e7a98eedb659 | method=fixed_k4 (k=4) | latency=70.19s
+  [SUCCESS] Written run 0fc3e01b666e | method=fixed_k8 (k=8) | latency=148.30s
+  [SUCCESS] Written run 25d036d23e56 | method=fixed_k4 (k=4) | latency=84.71s
+  [SUCCESS] Written run d96deb807b08 | method=fixed_k8 (k=8) | latency=151.14s
+  [SUCCESS] Written run f489c1b13647 | method=fixed_k8 (k=8) | latency=153.25s
+  [SUCCESS] Written run 4afb40537800 | method=fixed_k8 (k=8) | latency=155.10s
+  [SUCCESS] Written run 8b33768ad8c2 | method=fixed_k8 (k=8) | latency=156.45s
+  [SUCCESS] Written run bbb100ca2b72 | method=fixed_k8 (k=8) | latency=156.50s
+  [SUCCESS] Written run dfeb1c3f70fe | method=fixed_k8 (k=8) | latency=151.90s
+
+[STAGE 1/3 COMPLETE] Benchmark finished 288 runs in 9.08 minutes. Runs written to /Users/yuanchenwu/Downloads/personalized-search-agent-research/outputs/fixed_fanout_scaling_v2_gemini-3.6-flash/runs.jsonl

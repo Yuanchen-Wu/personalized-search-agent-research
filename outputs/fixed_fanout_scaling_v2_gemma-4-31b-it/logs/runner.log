@@ -1,0 +1,443 @@
+
+======================================================================
+ [STAGE 1/3] BENCHMARK EXECUTION: Generating Plans, Searching & Synthesizing
+======================================================================
+Total pairs to process: 72 | Methods per pair: ['fixed_k1', 'fixed_k2', 'fixed_k4', 'fixed_k8']
+Total planned runs: 288 | Config file: outputs/fixed_fanout_scaling_v2_gemma-4-31b-it/config.yaml
+Found 40 previously completed runs in /Users/yuanchenwu/Downloads/personalized-search-agent-research/outputs/fixed_fanout_scaling_v2_gemma-4-31b-it/runs.jsonl. Resuming...
+
+[run_fixed_fanout] processing 72 pairs with 8 workers
+
+--- Processing Pair [1/72] Query ID: q_1 | Persona ID: budget_nonstem_student ---
+
+--- Processing Pair [2/72] Query ID: q_2 | Persona ID: budget_nonstem_student ---
+
+--- Processing Pair [3/72] Query ID: q_3 | Persona ID: budget_highstem_phd ---
+
+--- Processing Pair [4/72] Query ID: q_4 | Persona ID: budget_nonstem_student ---
+
+--- Processing Pair [5/72] Query ID: q_5 | Persona ID: budget_nonstem_student ---
+
+--- Processing Pair [6/72] Query ID: q_6 | Persona ID: budget_highstem_phd ---
+
+--- Processing Pair [7/72] Query ID: q_7 | Persona ID: budget_highstem_phd ---
+
+--- Processing Pair [8/72] Query ID: q_8 | Persona ID: budget_highstem_phd ---
+  [Skipped - Resumed] method=fixed_k1 for query_id=q_1 persona_id=budget_nonstem_student
+  [Skipped - Resumed] method=fixed_k2 for query_id=q_1 persona_id=budget_nonstem_student
+  [Skipped - Resumed] method=fixed_k4 for query_id=q_1 persona_id=budget_nonstem_student
+  [Skipped - Resumed] method=fixed_k8 for query_id=q_1 persona_id=budget_nonstem_student
+
+--- Processing Pair [9/72] Query ID: q_9 | Persona ID: modbudget_nonstem_switcher ---
+  [Skipped - Resumed] method=fixed_k1 for query_id=q_4 persona_id=budget_nonstem_student
+  [Skipped - Resumed] method=fixed_k2 for query_id=q_4 persona_id=budget_nonstem_student
+  [Skipped - Resumed] method=fixed_k4 for query_id=q_4 persona_id=budget_nonstem_student
+  [Skipped - Resumed] method=fixed_k8 for query_id=q_4 persona_id=budget_nonstem_student
+
+--- Processing Pair [10/72] Query ID: q_10 | Persona ID: modbudget_nonstem_switcher ---
+  [Skipped - Resumed] method=fixed_k1 for query_id=q_5 persona_id=budget_nonstem_student
+  [Skipped - Resumed] method=fixed_k2 for query_id=q_5 persona_id=budget_nonstem_student
+  [Skipped - Resumed] method=fixed_k4 for query_id=q_5 persona_id=budget_nonstem_student
+  [Skipped - Resumed] method=fixed_k8 for query_id=q_5 persona_id=budget_nonstem_student
+
+--- Processing Pair [11/72] Query ID: q_11 | Persona ID: modbudget_nonstem_switcher ---
+  [Skipped - Resumed] method=fixed_k1 for query_id=q_3 persona_id=budget_highstem_phd
+  [Skipped - Resumed] method=fixed_k2 for query_id=q_3 persona_id=budget_highstem_phd
+  [Skipped - Resumed] method=fixed_k4 for query_id=q_3 persona_id=budget_highstem_phd
+  [Skipped - Resumed] method=fixed_k8 for query_id=q_3 persona_id=budget_highstem_phd
+
+--- Processing Pair [12/72] Query ID: q_12 | Persona ID: modbudget_nonstem_switcher ---
+  [Skipped - Resumed] method=fixed_k1 for query_id=q_7 persona_id=budget_highstem_phd
+  [Skipped - Resumed] method=fixed_k2 for query_id=q_7 persona_id=budget_highstem_phd
+  [Skipped - Resumed] method=fixed_k4 for query_id=q_7 persona_id=budget_highstem_phd
+  [Skipped - Resumed] method=fixed_k8 for query_id=q_7 persona_id=budget_highstem_phd
+
+--- Processing Pair [13/72] Query ID: q_13 | Persona ID: highbudget_highstem_pro ---
+  [Skipped - Resumed] method=fixed_k1 for query_id=q_6 persona_id=budget_highstem_phd
+  [Skipped - Resumed] method=fixed_k2 for query_id=q_6 persona_id=budget_highstem_phd
+  [Skipped - Resumed] method=fixed_k4 for query_id=q_6 persona_id=budget_highstem_phd
+  [Skipped - Resumed] method=fixed_k8 for query_id=q_6 persona_id=budget_highstem_phd
+
+--- Processing Pair [14/72] Query ID: q_14 | Persona ID: highbudget_highstem_pro ---
+  [Skipped - Resumed] method=fixed_k1 for query_id=q_2 persona_id=budget_nonstem_student
+  [Skipped - Resumed] method=fixed_k2 for query_id=q_2 persona_id=budget_nonstem_student
+  [Skipped - Resumed] method=fixed_k4 for query_id=q_2 persona_id=budget_nonstem_student
+  [Skipped - Resumed] method=fixed_k8 for query_id=q_2 persona_id=budget_nonstem_student
+
+--- Processing Pair [15/72] Query ID: q_15 | Persona ID: highbudget_highstem_pro ---
+  [Skipped - Resumed] method=fixed_k1 for query_id=q_8 persona_id=budget_highstem_phd
+  [Skipped - Resumed] method=fixed_k2 for query_id=q_8 persona_id=budget_highstem_phd
+  [Skipped - Resumed] method=fixed_k4 for query_id=q_8 persona_id=budget_highstem_phd
+  [Skipped - Resumed] method=fixed_k8 for query_id=q_8 persona_id=budget_highstem_phd
+
+--- Processing Pair [16/72] Query ID: q_16 | Persona ID: highbudget_highstem_pro ---
+  [Skipped - Resumed] method=fixed_k1 for query_id=q_9 persona_id=modbudget_nonstem_switcher
+  [Skipped - Resumed] method=fixed_k2 for query_id=q_9 persona_id=modbudget_nonstem_switcher
+  [Skipped - Resumed] method=fixed_k4 for query_id=q_9 persona_id=modbudget_nonstem_switcher
+  [Skipped - Resumed] method=fixed_k8 for query_id=q_9 persona_id=modbudget_nonstem_switcher
+
+--- Processing Pair [17/72] Query ID: q_17 | Persona ID: family_modbudget ---
+  [Skipped - Resumed] method=fixed_k1 for query_id=q_10 persona_id=modbudget_nonstem_switcher
+  [Skipped - Resumed] method=fixed_k2 for query_id=q_10 persona_id=modbudget_nonstem_switcher
+  [Skipped - Resumed] method=fixed_k4 for query_id=q_10 persona_id=modbudget_nonstem_switcher
+  [Skipped - Resumed] method=fixed_k8 for query_id=q_10 persona_id=modbudget_nonstem_switcher
+
+--- Processing Pair [18/72] Query ID: q_18 | Persona ID: family_modbudget ---
+  [SUCCESS] Written run 5d10e770fd5c | method=fixed_k1 (k=1) | latency=10.15s
+  [SUCCESS] Written run d20a96be0ac1 | method=fixed_k2 (k=2) | latency=11.02s
+  [SUCCESS] Written run f4651fb81150 | method=fixed_k4 (k=4) | latency=12.36s
+  [SUCCESS] Written run ec386c397522 | method=fixed_k8 (k=8) | latency=21.01s
+
+--- Processing Pair [19/72] Query ID: q_19 | Persona ID: family_modbudget ---
+  [SUCCESS] Written run 5ab8174ed507 | method=fixed_k1 (k=1) | latency=57.85s
+  [SUCCESS] Written run 470a66578a4e | method=fixed_k1 (k=1) | latency=56.34s
+  [SUCCESS] Written run cca20a0a9488 | method=fixed_k1 (k=1) | latency=59.94s
+  [SUCCESS] Written run e027b00f73c1 | method=fixed_k1 (k=1) | latency=60.17s
+  [SUCCESS] Written run 4e3fdbfa6a46 | method=fixed_k2 (k=2) | latency=61.23s
+  [SUCCESS] Written run 4a1966f02344 | method=fixed_k2 (k=2) | latency=62.00s
+  [SUCCESS] Written run 641539d04359 | method=fixed_k1 (k=1) | latency=71.99s
+  [SUCCESS] Written run 5a952e4972f7 | method=fixed_k2 (k=2) | latency=61.59s
+  [SUCCESS] Written run f64f822e0509 | method=fixed_k1 (k=1) | latency=69.35s
+  [SUCCESS] Written run a5cb5d2ea38e | method=fixed_k2 (k=2) | latency=63.82s
+  [SUCCESS] Written run f9cdf39d454e | method=fixed_k1 (k=1) | latency=83.39s
+  [SUCCESS] Written run 7882fcd60946 | method=fixed_k2 (k=2) | latency=78.24s
+  [SUCCESS] Written run 49a85ac59c3e | method=fixed_k4 (k=4) | latency=68.61s
+  [SUCCESS] Written run c7a9dfb52f0f | method=fixed_k2 (k=2) | latency=74.26s
+  [SUCCESS] Written run 0c754abedce8 | method=fixed_k4 (k=4) | latency=67.05s
+  [SUCCESS] Written run c325acc9544c | method=fixed_k2 (k=2) | latency=85.12s
+  [SUCCESS] Written run 17dc5e4ae920 | method=fixed_k4 (k=4) | latency=69.37s
+  [SUCCESS] Written run 23aa52ed2811 | method=fixed_k4 (k=4) | latency=70.04s
+  [SUCCESS] Written run 103b0aaee2f3 | method=fixed_k4 (k=4) | latency=85.06s
+  [SUCCESS] Written run 8ee48c9509ff | method=fixed_k4 (k=4) | latency=82.82s
+  [SUCCESS] Written run 3121feaf7741 | method=fixed_k4 (k=4) | latency=90.44s
+  [SUCCESS] Written run 3a1db9d7b37b | method=fixed_k8 (k=8) | latency=85.47s
+
+--- Processing Pair [20/72] Query ID: q_20 | Persona ID: family_modbudget ---
+  [SUCCESS] Written run 5fa0270c25c6 | method=fixed_k8 (k=8) | latency=87.11s
+
+--- Processing Pair [21/72] Query ID: q_21 | Persona ID: intl_newgrad ---
+  [SUCCESS] Written run dd79f08e92a9 | method=fixed_k8 (k=8) | latency=91.58s
+
+--- Processing Pair [22/72] Query ID: q_22 | Persona ID: intl_newgrad ---
+  [SUCCESS] Written run 6e1db3dab8db | method=fixed_k1 (k=1) | latency=57.06s
+  [SUCCESS] Written run 854e63ffe2d6 | method=fixed_k8 (k=8) | latency=91.86s
+
+--- Processing Pair [23/72] Query ID: q_23 | Persona ID: intl_newgrad ---
+  [SUCCESS] Written run a3fde30bb6ce | method=fixed_k8 (k=8) | latency=100.03s
+
+--- Processing Pair [24/72] Query ID: q_24 | Persona ID: intl_newgrad ---
+  [SUCCESS] Written run 80551cceb962 | method=fixed_k2 (k=2) | latency=57.40s
+  [SUCCESS] Written run dc1752b72990 | method=fixed_k8 (k=8) | latency=104.36s
+
+--- Processing Pair [25/72] Query ID: q_25 | Persona ID: tenant_low_income_eviction_risk ---
+  [SUCCESS] Written run 541b256d53a3 | method=fixed_k8 (k=8) | latency=103.98s
+
+--- Processing Pair [26/72] Query ID: q_26 | Persona ID: tenant_low_income_eviction_risk ---
+  [SUCCESS] Written run e5282a0303c3 | method=fixed_k4 (k=4) | latency=63.43s
+  [SUCCESS] Written run c8ca5ab080f7 | method=fixed_k8 (k=8) | latency=74.94s
+
+--- Processing Pair [27/72] Query ID: q_27 | Persona ID: tenant_low_income_eviction_risk ---
+  [SUCCESS] Written run 891434228882 | method=fixed_k1 (k=1) | latency=54.81s
+  [SUCCESS] Written run 47c41597b872 | method=fixed_k2 (k=2) | latency=60.24s
+  [SUCCESS] Written run e0ef63661086 | method=fixed_k1 (k=1) | latency=58.48s
+  [SUCCESS] Written run 7628341425f3 | method=fixed_k4 (k=4) | latency=59.75s
+  [SUCCESS] Written run bf272e3be3fa | method=fixed_k1 (k=1) | latency=55.70s
+  [SUCCESS] Written run e2d60a79ae5b | method=fixed_k1 (k=1) | latency=58.59s
+  [SUCCESS] Written run cca97fd339f2 | method=fixed_k1 (k=1) | latency=67.08s
+  [SUCCESS] Written run 7e45d0d2aa32 | method=fixed_k2 (k=2) | latency=60.51s
+  [SUCCESS] Written run 067689042658 | method=fixed_k1 (k=1) | latency=70.07s
+  [SUCCESS] Written run e77533f7d50d | method=fixed_k2 (k=2) | latency=57.95s
+  [SUCCESS] Written run e16ba3985d7c | method=fixed_k2 (k=2) | latency=59.70s
+  [SUCCESS] Written run 6a7ce0b68ebb | method=fixed_k1 (k=1) | latency=55.83s
+  [SUCCESS] Written run 382e33530bc3 | method=fixed_k8 (k=8) | latency=73.24s
+
+--- Processing Pair [28/72] Query ID: q_28 | Persona ID: immigrant_worker_visa_uncertain ---
+  [SUCCESS] Written run 7cc0cb57e010 | method=fixed_k2 (k=2) | latency=66.60s
+  [SUCCESS] Written run 954fad26e18b | method=fixed_k2 (k=2) | latency=74.96s
+  [SUCCESS] Written run 9cb53df3bb5b | method=fixed_k4 (k=4) | latency=64.46s
+  [SUCCESS] Written run 1e4c84a168b3 | method=fixed_k1 (k=1) | latency=93.28s
+  [SUCCESS] Written run 53fb58b2c792 | method=fixed_k4 (k=4) | latency=66.77s
+  [SUCCESS] Written run 6feac94d78aa | method=fixed_k4 (k=4) | latency=65.92s
+  [SUCCESS] Written run c7299cf53168 | method=fixed_k2 (k=2) | latency=61.04s
+  [SUCCESS] Written run 3422ee87e8fb | method=fixed_k4 (k=4) | latency=83.06s
+  [SUCCESS] Written run c4c9d34e0f41 | method=fixed_k2 (k=2) | latency=96.93s
+  [SUCCESS] Written run c736a70c0984 | method=fixed_k4 (k=4) | latency=77.27s
+  [SUCCESS] Written run 9788548de56f | method=fixed_k8 (k=8) | latency=80.25s
+
+--- Processing Pair [29/72] Query ID: q_29 | Persona ID: tenant_low_income_eviction_risk ---
+  [SUCCESS] Written run e8c7f743dbf4 | method=fixed_k4 (k=4) | latency=62.11s
+  [SUCCESS] Written run eced98020754 | method=fixed_k8 (k=8) | latency=83.49s
+
+--- Processing Pair [30/72] Query ID: q_30 | Persona ID: small_business_owner_contracts ---
+  [SUCCESS] Written run 83bc895a0d86 | method=fixed_k8 (k=8) | latency=83.46s
+
+--- Processing Pair [31/72] Query ID: q_31 | Persona ID: immigrant_worker_visa_uncertain ---
+  [SUCCESS] Written run 9b5cb6e49cf0 | method=fixed_k4 (k=4) | latency=100.81s
+  [SUCCESS] Written run b54f64becbde | method=fixed_k8 (k=8) | latency=102.63s
+
+--- Processing Pair [32/72] Query ID: q_32 | Persona ID: immigrant_worker_visa_uncertain ---
+  [SUCCESS] Written run 03ac757d1b65 | method=fixed_k8 (k=8) | latency=75.67s
+
+--- Processing Pair [33/72] Query ID: q_33 | Persona ID: immigrant_worker_visa_uncertain ---
+  [SUCCESS] Written run f66800db607b | method=fixed_k8 (k=8) | latency=95.47s
+
+--- Processing Pair [34/72] Query ID: q_34 | Persona ID: small_business_owner_contracts ---
+  [SUCCESS] Written run 1eec636a922c | method=fixed_k8 (k=8) | latency=112.15s
+
+--- Processing Pair [35/72] Query ID: q_35 | Persona ID: small_business_owner_contracts ---
+  [SUCCESS] Written run 809163191ce9 | method=fixed_k1 (k=1) | latency=57.89s
+  [SUCCESS] Written run a885f79abb45 | method=fixed_k2 (k=2) | latency=57.02s
+  [SUCCESS] Written run d4e47503f0c0 | method=fixed_k1 (k=1) | latency=58.39s
+  [SUCCESS] Written run e72a7e5f9a7c | method=fixed_k4 (k=4) | latency=58.17s
+  [SUCCESS] Written run 7d45848243e9 | method=fixed_k1 (k=1) | latency=60.60s
+  [SUCCESS] Written run ccce14bcfbf3 | method=fixed_k2 (k=2) | latency=58.03s
+  [SUCCESS] Written run 29af8ff81b3e | method=fixed_k8 (k=8) | latency=69.23s
+
+--- Processing Pair [36/72] Query ID: q_36 | Persona ID: divorced_parent_custody_schedule ---
+  [SUCCESS] Written run 8bfa68eccaca | method=fixed_k2 (k=2) | latency=60.54s
+  [SUCCESS] Written run 78f0b9024b4c | method=fixed_k4 (k=4) | latency=59.81s
+  [SUCCESS] Written run 6f0344a88630 | method=fixed_k1 (k=1) | latency=61.30s
+  [SUCCESS] Written run 289f1b221d47 | method=fixed_k1 (k=1) | latency=55.12s
+  [SUCCESS] Written run 27cda918ed27 | method=fixed_k4 (k=4) | latency=66.69s
+  [SUCCESS] Written run b24f8618501e | method=fixed_k2 (k=2) | latency=59.12s
+  [SUCCESS] Written run c3589c420708 | method=fixed_k1 (k=1) | latency=74.61s
+  [SUCCESS] Written run 547b64cd3014 | method=fixed_k2 (k=2) | latency=57.62s
+  [SUCCESS] Written run 84b6156dd7b6 | method=fixed_k8 (k=8) | latency=75.37s
+
+--- Processing Pair [37/72] Query ID: q_37 | Persona ID: divorced_parent_custody_schedule ---
+  [SUCCESS] Written run 050964c4f008 | method=fixed_k2 (k=2) | latency=77.60s
+  [SUCCESS] Written run b3c629ff8c76 | method=fixed_k8 (k=8) | latency=73.22s
+
+--- Processing Pair [38/72] Query ID: q_38 | Persona ID: small_business_owner_contracts ---
+  [SUCCESS] Written run 0079f470928d | method=fixed_k4 (k=4) | latency=62.90s
+  [SUCCESS] Written run 50d1c6c1bbaf | method=fixed_k4 (k=4) | latency=63.97s
+  [SUCCESS] Written run 5d388ae0eb81 | method=fixed_k1 (k=1) | latency=84.90s
+  [SUCCESS] Written run 3c91c8eafe9c | method=fixed_k1 (k=1) | latency=97.96s
+  [SUCCESS] Written run 8bb7f026b8b7 | method=fixed_k4 (k=4) | latency=83.33s
+  [SUCCESS] Written run 80ec262d1439 | method=fixed_k2 (k=2) | latency=88.54s
+  [SUCCESS] Written run d36b57bd9179 | method=fixed_k8 (k=8) | latency=73.15s
+
+--- Processing Pair [39/72] Query ID: q_39 | Persona ID: divorced_parent_custody_schedule ---
+  [SUCCESS] Written run f9498ee34aec | method=fixed_k4 (k=4) | latency=89.54s
+  [SUCCESS] Written run 8db0e10bd2cb | method=fixed_k2 (k=2) | latency=101.67s
+  [SUCCESS] Written run 1c6671d69cc1 | method=fixed_k8 (k=8) | latency=74.41s
+
+--- Processing Pair [40/72] Query ID: q_40 | Persona ID: divorced_parent_custody_schedule ---
+  [SUCCESS] Written run 5af5452c6f93 | method=fixed_k4 (k=4) | latency=101.96s
+  [SUCCESS] Written run fab2cbcd195a | method=fixed_k8 (k=8) | latency=97.24s
+
+--- Processing Pair [41/72] Query ID: q_41 | Persona ID: employee_noncompete_layoff ---
+  [SUCCESS] Written run ab117898f068 | method=fixed_k8 (k=8) | latency=102.30s
+
+--- Processing Pair [42/72] Query ID: q_42 | Persona ID: employee_noncompete_layoff ---
+  [SUCCESS] Written run ff05763058bf | method=fixed_k8 (k=8) | latency=116.93s
+
+--- Processing Pair [43/72] Query ID: q_43 | Persona ID: employee_noncompete_layoff ---
+  [SUCCESS] Written run 272a765aaf5b | method=fixed_k1 (k=1) | latency=54.88s
+  [SUCCESS] Written run a481a730b2e7 | method=fixed_k2 (k=2) | latency=57.55s
+  [SUCCESS] Written run 9dd9e68d7736 | method=fixed_k1 (k=1) | latency=62.54s
+  [SUCCESS] Written run c0c71fa1724e | method=fixed_k4 (k=4) | latency=61.73s
+  [SUCCESS] Written run 60e75c9d160c | method=fixed_k2 (k=2) | latency=64.73s
+  [SUCCESS] Written run 6ac7c8ff4480 | method=fixed_k8 (k=8) | latency=68.89s
+
+--- Processing Pair [44/72] Query ID: q_44 | Persona ID: employee_noncompete_layoff ---
+  [SUCCESS] Written run 93ac35eb4e11 | method=fixed_k1 (k=1) | latency=111.33s
+  [SUCCESS] Written run a459ec9f2124 | method=fixed_k1 (k=1) | latency=53.09s
+  [SUCCESS] Written run 6af6a491c539 | method=fixed_k4 (k=4) | latency=68.37s
+  [SUCCESS] Written run fdf71064a018 | method=fixed_k2 (k=2) | latency=114.29s
+  [SUCCESS] Written run 2e2ca497d624 | method=fixed_k2 (k=2) | latency=56.51s
+  [SUCCESS] Written run 3c421e89cfcb | method=fixed_k1 (k=1) | latency=61.55s
+  [SUCCESS] Written run 01f3b4b99212 | method=fixed_k1 (k=1) | latency=77.46s
+  [SUCCESS] Written run b934af412c1c | method=fixed_k4 (k=4) | latency=57.95s
+  [SUCCESS] Written run b40f55183fbf | method=fixed_k4 (k=4) | latency=120.59s
+  [SUCCESS] Written run 5ed2426e28a2 | method=fixed_k8 (k=8) | latency=80.65s
+
+--- Processing Pair [45/72] Query ID: q_45 | Persona ID: privacy_conscious_online_creator ---
+  [SUCCESS] Written run 2e3c3377979d | method=fixed_k1 (k=1) | latency=69.02s
+  [SUCCESS] Written run 3780abf4fb95 | method=fixed_k2 (k=2) | latency=80.93s
+  [SUCCESS] Written run f5455af63dac | method=fixed_k1 (k=1) | latency=60.57s
+  [SUCCESS] Written run 58fbec857380 | method=fixed_k2 (k=2) | latency=66.09s
+  [SUCCESS] Written run 04313cd267a9 | method=fixed_k2 (k=2) | latency=74.27s
+  [SUCCESS] Written run 046e1a3f287d | method=fixed_k8 (k=8) | latency=71.93s
+
+--- Processing Pair [46/72] Query ID: q_46 | Persona ID: privacy_conscious_online_creator ---
+  [SUCCESS] Written run e74f49f1902f | method=fixed_k2 (k=2) | latency=63.19s
+  [SUCCESS] Written run 3858900aa93c | method=fixed_k8 (k=8) | latency=131.35s
+
+--- Processing Pair [47/72] Query ID: q_47 | Persona ID: privacy_conscious_online_creator ---
+  [SUCCESS] Written run 9318b0056562 | method=fixed_k4 (k=4) | latency=67.09s
+  [SUCCESS] Written run 3d1495b73151 | method=fixed_k4 (k=4) | latency=85.84s
+  [SUCCESS] Written run 00f81fcabc12 | method=fixed_k4 (k=4) | latency=78.60s
+  [SUCCESS] Written run e657a8b707b9 | method=fixed_k4 (k=4) | latency=68.66s
+  [SUCCESS] Written run 1204f7ae3652 | method=fixed_k8 (k=8) | latency=99.11s
+
+--- Processing Pair [48/72] Query ID: q_48 | Persona ID: privacy_conscious_online_creator ---
+  [SUCCESS] Written run c910a6c8b6c8 | method=fixed_k8 (k=8) | latency=82.08s
+
+--- Processing Pair [49/72] Query ID: q_49 | Persona ID: paycheck_to_paycheck_credit_rebuild ---
+  [SUCCESS] Written run d5d335221777 | method=fixed_k8 (k=8) | latency=87.89s
+
+--- Processing Pair [50/72] Query ID: q_50 | Persona ID: paycheck_to_paycheck_credit_rebuild ---
+  [SUCCESS] Written run 22478a17ea41 | method=fixed_k8 (k=8) | latency=74.41s
+
+--- Processing Pair [51/72] Query ID: q_51 | Persona ID: paycheck_to_paycheck_credit_rebuild ---
+  [SUCCESS] Written run 934e4509ebcd | method=fixed_k1 (k=1) | latency=54.31s
+  [SUCCESS] Written run 145ede2a69ad | method=fixed_k2 (k=2) | latency=58.06s
+  [SUCCESS] Written run 431e9ea3b194 | method=fixed_k4 (k=4) | latency=61.20s
+  [SUCCESS] Written run 9c5fd14e7685 | method=fixed_k1 (k=1) | latency=52.90s
+  [SUCCESS] Written run 7d99033a3f19 | method=fixed_k2 (k=2) | latency=53.43s
+  [SUCCESS] Written run 6f8cfd6b09ab | method=fixed_k1 (k=1) | latency=49.80s
+  [SUCCESS] Written run 35074691af16 | method=fixed_k8 (k=8) | latency=70.55s
+
+--- Processing Pair [52/72] Query ID: q_52 | Persona ID: paycheck_to_paycheck_credit_rebuild ---
+  [SUCCESS] Written run ed41e456e24e | method=fixed_k1 (k=1) | latency=59.40s
+  [SUCCESS] Written run ea85eea977f8 | method=fixed_k2 (k=2) | latency=51.86s
+  [SUCCESS] Written run ac024c6136b7 | method=fixed_k4 (k=4) | latency=64.48s
+  [SUCCESS] Written run 67e8b45e1800 | method=fixed_k2 (k=2) | latency=59.48s
+  [SUCCESS] Written run 5d79e98b3d50 | method=fixed_k4 (k=4) | latency=57.47s
+  [SUCCESS] Written run 3f53068f4e93 | method=fixed_k4 (k=4) | latency=63.97s
+  [SUCCESS] Written run 0c043383ebdb | method=fixed_k1 (k=1) | latency=57.19s
+  [SUCCESS] Written run bd4470c79eda | method=fixed_k8 (k=8) | latency=70.35s
+
+--- Processing Pair [53/72] Query ID: q_53 | Persona ID: high_income_low_time_tech_worker ---
+  [SUCCESS] Written run c8d77e07a08b | method=fixed_k2 (k=2) | latency=58.46s
+  [SUCCESS] Written run b228c0eed80d | method=fixed_k8 (k=8) | latency=71.15s
+
+--- Processing Pair [54/72] Query ID: q_54 | Persona ID: high_income_low_time_tech_worker ---
+  [SUCCESS] Written run 33383173cb01 | method=fixed_k8 (k=8) | latency=67.32s
+
+--- Processing Pair [55/72] Query ID: q_55 | Persona ID: high_income_low_time_tech_worker ---
+  [SUCCESS] Written run 0a3ae868f4f4 | method=fixed_k4 (k=4) | latency=62.36s
+  [SUCCESS] Written run 86fa16c33a14 | method=fixed_k8 (k=8) | latency=68.87s
+
+--- Processing Pair [56/72] Query ID: q_56 | Persona ID: first_gen_college_grad_student_loans ---
+  [SUCCESS] Written run d972d8606937 | method=fixed_k1 (k=1) | latency=83.27s
+  [SUCCESS] Written run 154d6c67c9b5 | method=fixed_k1 (k=1) | latency=90.61s
+  [SUCCESS] Written run 9f0bc4ffb246 | method=fixed_k1 (k=1) | latency=97.93s
+  [SUCCESS] Written run 2f99e29d92f1 | method=fixed_k2 (k=2) | latency=85.26s
+  [SUCCESS] Written run 89185df387df | method=fixed_k2 (k=2) | latency=94.02s
+  [SUCCESS] Written run ee5e0c5d1414 | method=fixed_k4 (k=4) | latency=95.09s
+  [SUCCESS] Written run e72483c0c506 | method=fixed_k2 (k=2) | latency=101.59s
+  [SUCCESS] Written run 377907d4fc43 | method=fixed_k4 (k=4) | latency=87.66s
+  [SUCCESS] Written run 1023584f61d0 | method=fixed_k1 (k=1) | latency=72.12s
+  [SUCCESS] Written run 4a8355742735 | method=fixed_k4 (k=4) | latency=104.59s
+  [SUCCESS] Written run 82d543cc5f30 | method=fixed_k8 (k=8) | latency=105.20s
+
+--- Processing Pair [57/72] Query ID: q_57 | Persona ID: high_income_low_time_tech_worker ---
+  [SUCCESS] Written run e7a241278742 | method=fixed_k8 (k=8) | latency=98.22s
+
+--- Processing Pair [58/72] Query ID: q_58 | Persona ID: first_gen_college_grad_student_loans ---
+  [SUCCESS] Written run a17feaf1a573 | method=fixed_k2 (k=2) | latency=73.16s
+  [SUCCESS] Written run b57b276ea12f | method=fixed_k8 (k=8) | latency=117.18s
+
+--- Processing Pair [59/72] Query ID: q_59 | Persona ID: first_gen_college_grad_student_loans ---
+  [SUCCESS] Written run 129eccf74112 | method=fixed_k4 (k=4) | latency=77.05s
+  [SUCCESS] Written run 86605143dfcf | method=fixed_k1 (k=1) | latency=57.91s
+  [SUCCESS] Written run 9d2f85fa041d | method=fixed_k1 (k=1) | latency=63.76s
+  [SUCCESS] Written run b4c0502b6659 | method=fixed_k1 (k=1) | latency=66.93s
+  [SUCCESS] Written run 5fde4e35f6fa | method=fixed_k8 (k=8) | latency=89.24s
+
+--- Processing Pair [60/72] Query ID: q_60 | Persona ID: first_gen_college_grad_student_loans ---
+  [SUCCESS] Written run 9e68f4ab87c2 | method=fixed_k2 (k=2) | latency=61.59s
+  [SUCCESS] Written run d25fdb2eab85 | method=fixed_k2 (k=2) | latency=68.01s
+  [SUCCESS] Written run 977769aced2d | method=fixed_k2 (k=2) | latency=68.18s
+  [SUCCESS] Written run 016d5f070200 | method=fixed_k1 (k=1) | latency=56.43s
+  [SUCCESS] Written run 15915cffef62 | method=fixed_k4 (k=4) | latency=63.95s
+  [SUCCESS] Written run f6840a1ccaed | method=fixed_k4 (k=4) | latency=70.59s
+  [SUCCESS] Written run f46bc3834706 | method=fixed_k4 (k=4) | latency=73.73s
+  [SUCCESS] Written run d8448ae97aad | method=fixed_k2 (k=2) | latency=60.79s
+  [SUCCESS] Written run 328e142da095 | method=fixed_k8 (k=8) | latency=72.03s
+
+--- Processing Pair [61/72] Query ID: q_61 | Persona ID: young_family_homebuyer ---
+  [SUCCESS] Written run a0a59bbfa817 | method=fixed_k4 (k=4) | latency=61.40s
+  [SUCCESS] Written run 14489d458bef | method=fixed_k8 (k=8) | latency=79.65s
+
+--- Processing Pair [62/72] Query ID: q_62 | Persona ID: young_family_homebuyer ---
+  [SUCCESS] Written run f190fc05c900 | method=fixed_k8 (k=8) | latency=78.38s
+
+--- Processing Pair [63/72] Query ID: q_63 | Persona ID: young_family_homebuyer ---
+  [SUCCESS] Written run ec305f285fb7 | method=fixed_k8 (k=8) | latency=73.65s
+
+--- Processing Pair [64/72] Query ID: q_64 | Persona ID: young_family_homebuyer ---
+  [SUCCESS] Written run af2d92d6d272 | method=fixed_k1 (k=1) | latency=58.94s
+  [SUCCESS] Written run 849d888034df | method=fixed_k1 (k=1) | latency=51.50s
+  [SUCCESS] Written run 1d718dc75ca1 | method=fixed_k1 (k=1) | latency=68.67s
+  [SUCCESS] Written run e62b6ae6cd64 | method=fixed_k2 (k=2) | latency=58.78s
+  [SUCCESS] Written run cda9c6207845 | method=fixed_k1 (k=1) | latency=53.59s
+  [SUCCESS] Written run 67e6bf880520 | method=fixed_k2 (k=2) | latency=58.16s
+  [SUCCESS] Written run 9b5268035b59 | method=fixed_k2 (k=2) | latency=69.77s
+  [SUCCESS] Written run 31ecbb4c6c31 | method=fixed_k4 (k=4) | latency=64.51s
+  [SUCCESS] Written run 3d75e950e0e2 | method=fixed_k2 (k=2) | latency=54.49s
+  [SUCCESS] Written run 5b7c3da488e7 | method=fixed_k4 (k=4) | latency=60.50s
+  [SUCCESS] Written run eedcdac776b8 | method=fixed_k4 (k=4) | latency=75.05s
+  [SUCCESS] Written run 182cbb87bba7 | method=fixed_k8 (k=8) | latency=74.57s
+
+--- Processing Pair [65/72] Query ID: q_65 | Persona ID: near_retirement_catchup ---
+  [SUCCESS] Written run 9cbc23e2bf62 | method=fixed_k4 (k=4) | latency=62.02s
+  [SUCCESS] Written run f2aebd49406a | method=fixed_k8 (k=8) | latency=71.35s
+
+--- Processing Pair [66/72] Query ID: q_66 | Persona ID: near_retirement_catchup ---
+  [SUCCESS] Written run 480c9157d8c1 | method=fixed_k8 (k=8) | latency=90.38s
+
+--- Processing Pair [67/72] Query ID: q_67 | Persona ID: near_retirement_catchup ---
+  [SUCCESS] Written run 9f1a8546e46f | method=fixed_k1 (k=1) | latency=54.95s
+  [SUCCESS] Written run c06f389db100 | method=fixed_k8 (k=8) | latency=69.69s
+
+--- Processing Pair [68/72] Query ID: q_68 | Persona ID: near_retirement_catchup ---
+  [SUCCESS] Written run eb39266cdfc7 | method=fixed_k1 (k=1) | latency=62.98s
+  [SUCCESS] Written run 74f1cc6ec19e | method=fixed_k1 (k=1) | latency=62.54s
+  [SUCCESS] Written run 3591caaf99cb | method=fixed_k2 (k=2) | latency=56.02s
+  [SUCCESS] Written run 9ce59202ad8a | method=fixed_k2 (k=2) | latency=66.81s
+  [SUCCESS] Written run c44e8ffc3543 | method=fixed_k2 (k=2) | latency=64.82s
+  [SUCCESS] Written run b113d16a3df3 | method=fixed_k4 (k=4) | latency=58.18s
+  [SUCCESS] Written run e8efd099a954 | method=fixed_k4 (k=4) | latency=68.44s
+  [SUCCESS] Written run e2d6baaf435b | method=fixed_k4 (k=4) | latency=70.75s
+  [SUCCESS] Written run 0a0f37f0d988 | method=fixed_k8 (k=8) | latency=66.53s
+
+--- Processing Pair [69/72] Query ID: q_69 | Persona ID: freelancer_irregular_income_taxes ---
+  [SUCCESS] Written run 6c303da9c2aa | method=fixed_k8 (k=8) | latency=77.64s
+
+--- Processing Pair [70/72] Query ID: q_70 | Persona ID: freelancer_irregular_income_taxes ---
+  [SUCCESS] Written run 962c42241cf4 | method=fixed_k8 (k=8) | latency=83.54s
+
+--- Processing Pair [71/72] Query ID: q_71 | Persona ID: freelancer_irregular_income_taxes ---
+  [SUCCESS] Written run 691607cd998c | method=fixed_k1 (k=1) | latency=94.89s
+  [SUCCESS] Written run 87fcacb35eb5 | method=fixed_k1 (k=1) | latency=54.43s
+  [SUCCESS] Written run 42ab7cc2f9b5 | method=fixed_k2 (k=2) | latency=97.77s
+  [SUCCESS] Written run f656889e0641 | method=fixed_k1 (k=1) | latency=57.47s
+  [SUCCESS] Written run 7ff1773b97ea | method=fixed_k2 (k=2) | latency=57.65s
+  [SUCCESS] Written run 8b440ed678f5 | method=fixed_k4 (k=4) | latency=102.35s
+  [SUCCESS] Written run 0f8ac3e3e853 | method=fixed_k1 (k=1) | latency=60.43s
+  [SUCCESS] Written run 422bde7248e7 | method=fixed_k2 (k=2) | latency=60.61s
+  [SUCCESS] Written run d3b28143a9e2 | method=fixed_k4 (k=4) | latency=60.91s
+  [SUCCESS] Written run 04c93024801f | method=fixed_k2 (k=2) | latency=61.57s
+  [SUCCESS] Written run 566d825a45ba | method=fixed_k4 (k=4) | latency=63.45s
+  [SUCCESS] Written run 96709588fa76 | method=fixed_k8 (k=8) | latency=117.68s
+
+--- Processing Pair [72/72] Query ID: q_72 | Persona ID: freelancer_irregular_income_taxes ---
+  [SUCCESS] Written run 2df864d08da3 | method=fixed_k8 (k=8) | latency=74.98s
+  [SUCCESS] Written run fceba3c31b0c | method=fixed_k4 (k=4) | latency=66.53s
+  [SUCCESS] Written run a6e0f77b6929 | method=fixed_k8 (k=8) | latency=71.06s
+  [SUCCESS] Written run bd409d56f2bc | method=fixed_k1 (k=1) | latency=100.62s
+  [SUCCESS] Written run 933150b1abf1 | method=fixed_k8 (k=8) | latency=75.21s
+  [SUCCESS] Written run dd7bdd7a13a5 | method=fixed_k2 (k=2) | latency=104.59s
+  [SUCCESS] Written run bd153f4fec48 | method=fixed_k4 (k=4) | latency=108.87s
+  [SUCCESS] Written run 516919712cda | method=fixed_k1 (k=1) | latency=94.12s
+  [SUCCESS] Written run 0d05089e6489 | method=fixed_k8 (k=8) | latency=118.51s
+  [SUCCESS] Written run de8f70af1132 | method=fixed_k1 (k=1) | latency=84.63s
+  [SUCCESS] Written run af800ab22aa7 | method=fixed_k1 (k=1) | latency=92.89s
+  [SUCCESS] Written run 8f53a0557284 | method=fixed_k2 (k=2) | latency=93.89s
+  [SUCCESS] Written run babe4edd7e20 | method=fixed_k2 (k=2) | latency=85.23s
+  [SUCCESS] Written run eeb5a8f1c155 | method=fixed_k4 (k=4) | latency=95.34s
+  [SUCCESS] Written run 76e16dd4fafd | method=fixed_k2 (k=2) | latency=95.87s
+  [SUCCESS] Written run 9d6f86214249 | method=fixed_k1 (k=1) | latency=56.33s
+  [SUCCESS] Written run 5fbe99b4c4e1 | method=fixed_k4 (k=4) | latency=91.02s
+  [SUCCESS] Written run f0bcb0038bd3 | method=fixed_k2 (k=2) | latency=60.21s
+  [SUCCESS] Written run f14e4cb528c5 | method=fixed_k4 (k=4) | latency=99.15s
+  [SUCCESS] Written run c9eb41338fc2 | method=fixed_k8 (k=8) | latency=110.51s
+  [SUCCESS] Written run cc75e7b3fa98 | method=fixed_k4 (k=4) | latency=62.29s
+  [SUCCESS] Written run 28dae296506d | method=fixed_k8 (k=8) | latency=102.16s
+  [SUCCESS] Written run c9a8ec0b4677 | method=fixed_k8 (k=8) | latency=109.60s
+  [SUCCESS] Written run c9d82a31728b | method=fixed_k8 (k=8) | latency=74.30s
+
+[STAGE 1/3 COMPLETE] Benchmark finished 248 runs in 15.63 minutes. Runs written to /Users/yuanchenwu/Downloads/personalized-search-agent-research/outputs/fixed_fanout_scaling_v2_gemma-4-31b-it/runs.jsonl

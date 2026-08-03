@@ -1,0 +1,12 @@
+
+======================================================================
+ [STAGE 3/3] SUMMARIZATION: Quality-Cost Frontier & Paired Marginal Gains
+======================================================================
+
+[STAGE 3/3 COMPLETE] Statistical summarization finished successfully! Written files:
+  - /Users/yuanchenwu/Downloads/personalized-search-agent-research/outputs/fixed_fanout_scaling_v2_gemma-4-31b-it/summary_by_method.csv
+  - /Users/yuanchenwu/Downloads/personalized-search-agent-research/outputs/fixed_fanout_scaling_v2_gemma-4-31b-it/summary_by_method_task_type.csv
+  - /Users/yuanchenwu/Downloads/personalized-search-agent-research/outputs/fixed_fanout_scaling_v2_gemma-4-31b-it/summary_by_method_task_category.csv
+  - /Users/yuanchenwu/Downloads/personalized-search-agent-research/outputs/fixed_fanout_scaling_v2_gemma-4-31b-it/summary_by_method_domain.csv
+  - /Users/yuanchenwu/Downloads/personalized-search-agent-research/outputs/fixed_fanout_scaling_v2_gemma-4-31b-it/quality_cost_frontier.csv
+  - /Users/yuanchenwu/Downloads/personalized-search-agent-research/outputs/fixed_fanout_scaling_v2_gemma-4-31b-it/marginal_gains.csv

@@ -26,8 +26,13 @@
 #   --smoke               3 pairs x 4 k-conditions = 12 runs end-to-end.
 #   --dry-run             Preflight + plan preview only; no API calls.
 #   --force-eval          Discard this arm's judge scores and re-judge.
-#   --retry-empty-searches  Strip evidence-free runs (+ stale judge rows) so
-#                         resume re-runs exactly those.
+#   --retry-empty-searches  Purge failed (empty-result) searches from the
+#                         search cache and strip runs missing evidence --
+#                         fully evidence-free OR missing an executed branch's
+#                         results (partial quota failures) -- plus their stale
+#                         judge rows, so resume re-searches and re-runs exactly
+#                         those. Combine with --dry-run to preview the surgery
+#                         without changing any files.
 #   AGENT_WORKERS=N       Concurrent pairs (default 6). Cache and run-log
 #                         appends are lock-guarded; per-provider rate budgets
 #                         stay correct at any worker count.
@@ -177,24 +182,78 @@ EOF
 }
 
 retry_empty_searches() {
-  [ -f "$RUNS" ] || return 0
-  "$PY" - "$RUNS" "$OUT_DIR" <<'EOF'
-import json, os, sys
-runs_path, out_dir = sys.argv[1], sys.argv[2]
+  local mode="${1:-apply}"
+  "$PY" - "$CONFIG" "$mode" <<'EOF'
+import json, os, sys, yaml
+from collections import Counter
+
+cfg = yaml.safe_load(open(sys.argv[1]))
+apply = sys.argv[2] == "apply"
+out = cfg["outputs"]
+cache_path, runs_path = out["search_cache_path"], out["runs_path"]
+
+def did(past, infinitive):
+    return past if apply else f"would {infinitive}"
+
+def rewrite(path, lines):
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(lines) + ("\n" if lines else ""))
+    os.replace(tmp, path)
+
+# 1. Failed searches (quota exhaustion, rate-limit soft-fails) are cached as
+#    empty results and served as cache hits forever after; purge them so
+#    resume actually re-searches instead of replaying the failure.
+failed_queries, kept_cache = set(), []
+if os.path.exists(cache_path):
+    for line in open(cache_path, encoding="utf-8"):
+        s = line.strip()
+        if not s: continue
+        try:
+            rec = json.loads(s)
+        except json.JSONDecodeError:
+            continue  # torn tail line; dropped by the rewrite
+        if rec.get("results"):
+            kept_cache.append(s)
+        else:
+            failed_queries.add(rec.get("query"))
+if failed_queries:
+    if apply:
+        rewrite(cache_path, kept_cache)
+    print(f"   {did('purged', 'purge')} {len(failed_queries)} empty (failed-search) cache entries")
+
+# 2. Strip runs with incomplete evidence: no results at all, a branch matching
+#    a purged cache entry, or an executed branch that contributed zero results
+#    (partial failures -- raw_search_results is attributed per branch_query).
+if not os.path.exists(runs_path):
+    print("   no runs.jsonl yet; nothing to strip"); raise SystemExit
 runs = [json.loads(l) for l in open(runs_path, encoding="utf-8") if l.strip()]
-keep = [r for r in runs if r.get("raw_search_results")]
-dropped = len(runs) - len(keep)
+
+def tainted(r):
+    raw = r.get("raw_search_results") or []
+    if not raw:
+        return True
+    branches = r.get("executed_fanout_prefix") or r.get("fanout_branches") or []
+    covered = {res.get("branch_query") for res in raw}
+    return any(b.get("query") in failed_queries or b.get("query") not in covered
+               for b in branches)
+
+keep = [r for r in runs if not tainted(r)]
+dropped = [r for r in runs if tainted(r)]
 if not dropped:
-    print("   no evidence-free runs to strip"); raise SystemExit
-tmp = runs_path + ".tmp"
-with open(tmp, "w", encoding="utf-8") as fh:
-    for r in keep:
-        fh.write(json.dumps(r, ensure_ascii=False) + "\n")
-os.replace(tmp, runs_path)
+    print("   no evidence-incomplete runs to strip"); raise SystemExit
+if apply:
+    rewrite(runs_path, [json.dumps(r, ensure_ascii=False) for r in keep])
+by_method = ", ".join(f"{m}:{n}" for m, n in sorted(Counter(r.get("method") for r in dropped).items()))
+print(f"   {did('stripped', 'strip')} {len(dropped)} evidence-incomplete runs ({by_method}); "
+      f"{len(keep)} kept -- resume re-runs the stripped jobs")
+
+# 3. Judge rows for stripped runs are stale (re-runs get fresh run_ids); purge
+#    them so the judge's per-run_id resume re-scores exactly the re-run rows.
 valid = {r.get("run_id") for r in keep}
-for name in ("fanout_scores.jsonl", "retrieval_scores.jsonl", "final_response_scores.jsonl"):
-    p = os.path.join(out_dir, name)
-    if not os.path.exists(p): continue
+for key in ("fanout_scores_path", "retrieval_scores_path", "final_response_scores_path"):
+    p = out.get(key)
+    if not p or not os.path.exists(p): continue
     rows, orphans = [], 0
     for l in open(p, encoding="utf-8"):
         if not l.strip(): continue
@@ -207,25 +266,24 @@ for name in ("fanout_scores.jsonl", "retrieval_scores.jsonl", "final_response_sc
         else:
             orphans += 1
     if orphans:
-        with open(p + ".tmp", "w", encoding="utf-8") as fh:
-            fh.write("\n".join(rows) + ("\n" if rows else ""))
-        os.replace(p + ".tmp", p)
-        print(f"   purged {orphans} stale judge rows from {name}")
-print(f"   stripped {dropped} evidence-free runs; {len(keep)} kept — resume will re-run them")
+        if apply:
+            rewrite(p, rows)
+        print(f"   {did('purged', 'purge')} {orphans} stale judge rows from {os.path.basename(p)}")
 EOF
 }
 
 if [ "$DRY" = 1 ]; then
   echo "== DRY RUN"
   sanitize_runs
+  [ "$RETRY_EMPTY" = 1 ] && retry_empty_searches report
   "$PY" scripts/run_fixed_fanout_benchmark.py --config "$CONFIG" --dry_run ${LIMIT:+--limit "$LIMIT"} | tail -5
-  echo "   remaining jobs: $(remaining_jobs)"
+  echo "   remaining jobs (before any surgery): $(remaining_jobs)"
   exit 0
 fi
 
 echo "== [1/4] Runner (planner=$PLANNER_MODEL, workers=$AGENT_WORKERS, gemini rpm=$GEMINI_MAX_RPM, tavily rpm=$TAVILY_MAX_RPM${LIMIT:+, smoke limit=$LIMIT pairs})"
 sanitize_runs
-[ "$RETRY_EMPTY" = 1 ] && retry_empty_searches
+[ "$RETRY_EMPTY" = 1 ] && retry_empty_searches apply
 EXPECTED_REMAINING=$(remaining_jobs)
 PASS=1
 while [ "$EXPECTED_REMAINING" -gt 0 ]; do
@@ -251,14 +309,23 @@ echo "   runner complete: $RUN_COUNT records in runs.jsonl"
 if ! "$PY" - "$RUNS" "$EMPTY_EVIDENCE_TOLERANCE_PCT" <<'EOF'
 import json, sys
 runs = [json.loads(l) for l in open(sys.argv[1], encoding="utf-8") if l.strip()]
-empty = sum(1 for r in runs if not r.get("raw_search_results"))
-pct = 100.0 * empty / max(1, len(runs))
-print(f"   evidence coverage: {len(runs) - empty}/{len(runs)} runs have search results ({pct:.1f}% empty)")
+def incomplete(r):
+    raw = r.get("raw_search_results") or []
+    if not raw:
+        return True
+    covered = {res.get("branch_query") for res in raw}
+    branches = r.get("executed_fanout_prefix") or r.get("fanout_branches") or []
+    return any(b.get("query") not in covered for b in branches)
+empty = sum(1 for r in runs if not (r.get("raw_search_results") or []))
+affected = sum(1 for r in runs if incomplete(r))
+pct = 100.0 * affected / max(1, len(runs))
+print(f"   evidence coverage: {len(runs) - affected}/{len(runs)} runs fully evidenced "
+      f"({empty} evidence-free, {affected - empty} missing a searched branch; {pct:.1f}% affected)")
 sys.exit(1 if pct > float(sys.argv[2]) else 0)
 EOF
 then
-  echo "   EVIDENCE GATE FAILED (Tavily rate limit?). Fix TAVILY_MAX_RPM / key tier,"
-  echo "   then re-invoke with --retry-empty-searches."
+  echo "   EVIDENCE GATE FAILED (Tavily quota exhausted or rate limited?). Fix the key/quota"
+  echo "   or TAVILY_MAX_RPM, then re-invoke with --retry-empty-searches."
   exit 1
 fi
 
