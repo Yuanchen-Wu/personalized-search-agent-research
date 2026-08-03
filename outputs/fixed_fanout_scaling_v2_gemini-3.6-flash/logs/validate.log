@@ -1,0 +1,2 @@
+[VALIDATION FAILURE] Found setup errors:
+  - Invalid experiment_name: 'fixed_fanout_scaling_v2_gemini-3.6-flash' (expected 'fixed_fanout_scaling_v1')
