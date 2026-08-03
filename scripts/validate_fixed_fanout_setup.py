@@ -37,8 +37,9 @@ def validate_setup(config_path: str) -> List[str]:
         config = yaml.safe_load(f)
 
     # 1. Experiment name
-    if config.get("experiment_name") != "fixed_fanout_scaling_v1":
-        errors.append(f"Invalid experiment_name: {config.get('experiment_name')!r} (expected 'fixed_fanout_scaling_v1')")
+    exp_name = str(config.get("experiment_name", ""))
+    if not exp_name.startswith("fixed_fanout_scaling_"):
+        errors.append(f"Invalid experiment_name: {config.get('experiment_name')!r} (expected to start with 'fixed_fanout_scaling_')")
 
     # 2. k values & fixed_fanout section
     ff = config.get("fixed_fanout", {})

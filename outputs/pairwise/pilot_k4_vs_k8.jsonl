@@ -1,0 +1,16 @@
+{"query_id": "q_22", "votes": ["a", "a", "a", "a"], "wins_a": 4, "wins_b": 0, "ties": 0, "parse_errors": 0, "majority": "a", "len_a": 3612, "len_b": 4853}
+{"query_id": "q_14", "votes": ["b", "b", "b", "b"], "wins_a": 0, "wins_b": 4, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 5763, "len_b": 7102}
+{"query_id": "q_23", "votes": ["b", "b", "b", "b"], "wins_a": 0, "wins_b": 4, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 5168, "len_b": 9589}
+{"query_id": "q_21", "votes": ["b", "b", "b", "b"], "wins_a": 0, "wins_b": 4, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 3877, "len_b": 5545}
+{"query_id": "q_17", "votes": ["b", "a", "b", "b"], "wins_a": 1, "wins_b": 3, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 3653, "len_b": 3500}
+{"query_id": "q_2", "votes": ["b", "b", "b", "b"], "wins_a": 0, "wins_b": 4, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 7043, "len_b": 5770}
+{"query_id": "q_18", "votes": ["b", "b", "b", "b"], "wins_a": 0, "wins_b": 4, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 4717, "len_b": 4188}
+{"query_id": "q_15", "votes": ["b", "b", "b", "b"], "wins_a": 0, "wins_b": 4, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 4201, "len_b": 4326}
+{"query_id": "q_12", "votes": ["b", "b", "b", "b"], "wins_a": 0, "wins_b": 4, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 5326, "len_b": 5331}
+{"query_id": "q_13", "votes": ["b", "b", "b", "b"], "wins_a": 0, "wins_b": 4, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 4636, "len_b": 7211}
+{"query_id": "q_1", "votes": ["b", "b", "b", "b"], "wins_a": 0, "wins_b": 4, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 3854, "len_b": 6015}
+{"query_id": "q_16", "votes": ["b", "b", "a", "a"], "wins_a": 2, "wins_b": 2, "ties": 0, "parse_errors": 0, "majority": "tie", "len_a": 4900, "len_b": 5218}
+{"query_id": "q_10", "votes": ["a", "a", "b", "b"], "wins_a": 2, "wins_b": 2, "ties": 0, "parse_errors": 0, "majority": "tie", "len_a": 5487, "len_b": 6172}
+{"query_id": "q_11", "votes": ["a", "a", "b", "b"], "wins_a": 2, "wins_b": 2, "ties": 0, "parse_errors": 0, "majority": "tie", "len_a": 6928, "len_b": 5683}
+{"query_id": "q_20", "votes": ["a", "b", "b", "b"], "wins_a": 1, "wins_b": 3, "ties": 0, "parse_errors": 0, "majority": "b", "len_a": 5131, "len_b": 5504}
+{"query_id": "q_19", "votes": ["a", "a", "a", "a"], "wins_a": 4, "wins_b": 0, "ties": 0, "parse_errors": 0, "majority": "a", "len_a": 3912, "len_b": 5220}

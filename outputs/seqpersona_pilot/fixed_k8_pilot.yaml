@@ -1,0 +1,32 @@
+experiment_name: seqpersona_pilot_fixed_k8
+methods:
+- fixed_k8
+search:
+  search_depth: basic
+  max_results_per_branch: 5
+synthesis:
+  evidence_budget_mode: all
+  max_documents: null
+  max_context_chars: null
+models:
+  planner: gemini-3.6-flash
+  synthesizer: gemini-3.5-flash
+  evaluator: gemini-3.5-flash
+reproducibility:
+  seed: 42
+  cache_fanout_plans: true
+  cache_search_results: true
+  resume_existing_runs: true
+data:
+  personas_path: data/synthetic_personas_v1.jsonl
+  queries_path: data/synthetic_queries_v1.jsonl
+outputs:
+  run_dir: outputs/seqpersona_pilot/fixed_k8
+  runs_path: outputs/seqpersona_pilot/fixed_k8/runs.jsonl
+  fanout_plans_path: outputs/seqpersona_pilot/fixed_k8/fanout_plans.jsonl
+  search_cache_path: outputs/seqpersona_pilot/fixed_k8/search_cache.jsonl
+fixed_fanout:
+  candidate_pool_size: 8
+  k_values:
+  - 8
+  use_nested_prefixes: true

@@ -1,0 +1,227 @@
+
+======================================================================
+ [STAGE 1/3] BENCHMARK EXECUTION: Generating Plans, Searching & Synthesizing
+======================================================================
+Total pairs to process: 72 | Methods per pair: ['seqpersona_k8']
+Total planned runs: 72 | Config file: configs/seqpersona_k8_v1.yaml
+Found 66 previously completed runs in /Users/yuanchenwu/Downloads/personalized-search-agent-research/outputs/seqpersona_k8_v1/runs.jsonl. Resuming...
+
+[run_fixed_fanout] processing 72 pairs with 6 workers
+
+--- Processing Pair [1/72] Query ID: q_1 | Persona ID: budget_nonstem_student ---
+
+--- Processing Pair [2/72] Query ID: q_2 | Persona ID: budget_nonstem_student ---
+
+--- Processing Pair [3/72] Query ID: q_3 | Persona ID: budget_highstem_phd ---
+
+--- Processing Pair [4/72] Query ID: q_4 | Persona ID: budget_nonstem_student ---
+
+--- Processing Pair [5/72] Query ID: q_5 | Persona ID: budget_nonstem_student ---
+
+--- Processing Pair [6/72] Query ID: q_6 | Persona ID: budget_highstem_phd ---
+  [SUCCESS-SEQPERSONA] b7d42cad082a | method=seqpersona_k8 | steps=8 searches=8 | lat=67.79s
+
+--- Processing Pair [7/72] Query ID: q_7 | Persona ID: budget_highstem_phd ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_7 persona_id=budget_highstem_phd
+
+--- Processing Pair [8/72] Query ID: q_8 | Persona ID: budget_highstem_phd ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_8 persona_id=budget_highstem_phd
+
+--- Processing Pair [9/72] Query ID: q_9 | Persona ID: modbudget_nonstem_switcher ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_9 persona_id=modbudget_nonstem_switcher
+
+--- Processing Pair [10/72] Query ID: q_10 | Persona ID: modbudget_nonstem_switcher ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_10 persona_id=modbudget_nonstem_switcher
+
+--- Processing Pair [11/72] Query ID: q_11 | Persona ID: modbudget_nonstem_switcher ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_11 persona_id=modbudget_nonstem_switcher
+
+--- Processing Pair [12/72] Query ID: q_12 | Persona ID: modbudget_nonstem_switcher ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_12 persona_id=modbudget_nonstem_switcher
+
+--- Processing Pair [13/72] Query ID: q_13 | Persona ID: highbudget_highstem_pro ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_13 persona_id=highbudget_highstem_pro
+
+--- Processing Pair [14/72] Query ID: q_14 | Persona ID: highbudget_highstem_pro ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_14 persona_id=highbudget_highstem_pro
+
+--- Processing Pair [15/72] Query ID: q_15 | Persona ID: highbudget_highstem_pro ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_15 persona_id=highbudget_highstem_pro
+
+--- Processing Pair [16/72] Query ID: q_16 | Persona ID: highbudget_highstem_pro ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_16 persona_id=highbudget_highstem_pro
+
+--- Processing Pair [17/72] Query ID: q_17 | Persona ID: family_modbudget ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_17 persona_id=family_modbudget
+
+--- Processing Pair [18/72] Query ID: q_18 | Persona ID: family_modbudget ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_18 persona_id=family_modbudget
+
+--- Processing Pair [19/72] Query ID: q_19 | Persona ID: family_modbudget ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_19 persona_id=family_modbudget
+
+--- Processing Pair [20/72] Query ID: q_20 | Persona ID: family_modbudget ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_20 persona_id=family_modbudget
+
+--- Processing Pair [21/72] Query ID: q_21 | Persona ID: intl_newgrad ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_21 persona_id=intl_newgrad
+
+--- Processing Pair [22/72] Query ID: q_22 | Persona ID: intl_newgrad ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_22 persona_id=intl_newgrad
+
+--- Processing Pair [23/72] Query ID: q_23 | Persona ID: intl_newgrad ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_23 persona_id=intl_newgrad
+
+--- Processing Pair [24/72] Query ID: q_24 | Persona ID: intl_newgrad ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_24 persona_id=intl_newgrad
+
+--- Processing Pair [25/72] Query ID: q_25 | Persona ID: tenant_low_income_eviction_risk ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_25 persona_id=tenant_low_income_eviction_risk
+
+--- Processing Pair [26/72] Query ID: q_26 | Persona ID: tenant_low_income_eviction_risk ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_26 persona_id=tenant_low_income_eviction_risk
+
+--- Processing Pair [27/72] Query ID: q_27 | Persona ID: tenant_low_income_eviction_risk ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_27 persona_id=tenant_low_income_eviction_risk
+
+--- Processing Pair [28/72] Query ID: q_28 | Persona ID: immigrant_worker_visa_uncertain ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_28 persona_id=immigrant_worker_visa_uncertain
+
+--- Processing Pair [29/72] Query ID: q_29 | Persona ID: tenant_low_income_eviction_risk ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_29 persona_id=tenant_low_income_eviction_risk
+
+--- Processing Pair [30/72] Query ID: q_30 | Persona ID: small_business_owner_contracts ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_30 persona_id=small_business_owner_contracts
+
+--- Processing Pair [31/72] Query ID: q_31 | Persona ID: immigrant_worker_visa_uncertain ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_31 persona_id=immigrant_worker_visa_uncertain
+
+--- Processing Pair [32/72] Query ID: q_32 | Persona ID: immigrant_worker_visa_uncertain ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_32 persona_id=immigrant_worker_visa_uncertain
+
+--- Processing Pair [33/72] Query ID: q_33 | Persona ID: immigrant_worker_visa_uncertain ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_33 persona_id=immigrant_worker_visa_uncertain
+
+--- Processing Pair [34/72] Query ID: q_34 | Persona ID: small_business_owner_contracts ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_34 persona_id=small_business_owner_contracts
+
+--- Processing Pair [35/72] Query ID: q_35 | Persona ID: small_business_owner_contracts ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_35 persona_id=small_business_owner_contracts
+
+--- Processing Pair [36/72] Query ID: q_36 | Persona ID: divorced_parent_custody_schedule ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_36 persona_id=divorced_parent_custody_schedule
+
+--- Processing Pair [37/72] Query ID: q_37 | Persona ID: divorced_parent_custody_schedule ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_37 persona_id=divorced_parent_custody_schedule
+
+--- Processing Pair [38/72] Query ID: q_38 | Persona ID: small_business_owner_contracts ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_38 persona_id=small_business_owner_contracts
+
+--- Processing Pair [39/72] Query ID: q_39 | Persona ID: divorced_parent_custody_schedule ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_39 persona_id=divorced_parent_custody_schedule
+
+--- Processing Pair [40/72] Query ID: q_40 | Persona ID: divorced_parent_custody_schedule ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_40 persona_id=divorced_parent_custody_schedule
+
+--- Processing Pair [41/72] Query ID: q_41 | Persona ID: employee_noncompete_layoff ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_41 persona_id=employee_noncompete_layoff
+
+--- Processing Pair [42/72] Query ID: q_42 | Persona ID: employee_noncompete_layoff ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_42 persona_id=employee_noncompete_layoff
+
+--- Processing Pair [43/72] Query ID: q_43 | Persona ID: employee_noncompete_layoff ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_43 persona_id=employee_noncompete_layoff
+
+--- Processing Pair [44/72] Query ID: q_44 | Persona ID: employee_noncompete_layoff ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_44 persona_id=employee_noncompete_layoff
+
+--- Processing Pair [45/72] Query ID: q_45 | Persona ID: privacy_conscious_online_creator ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_45 persona_id=privacy_conscious_online_creator
+
+--- Processing Pair [46/72] Query ID: q_46 | Persona ID: privacy_conscious_online_creator ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_46 persona_id=privacy_conscious_online_creator
+
+--- Processing Pair [47/72] Query ID: q_47 | Persona ID: privacy_conscious_online_creator ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_47 persona_id=privacy_conscious_online_creator
+
+--- Processing Pair [48/72] Query ID: q_48 | Persona ID: privacy_conscious_online_creator ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_48 persona_id=privacy_conscious_online_creator
+
+--- Processing Pair [49/72] Query ID: q_49 | Persona ID: paycheck_to_paycheck_credit_rebuild ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_49 persona_id=paycheck_to_paycheck_credit_rebuild
+
+--- Processing Pair [50/72] Query ID: q_50 | Persona ID: paycheck_to_paycheck_credit_rebuild ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_50 persona_id=paycheck_to_paycheck_credit_rebuild
+
+--- Processing Pair [51/72] Query ID: q_51 | Persona ID: paycheck_to_paycheck_credit_rebuild ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_51 persona_id=paycheck_to_paycheck_credit_rebuild
+
+--- Processing Pair [52/72] Query ID: q_52 | Persona ID: paycheck_to_paycheck_credit_rebuild ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_52 persona_id=paycheck_to_paycheck_credit_rebuild
+
+--- Processing Pair [53/72] Query ID: q_53 | Persona ID: high_income_low_time_tech_worker ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_53 persona_id=high_income_low_time_tech_worker
+
+--- Processing Pair [54/72] Query ID: q_54 | Persona ID: high_income_low_time_tech_worker ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_54 persona_id=high_income_low_time_tech_worker
+
+--- Processing Pair [55/72] Query ID: q_55 | Persona ID: high_income_low_time_tech_worker ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_55 persona_id=high_income_low_time_tech_worker
+
+--- Processing Pair [56/72] Query ID: q_56 | Persona ID: first_gen_college_grad_student_loans ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_56 persona_id=first_gen_college_grad_student_loans
+
+--- Processing Pair [57/72] Query ID: q_57 | Persona ID: high_income_low_time_tech_worker ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_57 persona_id=high_income_low_time_tech_worker
+
+--- Processing Pair [58/72] Query ID: q_58 | Persona ID: first_gen_college_grad_student_loans ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_58 persona_id=first_gen_college_grad_student_loans
+
+--- Processing Pair [59/72] Query ID: q_59 | Persona ID: first_gen_college_grad_student_loans ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_59 persona_id=first_gen_college_grad_student_loans
+
+--- Processing Pair [60/72] Query ID: q_60 | Persona ID: first_gen_college_grad_student_loans ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_60 persona_id=first_gen_college_grad_student_loans
+
+--- Processing Pair [61/72] Query ID: q_61 | Persona ID: young_family_homebuyer ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_61 persona_id=young_family_homebuyer
+
+--- Processing Pair [62/72] Query ID: q_62 | Persona ID: young_family_homebuyer ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_62 persona_id=young_family_homebuyer
+
+--- Processing Pair [63/72] Query ID: q_63 | Persona ID: young_family_homebuyer ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_63 persona_id=young_family_homebuyer
+
+--- Processing Pair [64/72] Query ID: q_64 | Persona ID: young_family_homebuyer ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_64 persona_id=young_family_homebuyer
+
+--- Processing Pair [65/72] Query ID: q_65 | Persona ID: near_retirement_catchup ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_65 persona_id=near_retirement_catchup
+
+--- Processing Pair [66/72] Query ID: q_66 | Persona ID: near_retirement_catchup ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_66 persona_id=near_retirement_catchup
+
+--- Processing Pair [67/72] Query ID: q_67 | Persona ID: near_retirement_catchup ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_67 persona_id=near_retirement_catchup
+
+--- Processing Pair [68/72] Query ID: q_68 | Persona ID: near_retirement_catchup ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_68 persona_id=near_retirement_catchup
+
+--- Processing Pair [69/72] Query ID: q_69 | Persona ID: freelancer_irregular_income_taxes ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_69 persona_id=freelancer_irregular_income_taxes
+
+--- Processing Pair [70/72] Query ID: q_70 | Persona ID: freelancer_irregular_income_taxes ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_70 persona_id=freelancer_irregular_income_taxes
+
+--- Processing Pair [71/72] Query ID: q_71 | Persona ID: freelancer_irregular_income_taxes ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_71 persona_id=freelancer_irregular_income_taxes
+
+--- Processing Pair [72/72] Query ID: q_72 | Persona ID: freelancer_irregular_income_taxes ---
+  [Skipped - Resumed] method=seqpersona_k8 for query_id=q_72 persona_id=freelancer_irregular_income_taxes
+  [SUCCESS-SEQPERSONA] 46448f743700 | method=seqpersona_k8 | steps=8 searches=8 | lat=80.87s
+  [SUCCESS-SEQPERSONA] fce1c60c9058 | method=seqpersona_k8 | steps=8 searches=8 | lat=82.51s
+  [SUCCESS-SEQPERSONA] 0a0bfc6d153f | method=seqpersona_k8 | steps=8 searches=8 | lat=84.68s
+  [SUCCESS-SEQPERSONA] 8b87dd1ed15c | method=seqpersona_k8 | steps=8 searches=8 | lat=86.09s
+  [SUCCESS-SEQPERSONA] 2dfaabd5d177 | method=seqpersona_k8 | steps=8 searches=8 | lat=86.83s
+
+[STAGE 1/3 COMPLETE] Benchmark finished 6 runs in 1.45 minutes. Runs written to /Users/yuanchenwu/Downloads/personalized-search-agent-research/outputs/seqpersona_k8_v1/runs.jsonl
