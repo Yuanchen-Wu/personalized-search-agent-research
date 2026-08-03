@@ -302,6 +302,14 @@ def compute_plan_cache_key(
     return hashlib.sha256(raw_key.encode("utf-8")).hexdigest()[:16]
 
 
+import threading
+
+# Serializes cache-file appends (plan + search caches) so concurrent pair
+# workers can't interleave partial lines; readers additionally tolerate torn
+# lines (skip-and-research is harmless, corruption is not).
+_cache_io_lock = threading.Lock()
+
+
 def get_or_create_shared_plan(
     query_id: str,
     user_query: str,
@@ -332,7 +340,10 @@ def get_or_create_shared_plan(
             for line in fh:
                 if not line.strip():
                     continue
-                record = json.loads(line)
+                try:
+                    record = json.loads(line)
+                except json.JSONDecodeError:
+                    continue  # torn line from a concurrent append; treat as miss
                 if record.get("plan_id") == plan_id:
                     branches = [
                         FanoutBranch(
@@ -372,8 +383,9 @@ def get_or_create_shared_plan(
             "branches": [b.as_dict() for b in branches],
             "events": events,
         }
-        with open(cache_path, "a", encoding="utf-8") as fh:
-            fh.write(json.dumps(record, ensure_ascii=False) + "\n")
+        with _cache_io_lock:
+            with open(cache_path, "a", encoding="utf-8") as fh:
+                fh.write(json.dumps(record, ensure_ascii=False) + "\n")
 
     return plan_id, branches, events, False
 
@@ -409,7 +421,10 @@ def search_tavily_cached(
             for line in fh:
                 if not line.strip():
                     continue
-                record = json.loads(line)
+                try:
+                    record = json.loads(line)
+                except json.JSONDecodeError:
+                    continue  # torn line from a concurrent append; treat as miss
                 if record.get("cache_key") == key:
                     raw_results = record.get("results", [])
                     results = [
@@ -444,7 +459,8 @@ def search_tavily_cached(
             "max_results": max_results,
             "results": [r.as_dict() for r in results],
         }
-        with open(cache_path, "a", encoding="utf-8") as fh:
-            fh.write(json.dumps(record, ensure_ascii=False) + "\n")
+        with _cache_io_lock:
+            with open(cache_path, "a", encoding="utf-8") as fh:
+                fh.write(json.dumps(record, ensure_ascii=False) + "\n")
 
     return results, False

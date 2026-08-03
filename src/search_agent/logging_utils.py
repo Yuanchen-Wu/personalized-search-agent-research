@@ -10,8 +10,11 @@ from __future__ import annotations
 import datetime as _dt
 import json
 import os
+import threading
 import uuid
 from typing import List, Optional
+
+_append_lock = threading.Lock()
 
 from .config import DEFAULT_RUNS_LOG, OUTPUTS_DIR
 from .schemas import (
@@ -139,6 +142,9 @@ def append_run_log(run_log: RunLog, path: str = DEFAULT_RUNS_LOG) -> str:
     Returns the path written to.
     """
     os.makedirs(os.path.dirname(path) or OUTPUTS_DIR, exist_ok=True)
-    with open(path, "a", encoding="utf-8") as fh:
-        fh.write(json.dumps(run_log.as_dict(), ensure_ascii=False) + "\n")
+    # Run records are large (embedded search results), so concurrent writers
+    # must not interleave; the lock keeps each record a single intact line.
+    with _append_lock:
+        with open(path, "a", encoding="utf-8") as fh:
+            fh.write(json.dumps(run_log.as_dict(), ensure_ascii=False) + "\n")
     return path

@@ -126,6 +126,14 @@ def main(argv: Optional[List[str]] = None) -> None:
     parser.add_argument("--dry_run", action="store_true", default=False)
     parser.add_argument("--no_cache", action="store_true", default=False)
     parser.add_argument("--all_persona_pairings", action="store_true", default=False, help="Cross-pair queries with all personas (up to 1387 pairs) instead of targeted 1-to-1 personas (72 pairs)")
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        help="Concurrent pairs (default 1 = serial). Cache and run-log appends "
+        "are lock-guarded; Gemini/Tavily pacing stays correct at any worker "
+        "count via the shared per-provider rate budgets.",
+    )
     args = parser.parse_args(argv)
 
     with open(args.config, "r", encoding="utf-8") as f:
@@ -251,7 +259,8 @@ def main(argv: Optional[List[str]] = None) -> None:
     run_counter = 0
     start_time = time.time()
 
-    for pair_idx, (q, persona) in enumerate(qp_pairs, start=1):
+    def _process_pair(pair_idx: int, q, persona) -> None:
+        nonlocal run_counter
         pid = persona.persona_id if persona else "none"
         print(f"\n--- Processing Pair [{pair_idx}/{len(qp_pairs)}] Query ID: {q.query_id} | Persona ID: {pid} ---")
 
@@ -620,6 +629,25 @@ def main(argv: Optional[List[str]] = None) -> None:
             append_run_log(run_log, path=runs_path)
             run_counter += 1
             print(f"  [SUCCESS] Written run {run_log.run_id} | method={method} (k={k}) | latency={total_run_latency:.2f}s")
+
+    if args.workers > 1:
+        print(f"\n[run_fixed_fanout] processing {len(qp_pairs)} pairs with {args.workers} workers")
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+        with ThreadPoolExecutor(max_workers=args.workers) as pool:
+            futures = {pool.submit(_process_pair, i, q, p): (i, q.query_id)
+                       for i, (q, p) in enumerate(qp_pairs, start=1)}
+            for fut in as_completed(futures):
+                i, qid = futures[fut]
+                try:
+                    fut.result()
+                except Exception as err:  # pair-level failure: --resume re-runs it next pass
+                    print(f"[pair {i} {qid}] ERROR: {err}")
+    else:
+        for i, (q, p) in enumerate(qp_pairs, start=1):
+            try:
+                _process_pair(i, q, p)
+            except Exception as err:
+                print(f"[pair {i} {q.query_id}] ERROR: {err}")
 
     elapsed = time.time() - start_time
     print(f"\n[STAGE 1/3 COMPLETE] Benchmark finished {run_counter} runs in {elapsed/60.0:.2f} minutes. Runs written to {runs_path}")
