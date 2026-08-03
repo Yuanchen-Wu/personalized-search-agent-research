@@ -28,8 +28,9 @@
 #   --force-eval          Discard this arm's judge scores and re-judge.
 #   --retry-empty-searches  Strip evidence-free runs (+ stale judge rows) so
 #                         resume re-runs exactly those.
-#   AGENT_WORKERS is not used here (the C2 runner is serial by design; plan
-#   and search caches make k-conditions cheap). Pacing knobs:
+#   AGENT_WORKERS=N       Concurrent pairs (default 6). Cache and run-log
+#                         appends are lock-guarded; per-provider rate budgets
+#                         stay correct at any worker count.
 #   GEMINI_MAX_RPM=N      Shared pace for planner+synthesis calls (default 150).
 #   TAVILY_MAX_RPM=N      Shared pace for searches (default 90 = dev-key safe).
 set -euo pipefail
@@ -41,6 +42,7 @@ PY=.venv/bin/python
 BASELINE_PLANNER="gemini-3.5-flash"
 PLANNER_MODEL="$BASELINE_PLANNER"
 MAX_AGENT_PASSES="${MAX_AGENT_PASSES:-3}"
+AGENT_WORKERS="${AGENT_WORKERS:-6}"
 export GEMINI_MAX_RPM="${GEMINI_MAX_RPM:-150}"
 export TAVILY_MAX_RPM="${TAVILY_MAX_RPM:-90}"
 EMPTY_EVIDENCE_TOLERANCE_PCT="${EMPTY_EVIDENCE_TOLERANCE_PCT:-2}"
@@ -221,7 +223,7 @@ if [ "$DRY" = 1 ]; then
   exit 0
 fi
 
-echo "== [1/4] Runner (planner=$PLANNER_MODEL, gemini rpm=$GEMINI_MAX_RPM, tavily rpm=$TAVILY_MAX_RPM${LIMIT:+, smoke limit=$LIMIT pairs})"
+echo "== [1/4] Runner (planner=$PLANNER_MODEL, workers=$AGENT_WORKERS, gemini rpm=$GEMINI_MAX_RPM, tavily rpm=$TAVILY_MAX_RPM${LIMIT:+, smoke limit=$LIMIT pairs})"
 sanitize_runs
 [ "$RETRY_EMPTY" = 1 ] && retry_empty_searches
 EXPECTED_REMAINING=$(remaining_jobs)
@@ -232,7 +234,7 @@ while [ "$EXPECTED_REMAINING" -gt 0 ]; do
     exit 1
   fi
   echo "   pass $PASS: $EXPECTED_REMAINING jobs to run"
-  "$PY" scripts/run_fixed_fanout_benchmark.py --config "$CONFIG" \
+  "$PY" scripts/run_fixed_fanout_benchmark.py --config "$CONFIG" --workers "$AGENT_WORKERS" \
     ${LIMIT:+--limit "$LIMIT"} 2>&1 | tee -a "$OUT_DIR/logs/runner.log" | tail -3
   NEW_REMAINING=$(remaining_jobs)
   [ -n "$LIMIT" ] && break
