@@ -132,12 +132,16 @@ def main():
             persona = Persona.from_dict(src["persona"]) if src.get("persona") else None
             res = run_answercritic_loop(
                 user_query=src["user_query"], persona=persona, query_id=qid,
-                fanout_size=4, max_rounds=ac["max_rounds"], approval_threshold=ac["approval_threshold"],
+                fanout_size=ac.get("fanout_size", 4),
+                max_rounds=ac["max_rounds"], approval_threshold=ac["approval_threshold"],
                 planner_model=models["planner"], synthesizer_model=models["synthesizer"],
                 critic_model=models["critic"], judge_samples=ac["judge_samples"],
                 judge_temperature=ac["judge_temperature"], seed=seed,
                 search_depth=se["search_depth"], max_results_per_branch=se["max_results_per_branch"],
-                search_cache_path=cache, use_cache=True)
+                search_cache_path=cache, use_cache=True,
+                route_actions=ac.get("route_actions", False),
+                targeted_fanout_size=ac.get("targeted_fanout_size", 2),
+                accumulate_evidence=ac.get("accumulate_evidence", False))
             rec = build_record(src, res, cfg, seed, models)
             with open(out_path, "a", encoding="utf-8") as fh:      # <-- append + flush + fsync per pair
                 fh.write(json.dumps(rec, ensure_ascii=False) + "\n")

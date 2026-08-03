@@ -1,0 +1,46 @@
+experiment_name: answercritic_v2
+
+# v2 of the answer-critic loop ("adaptive loop, routed"): same skeleton as v1
+# (fan-out -> search -> DRAFT -> leak-free answer critic), but each retry is
+# ROUTED to the failing stage instead of always re-searching:
+#   - synthesis-bound rounds (critic: needs_more_evidence=false) REVISE the
+#     draft against the critique using the same evidence (zero searches);
+#   - retrieval-bound rounds run a small targeted fan-out for the named gaps
+#     and MERGE into an accumulating evidence pool (rounds no longer discard
+#     prior evidence).
+# Motivated by the C1 two-channel results and the v1 pilot's own diagnosis
+# (~39% of failing rounds were synthesis-bound, unfixable by re-search).
+# Models pinned (never the floating alias) per the C2-v2 policy.
+
+answercritic:
+  fanout_size: 4                 # round-1 full fan-out
+  max_rounds: 4                  # retries are cheap now (revise rounds cost no searches)
+  approval_threshold: 4          # accept when mean critic score >= 4
+  judge_samples: 3
+  judge_temperature: 0.2
+  route_actions: true            # v2: route retries to the failing stage
+  targeted_fanout_size: 2        # retrieval-bound rounds fetch just the named gaps
+  accumulate_evidence: true      # v2: evidence pool persists across rounds
+
+search:
+  search_depth: basic
+  max_results_per_branch: 5
+
+models:
+  planner: gemini-3.5-flash
+  synthesizer: gemini-3.5-flash  # hardened-v2 draft + revise prompts
+  critic: gemini-3.5-flash       # leak-free draft-answer critic
+
+reproducibility:
+  seed: 42
+
+data:
+  # Same 72 (query, persona) pairs as the v1 pilot / C3 grid.
+  pairs_source: outputs/adaptive_refanout_v1/runs_tau_grid.jsonl
+  pairs_method: refanout_k4_t5
+
+outputs:
+  run_dir: outputs/answercritic_v2
+  runs_path: outputs/answercritic_v2/runs_answercritic.jsonl
+  # Reuse the shared search cache so overlapping queries are cache hits:
+  search_cache_path: outputs/fixed_fanout_scaling_v1/search_cache.jsonl
