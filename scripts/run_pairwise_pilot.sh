@@ -69,9 +69,38 @@ fi
 
 if [ "$DRY" = 0 ]; then
   echo
-  echo "== interpretation"
-  echo "   PASS: pilot A shows k8 win-rate >= ~75%  AND  pilot B shows a mild k8 lean (~55-70%)."
-  echo "   FAIL: A near 50% (judge can't see large true gaps) or B >= ~85% (over-eager judge)."
-  echo "   On PASS: scale up by re-running without LIMIT (resume keeps pilot items), then"
-  echo "   use judge_pairwise.py for the real comparison: fixed_k8 vs the adaptive arm."
+  "$PY" - "$OUT_DIR/pilot_k1_vs_k8.jsonl" "$OUT_DIR/pilot_k4_vs_k8.jsonl" <<'PYEOF'
+import json, os, sys
+
+def rate(path):
+    if not os.path.exists(path):
+        return None, 0
+    rows = [json.loads(l) for l in open(path) if l.strip()]
+    nb = sum(1 for r in rows if r["majority"] == "b")
+    dec = nb + sum(1 for r in rows if r["majority"] == "a")
+    return (nb / dec if dec else None), len(rows)
+
+ra, n_a = rate(sys.argv[1])
+rb, n_b = rate(sys.argv[2])
+print("== PILOT VERDICT")
+if ra is None or rb is None:
+    print("   INCOMPLETE: pilot output files missing/empty — re-run the pilot.")
+    sys.exit(1)
+a_pass = ra >= 0.75
+b_ok = 0.50 <= rb < 0.85
+print(f"   test A (k1 vs k8, known blowout +0.94):   k8 wins {ra:.0%} of decided ({n_a} items) "
+      f"-> {'PASS' if a_pass else 'FAIL: judge cannot see large true gaps'}")
+print(f"   test B (k4 vs k8, known narrow win +0.30): k8 wins {rb:.0%} of decided ({n_b} items) "
+      f"-> {'PASS (mild lean)' if b_ok else 'AMPLIFYING: judge turns small gaps into strong preferences' if rb >= 0.85 else 'FAIL: judge inverted a known direction'}")
+if not a_pass or rb < 0.50:
+    print("   PILOT: FAIL — do not run the real comparison with this judge.")
+    sys.exit(1)
+if b_ok:
+    print("   PILOT: PASS — judge certified. Interpret real win-rates directly.")
+else:
+    print("   PILOT: PASS WITH CALIBRATION — the judge amplifies small gaps. Use the")
+    print("   anchors when reading the real comparison: ~50% = null, ~"
+          f"{rb:.0%} = a +0.3-class effect, ~{ra:.0%} = a +0.9-class effect.")
+print("   Next: run the seqpersona_k8 arm, then judge_pairwise.py fixed_k8 vs seqpersona_k8.")
+PYEOF
 fi
